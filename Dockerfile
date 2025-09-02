@@ -10,35 +10,25 @@ ENV DJANGO_SETTINGS_MODULE=shahin_auto.settings_production
 # Set work directory
 WORKDIR /app
 
-# Install system dependencies
+# Install only essential system dependencies
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-        build-essential \
-        libpq-dev \
         default-libmysqlclient-dev \
         pkg-config \
-        gcc \
-        g++ \
         curl \
-        wget \
-        git \
-        vim \
-        default-mysql-client \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
 
-# Install Python dependencies
+# Install Python dependencies first (for better caching)
 COPY requirements.txt /app/
 RUN pip install --no-cache-dir --upgrade pip \
     && pip install --no-cache-dir -r requirements.txt
 
-# Copy project
+# Copy project files
 COPY . /app/
 
-# Create directories for static and media files
+# Create directories
 RUN mkdir -p /app/staticfiles /app/media /app/logs
-
-# Collect static files (skip if no database)
-RUN python manage.py collectstatic --noinput --clear || true
 
 # Create a non-root user
 RUN adduser --disabled-password --gecos '' appuser \
@@ -50,7 +40,7 @@ EXPOSE 8000
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:8000/ || exit 1
+    CMD curl -f http://localhost:8000/health/ || exit 1
 
 # Create startup script
 RUN echo '#!/bin/bash\n\
@@ -60,7 +50,7 @@ set -e\n\
 echo "Waiting for database..."\n\
 while ! python manage.py dbshell --command="SELECT 1;" > /dev/null 2>&1; do\n\
   echo "Database is unavailable - sleeping"\n\
-  sleep 1\n\
+  sleep 2\n\
 done\n\
 echo "Database is up - continuing"\n\
 \n\

@@ -19,7 +19,6 @@ nosetests.xml
 coverage.xml
 *.cover
 *.log
-.git
 .mypy_cache
 .pytest_cache
 .hypothesis
@@ -52,20 +51,20 @@ Thumbs.db
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
-media/
 
-# Static files
+# Static files (will be collected during build)
 staticfiles/
-static/
 
 # Documentation
 README.md
 docs/
+DEPLOYMENT.md
 
 # Docker
 Dockerfile
 docker-compose.yml
 .dockerignore
+troubleshoot.sh
 
 # Environment files
 .env
@@ -88,3 +87,6 @@ htmlcov/
 *.bak
 *.backup
 *.old
+
+# Large media files (exclude from build context)
+media/
