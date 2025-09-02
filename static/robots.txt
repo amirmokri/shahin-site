@@ -1,0 +1,18 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: http://localhost:8000/sitemap.xml
+
+# Disallow admin area
+Disallow: /admin/
+Disallow: /api/
+Disallow: /static/admin/
+Disallow: /media/admin/
+
+# Allow important pages
+Allow: /
+Allow: /lectures/
+Allow: /service/
+Allow: /static/
+Allow: /media/

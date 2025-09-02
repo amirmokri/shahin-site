@@ -1,0 +1,410 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ site_settings.site_name }} - {{ site_settings.site_description }}{% endblock %}
+
+{% block meta_description %}{{ site_settings.site_description }}{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-bg min-h-screen flex items-center justify-center text-white relative overflow-hidden">
+    <!-- Animated Background Elements -->
+    <div class="absolute inset-0">
+        <div class="absolute top-20 left-10 w-20 h-20 bg-shahin-yellow/20 rounded-full animate-float"></div>
+        <div class="absolute top-40 right-20 w-16 h-16 bg-shahin-blue/20 rounded-full animate-float" style="animation-delay: 1s;"></div>
+        <div class="absolute bottom-40 left-20 w-12 h-12 bg-shahin-yellow/30 rounded-full animate-float" style="animation-delay: 2s;"></div>
+        <div class="absolute bottom-20 right-10 w-24 h-24 bg-shahin-blue/20 rounded-full animate-float" style="animation-delay: 0.5s;"></div>
+    </div>
+    
+    <div class="absolute inset-0 bg-gradient-to-br from-black/40 via-black/20 to-black/40"></div>
+    
+    <div class="relative z-10 text-center px-4" data-aos="fade-up">
+        <div class="mb-8" data-aos="fade-in-down" data-aos-delay="200">
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-white via-shahin-yellow to-white bg-clip-text text-transparent font-vazir drop-shadow-2xl">
+                {{ site_settings.site_name }}
+            </h1>
+            <div class="w-24 h-1 bg-gradient-to-r from-shahin-yellow to-shahin-gold mx-auto rounded-full"></div>
+        </div>
+        
+        <p class="text-xl md:text-3xl mb-12 text-white/90 max-w-4xl mx-auto leading-relaxed font-medium" data-aos="fade-in-up" data-aos-delay="400">
+            {{ site_settings.site_description }}
+        </p>
+        
+        <div class="flex flex-col sm:flex-row gap-6 justify-center" data-aos="fade-in-up" data-aos-delay="600">
+            <a href="#services" class="group relative px-8 py-4 bg-gradient-to-r from-shahin-yellow to-shahin-gold text-gray-900 font-bold rounded-xl hover:from-shahin-gold hover:to-shahin-yellow transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-yellow-glow">
+                <i class="fas fa-cogs ml-2 group-hover:rotate-180 transition-transform duration-300"></i>
+                مشاهده سرویس‌ها
+                <div class="absolute inset-0 bg-white/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            </a>
+            <a href="{% url 'lectures_list' %}" class="group relative px-8 py-4 bg-transparent border-2 border-white/80 text-white font-bold rounded-xl hover:bg-white hover:text-gray-900 transition-all duration-300 transform hover:scale-105 backdrop-blur-sm">
+                <i class="fas fa-newspaper ml-2 group-hover:scale-110 transition-transform duration-300"></i>
+                مقالات آموزشی
+            </a>
+        </div>
+    </div>
+    
+    <!-- Enhanced Scroll indicator -->
+    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce-slow" data-aos="fade-in-up" data-aos-delay="800">
+        <div class="flex flex-col items-center space-y-2">
+            <span class="text-white/70 text-sm font-medium">اسکرول کنید</span>
+            <div class="w-6 h-10 border-2 border-white/50 rounded-full flex justify-center">
+                <div class="w-1 h-3 bg-white/70 rounded-full mt-2 animate-pulse"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% if bonus %}
+<!-- Bonus Modal -->
+<div id="bonus-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="relative bg-white rounded-2xl shadow-shahin-xl max-w-2xl w-full overflow-hidden animate-scale-in">
+        <div class="grid grid-cols-1 md:grid-cols-2">
+            <div class="relative h-56 md:h-full">
+                <img src="{{ bonus.image.url }}" alt="{{ bonus.name }}" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                <div class="absolute top-3 right-3">
+                    <span class="px-3 py-1 text-xs font-bold rounded-full bg-white/90 text-gray-900 shadow">Package</span>
+                </div>
+            </div>
+            <div class="p-6 md:p-8">
+                <div class="flex items-start justify-between mb-4">
+                    <h3 class="text-2xl font-bold bg-gradient-to-r from-shahin-blue to-shahin-light-blue bg-clip-text text-transparent font-vazir">{{ bonus.name }}</h3>
+                    <button onclick="closeBonusModal()" class="p-2 rounded-xl bg-gray-100 hover:bg-gray-200 transition-colors duration-300">
+                        <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <p class="text-gray-600 leading-relaxed mb-6">{{ bonus.description }}</p>
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <a href="#contact" class="flex-1 inline-flex items-center justify-center px-6 py-3 rounded-xl text-white bg-gradient-to-r from-shahin-blue to-shahin-light-blue hover:from-shahin-light-blue hover:to-shahin-blue transition-all duration-300 shadow-lg">
+                        <i class="fas fa-phone ml-2"></i>
+                        ارتباط با ما
+                    </a>
+                    <button onclick="closeBonusModal()" class="flex-1 inline-flex items-center justify-center px-6 py-3 rounded-xl text-gray-900 bg-gradient-to-r from-shahin-yellow to-shahin-gold hover:from-shahin-gold hover:to-shahin-yellow transition-all duration-300 shadow-lg">
+                        بعداً ببینم
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Advertising Video Section -->
+{% if site_settings.hero_video_url %}
+<section class="py-20 bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden" data-aos="fade-up">
+    <!-- Background Pattern -->
+    <div class="absolute inset-0 opacity-5">
+        <div class="absolute top-0 left-0 w-full h-full bg-[url('data:image/svg+xml,%3Csvg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="%23FFD700" fill-opacity="0.1"%3E%3Cpath d="M20 20c0-5.5-4.5-10-10-10s-10 4.5-10 10 4.5 10 10 10 10-4.5 10-10zm10 0c0-5.5-4.5-10-10-10s-10 4.5-10 10 4.5 10 10 10 10-4.5 10-10z"/%3E%3C/g%3E%3C/svg%3E')]"></div>
+    </div>
+    
+    <div class="container mx-auto px-4 relative z-10">
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center mb-12" data-aos="fade-in-down">
+                <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-shahin-yellow to-shahin-gold rounded-full mb-6">
+                    <i class="fas fa-play text-gray-900 text-2xl"></i>
+                </div>
+                <h2 class="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-shahin-blue to-shahin-light-blue bg-clip-text text-transparent font-vazir">ویدیو تبلیغاتی</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">آشنایی با خدمات و تخصص ما در زمینه تعمیر و نگهداری خودرو</p>
+            </div>
+            
+            <div class="relative group" data-aos="scale-in" data-aos-delay="200">
+                <div class="absolute inset-0 bg-gradient-to-r from-shahin-yellow/20 to-shahin-blue/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-500"></div>
+                <div class="relative bg-gray-900 rounded-2xl overflow-hidden shadow-shahin-xl group-hover:shadow-shahin-xl transition-all duration-500">
+                    <div class="aspect-video">
+                        <iframe 
+                            src="{{ site_settings.hero_video_url }}" 
+                            class="w-full h-full"
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Services Section -->
+<section id="services" class="py-20 bg-white relative overflow-hidden">
+    <!-- Background Elements -->
+    <div class="absolute top-0 left-0 w-full h-full opacity-5">
+        <div class="absolute top-20 right-10 w-32 h-32 bg-shahin-blue/20 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-20 left-10 w-40 h-40 bg-shahin-yellow/20 rounded-full blur-3xl"></div>
+    </div>
+    
+    <div class="container mx-auto px-4 relative z-10">
+        <div class="text-center mb-16" data-aos="fade-up">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-shahin-blue to-shahin-light-blue rounded-full mb-6">
+                <i class="fas fa-cogs text-white text-2xl"></i>
+            </div>
+            <h2 class="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-shahin-blue to-shahin-light-blue bg-clip-text text-transparent font-vazir">سرویس‌های ما</h2>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">خدمات حرفه‌ای و تخصصی خودرو با استفاده از جدیدترین تجهیزات و تکنولوژی‌ها</p>
+            <div class="w-24 h-1 bg-gradient-to-r from-shahin-yellow to-shahin-gold mx-auto mt-6 rounded-full"></div>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for service in services %}
+            <div class="group bg-white rounded-2xl shadow-shahin overflow-hidden hover:shadow-shahin-lg transition-all duration-500 transform hover:-translate-y-2" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:100 }}">
+                <div class="relative overflow-hidden">
+                    <img src="{{ service.image.url }}" alt="{{ service.name }}" class="w-full h-56 object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <button onclick="openServiceModal('{{ service.slug }}')" class="bg-gradient-to-r from-shahin-yellow to-shahin-gold text-gray-900 font-bold py-3 px-6 rounded-xl hover:from-shahin-gold hover:to-shahin-yellow transition-all duration-300 transform hover:scale-105 shadow-lg">
+                            <i class="fas fa-eye ml-2"></i>
+                            مشاهده جزئیات
+                        </button>
+                    </div>
+                    <div class="absolute top-4 right-4">
+                        <div class="w-12 h-12 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                            <i class="fas fa-cog text-shahin-blue text-lg"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-8">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 group-hover:text-shahin-blue transition-colors duration-300">{{ service.name }}</h3>
+                    <p class="text-gray-600 mb-6 leading-relaxed">{{ service.description|truncatewords:20 }}</p>
+                    <div class="flex gap-3">
+                        {% if service.instagram_link %}
+                        <a href="{{ service.instagram_link }}" target="_blank" class="flex-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-center py-3 px-4 rounded-xl hover:from-purple-600 hover:to-pink-600 transition-all duration-300 transform hover:scale-105 font-medium">
+                            <i class="fab fa-instagram ml-2"></i>
+                            اینستاگرام
+                        </a>
+                        {% endif %}
+                        <a href="{% url 'service_detail' service.slug %}" class="flex-1 bg-gradient-to-r from-shahin-blue to-shahin-light-blue text-white text-center py-3 px-4 rounded-xl hover:from-shahin-light-blue hover:to-shahin-blue transition-all duration-300 transform hover:scale-105 font-medium">
+                            <i class="fas fa-book ml-2"></i>
+                            آموزش
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-span-full text-center py-16">
+                <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-tools text-gray-400 text-3xl"></i>
+                </div>
+                <p class="text-gray-500 text-xl">سرویس‌ها به زودی اضافه خواهند شد</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Recent Lectures Section -->
+<section class="py-20 bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden">
+    <!-- Background Pattern -->
+    <div class="absolute inset-0 opacity-5">
+        <div class="absolute top-0 left-0 w-full h-full bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%231E40AF" fill-opacity="0.1"%3E%3Ccircle cx="30" cy="30" r="2"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')]"></div>
+    </div>
+    
+    <div class="container mx-auto px-4 relative z-10">
+        <div class="text-center mb-16" data-aos="fade-up">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-shahin-blue to-shahin-light-blue rounded-full mb-6">
+                <i class="fas fa-newspaper text-white text-2xl"></i>
+            </div>
+            <h2 class="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-shahin-blue to-shahin-light-blue bg-clip-text text-transparent font-vazir">آخرین مقالات</h2>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">مقالات آموزشی و راهنمای تعمیر و نگهداری خودرو</p>
+            <div class="w-24 h-1 bg-gradient-to-r from-shahin-yellow to-shahin-gold mx-auto mt-6 rounded-full"></div>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for lecture in recent_lectures %}
+            <article class="group bg-white rounded-2xl shadow-shahin overflow-hidden hover:shadow-shahin-lg transition-all duration-500 transform hover:-translate-y-2" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:100 }}">
+                <div class="relative overflow-hidden">
+                    <img src="{{ lecture.image.url }}" alt="{{ lecture.title }}" class="w-full h-56 object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div class="absolute top-4 right-4">
+                        <div class="w-12 h-12 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                            <i class="fas fa-newspaper text-shahin-blue text-lg"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-8">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 group-hover:text-shahin-blue transition-colors duration-300">{{ lecture.title }}</h3>
+                    <p class="text-gray-600 mb-6 leading-relaxed">{{ lecture.teaser }}</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">{{ lecture.created_at|date:"Y/m/d" }}</span>
+                        <a href="{% url 'lecture_detail' lecture.slug %}" class="text-shahin-blue font-medium hover:text-shahin-dark-blue transition-colors duration-300 group/link">
+                            مطالعه بیشتر
+                            <i class="fas fa-arrow-left mr-2 group-hover/link:-translate-x-1 transition-transform duration-300"></i>
+                        </a>
+                    </div>
+                </div>
+            </article>
+            {% empty %}
+            <div class="col-span-full text-center py-16">
+                <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-newspaper text-gray-400 text-3xl"></i>
+                </div>
+                <p class="text-gray-500 text-xl">مقالات به زودی اضافه خواهند شد</p>
+            </div>
+            {% endfor %}
+        </div>
+        
+        {% if recent_lectures %}
+        <div class="text-center mt-16" data-aos="fade-up">
+            <a href="{% url 'lectures_list' %}" class="group inline-flex items-center px-8 py-4 bg-gradient-to-r from-shahin-blue to-shahin-light-blue text-white font-bold rounded-xl hover:from-shahin-light-blue hover:to-shahin-blue transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-glow">
+                <i class="fas fa-list ml-2 group-hover:scale-110 transition-transform duration-300"></i>
+                مشاهده همه مقالات
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Pre-Footer Section -->
+<section class="py-16 bg-gray-100">
+    <div class="container mx-auto px-4">
+        <div class="text-center" data-aos="fade-up">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-6">آماده برای شروع؟</h2>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto mb-8">با ما تماس بگیرید و از خدمات حرفه‌ای خودرو بهره‌مند شوید</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="#contact" class="group inline-flex items-center px-8 py-4 bg-gradient-to-r from-shahin-yellow to-shahin-gold text-gray-900 font-bold rounded-xl hover:from-shahin-gold hover:to-shahin-yellow transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-yellow-glow">
+                    <i class="fas fa-phone ml-2 group-hover:scale-110 transition-transform duration-300"></i>
+                    تماس با ما
+                </a>
+                <a href="{{ site_settings.instagram_url }}" target="_blank" class="group inline-flex items-center px-8 py-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold rounded-xl hover:from-purple-600 hover:to-pink-600 transition-all duration-300 transform hover:scale-105 shadow-lg">
+                    <i class="fab fa-instagram ml-2 group-hover:scale-110 transition-transform duration-300"></i>
+                    اینستاگرام
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Service Modal -->
+<div id="service-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-2xl p-8 max-w-lg w-full mx-4 max-h-[90vh] overflow-y-auto shadow-shahin-xl transform scale-95 transition-transform duration-300" id="modal-content-wrapper">
+        <div class="flex justify-between items-center mb-6">
+            <h3 id="modal-title" class="text-2xl font-bold bg-gradient-to-r from-shahin-blue to-shahin-light-blue bg-clip-text text-transparent font-vazir"></h3>
+            <button onclick="closeServiceModal()" class="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors duration-300 group">
+                <svg class="w-6 h-6 text-gray-500 group-hover:text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+        <div id="modal-content" class="space-y-6">
+            <!-- Content will be loaded here -->
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Bonus popup (shown once per session)
+document.addEventListener('DOMContentLoaded', function() {
+    const hasSeenBonus = sessionStorage.getItem('bonus_shown');
+    const bonusExists = Boolean({% if bonus %}true{% else %}false{% endif %});
+    if (bonusExists && !hasSeenBonus) {
+        const modal = document.getElementById('bonus-modal');
+        if (modal) {
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+    }
+});
+
+function closeBonusModal() {
+    const modal = document.getElementById('bonus-modal');
+    if (modal) {
+        modal.classList.add('hidden');
+        document.body.style.overflow = '';
+        sessionStorage.setItem('bonus_shown', '1');
+    }
+}
+
+// Service modal functions
+function openServiceModal(serviceSlug) {
+    const modal = document.getElementById('service-modal');
+    const modalWrapper = document.getElementById('modal-content-wrapper');
+    const title = document.getElementById('modal-title');
+    const content = document.getElementById('modal-content');
+    
+    // Show loading
+    content.innerHTML = '<div class="text-center py-12"><div class="loading-spinner mx-auto mb-4"></div><p class="text-gray-500">در حال بارگذاری...</p></div>';
+    modal.classList.remove('hidden');
+    modalWrapper.classList.remove('scale-95');
+    modalWrapper.classList.add('scale-100');
+    
+    // Fetch service data
+    fetch(`/api/services/${serviceSlug}/`)
+        .then(response => response.json())
+        .then(data => {
+            title.textContent = data.name;
+            content.innerHTML = `
+                <div class="space-y-6">
+                    <div class="relative overflow-hidden rounded-xl">
+                        <img src="${data.image}" alt="${data.name}" class="w-full h-56 object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                    </div>
+                    <p class="text-gray-600 leading-relaxed text-lg">${data.description}</p>
+                    <div class="flex gap-3">
+                        ${data.instagram_link ? `<a href="${data.instagram_link}" target="_blank" class="flex-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-center py-3 px-4 rounded-xl hover:from-purple-600 hover:to-pink-600 transition-all duration-300 transform hover:scale-105 font-medium">
+                            <i class="fab fa-instagram ml-2"></i>
+                            اینستاگرام
+                        </a>` : ''}
+                        <a href="/service/${data.slug}/" class="flex-1 bg-gradient-to-r from-shahin-blue to-shahin-light-blue text-white text-center py-3 px-4 rounded-xl hover:from-shahin-light-blue hover:to-shahin-blue transition-all duration-300 transform hover:scale-105 font-medium">
+                            <i class="fas fa-book ml-2"></i>
+                            مشاهده آموزش
+                        </a>
+                    </div>
+                </div>
+            `;
+        })
+        .catch(error => {
+            content.innerHTML = '<div class="text-center py-12"><div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4"><i class="fas fa-exclamation-triangle text-red-500 text-2xl"></i></div><p class="text-red-500 text-lg">خطا در بارگذاری اطلاعات</p></div>';
+        });
+}
+
+function closeServiceModal() {
+    const modal = document.getElementById('service-modal');
+    const modalWrapper = document.getElementById('modal-content-wrapper');
+    
+    modalWrapper.classList.remove('scale-100');
+    modalWrapper.classList.add('scale-95');
+    
+    setTimeout(() => {
+        modal.classList.add('hidden');
+    }, 300);
+}
+
+// Close modal when clicking outside
+document.getElementById('service-modal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeServiceModal();
+    }
+});
+
+// Parallax effect for hero section
+window.addEventListener('scroll', () => {
+    const scrolled = window.pageYOffset;
+    const hero = document.querySelector('.hero-bg');
+    if (hero) {
+        hero.style.transform = `translateY(${scrolled * 0.5}px)`;
+    }
+});
+
+// Intersection Observer for animations
+const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+};
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('animate-fade-in');
+        }
+    });
+}, observerOptions);
+
+// Observe all cards
+document.querySelectorAll('.card-hover').forEach(card => {
+    observer.observe(card);
+});
+</script>
+{% endblock %}

@@ -1,0 +1,385 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ service.name }} - {{ site_settings.site_name }}{% endblock %}
+
+{% block meta_description %}{{ service.description|truncatewords:20 }}{% endblock %}
+
+{% block og_title %}{{ service.name }}{% endblock %}
+{% block og_description %}{{ service.description|truncatewords:20 }}{% endblock %}
+{% block og_image %}{{ service.image.url }}{% endblock %}
+
+{% block content %}
+<!-- Breadcrumb -->
+<section class="bg-gradient-to-r from-gray-50 to-gray-100 py-6 border-b border-gray-200">
+    <div class="container mx-auto px-4">
+        <nav class="flex items-center space-x-3 space-x-reverse text-sm" data-aos="fade-in-right">
+            <a href="{% url 'home' %}" class="flex items-center text-shahin-blue hover:text-shahin-dark-blue transition-colors duration-300 group">
+                <i class="fas fa-home ml-2 group-hover:scale-110 transition-transform duration-300"></i>
+                خانه
+            </a>
+            <div class="w-2 h-2 bg-shahin-yellow rounded-full"></div>
+            <a href="#services" class="flex items-center text-shahin-blue hover:text-shahin-dark-blue transition-colors duration-300 group">
+                <i class="fas fa-cogs ml-2 group-hover:scale-110 transition-transform duration-300"></i>
+                سرویس‌ها
+            </a>
+            <div class="w-2 h-2 bg-shahin-yellow rounded-full"></div>
+            <span class="text-gray-600 font-medium">{{ service.name|truncatechars:30 }}</span>
+        </nav>
+    </div>
+</section>
+
+<!-- Service Content -->
+<section class="py-20 bg-white relative overflow-hidden">
+    <!-- Background Elements -->
+    <div class="absolute top-0 left-0 w-full h-full opacity-5">
+        <div class="absolute top-20 right-10 w-32 h-32 bg-shahin-blue/20 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-20 left-10 w-40 h-40 bg-shahin-yellow/20 rounded-full blur-3xl"></div>
+    </div>
+    
+    <div class="container mx-auto px-4 relative z-10">
+        <div class="max-w-6xl mx-auto">
+            <!-- Service Header -->
+            <div class="bg-white rounded-2xl shadow-shahin-xl overflow-hidden mb-12" data-aos="fade-up">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-0">
+                    <div class="relative group">
+                        <img src="{{ service.image.url }}" alt="{{ service.name }}" class="w-full h-64 lg:h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        <div class="absolute top-6 right-6">
+                            <div class="bg-gradient-to-r from-shahin-yellow to-shahin-gold text-gray-900 px-4 py-2 rounded-full text-sm font-bold shadow-lg">
+                                <i class="fas fa-cog ml-2"></i>
+                                سرویس
+                            </div>
+                        </div>
+                        <div class="absolute bottom-6 left-6">
+                            <div class="bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full text-sm text-gray-600">
+                                <i class="fas fa-calendar ml-2"></i>
+                                {{ service.created_at|date:"Y/m/d" }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-8 lg:p-12 flex flex-col justify-center bg-gradient-to-br from-gray-50 to-white">
+                        <h1 class="text-3xl lg:text-5xl font-bold bg-gradient-to-r from-shahin-blue to-shahin-light-blue bg-clip-text text-transparent font-vazir mb-6">{{ service.name }}</h1>
+                        <p class="text-lg text-gray-600 mb-8 leading-relaxed">{{ service.description|truncatewords:30 }}</p>
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            {% if service.instagram_link %}
+                            <a href="{{ service.instagram_link }}" target="_blank" class="group flex items-center justify-center bg-gradient-to-r from-purple-500 to-pink-500 text-white py-4 px-8 rounded-xl hover:from-purple-600 hover:to-pink-600 transition-all duration-300 transform hover:scale-105 shadow-lg">
+                                <i class="fab fa-instagram text-xl ml-3 group-hover:scale-110 transition-transform duration-300"></i>
+                                مشاهده در اینستاگرام
+                            </a>
+                            {% endif %}
+                            <a href="#contact" class="group flex items-center justify-center bg-gradient-to-r from-shahin-blue to-shahin-light-blue text-white py-4 px-8 rounded-xl hover:from-shahin-light-blue hover:to-shahin-blue transition-all duration-300 transform hover:scale-105 shadow-lg">
+                                <i class="fas fa-phone ml-3 group-hover:scale-110 transition-transform duration-300"></i>
+                                درخواست سرویس
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Service Description -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Main Content -->
+                <div class="lg:col-span-2">
+                    <div class="bg-white rounded-2xl shadow-shahin p-8 lg:p-10 mb-8" data-aos="fade-up" data-aos-delay="100">
+                        <div class="flex items-center mb-8">
+                            <div class="w-12 h-12 bg-gradient-to-r from-shahin-blue to-shahin-light-blue rounded-xl flex items-center justify-center ml-4">
+                                <i class="fas fa-info-circle text-white text-xl"></i>
+                            </div>
+                            <h2 class="text-3xl font-bold bg-gradient-to-r from-shahin-blue to-shahin-light-blue bg-clip-text text-transparent font-vazir">توضیحات سرویس</h2>
+                        </div>
+                        <div class="prose prose-lg max-w-none text-gray-700 leading-relaxed">
+                            {{ service.description|linebreaks }}
+                        </div>
+                    </div>
+
+                    <!-- Video Section -->
+                    {% if service.video %}
+                    <div class="bg-white rounded-2xl shadow-shahin p-8 lg:p-10 mb-8" data-aos="fade-up" data-aos-delay="200">
+                        <div class="flex items-center mb-8">
+                            <div class="w-12 h-12 bg-gradient-to-r from-shahin-yellow to-shahin-gold rounded-xl flex items-center justify-center ml-4">
+                                <i class="fas fa-play text-gray-900 text-xl"></i>
+                            </div>
+                            <h2 class="text-3xl font-bold bg-gradient-to-r from-shahin-blue to-shahin-light-blue bg-clip-text text-transparent font-vazir">ویدیو آموزشی</h2>
+                        </div>
+                        <div class="relative group">
+                            <div class="absolute inset-0 bg-gradient-to-r from-shahin-yellow/20 to-shahin-blue/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-500"></div>
+                            <div class="relative bg-black rounded-2xl overflow-hidden shadow-shahin-xl">
+                                <div class="aspect-video">
+                                    <video class="w-full h-full" controls preload="metadata" playsinline poster="{{ service.image.url }}">
+                                        <source src="{{ service.video.url }}" type="video/mp4">
+                                        مرورگر شما از ویدیو پشتیبانی نمی‌کند.
+                                    </video>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Sidebar -->
+                <div class="lg:col-span-1">
+                    <!-- Contact Card -->
+                    <div class="bg-white rounded-2xl shadow-shahin p-8 mb-8" data-aos="fade-up" data-aos-delay="300">
+                        <div class="flex items-center mb-6">
+                            <div class="w-10 h-10 bg-gradient-to-r from-shahin-blue to-shahin-light-blue rounded-xl flex items-center justify-center ml-3">
+                                <i class="fas fa-phone text-white"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800">تماس برای سرویس</h3>
+                        </div>
+                        <div class="space-y-6">
+                            <div class="flex items-center space-x-4 space-x-reverse group">
+                                <div class="w-12 h-12 bg-shahin-blue/10 rounded-xl flex items-center justify-center group-hover:bg-shahin-blue/20 transition-colors duration-300">
+                                    <i class="fas fa-phone text-shahin-blue"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500">تلفن</p>
+                                    <a href="tel:{{ site_settings.phone }}" class="text-shahin-blue font-medium hover:text-shahin-dark-blue transition-colors duration-300">{{ site_settings.phone }}</a>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-4 space-x-reverse group">
+                                <div class="w-12 h-12 bg-shahin-yellow/10 rounded-xl flex items-center justify-center group-hover:bg-shahin-yellow/20 transition-colors duration-300">
+                                    <i class="fas fa-envelope text-shahin-yellow"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500">ایمیل</p>
+                                    <a href="mailto:{{ site_settings.email }}" class="text-shahin-blue font-medium hover:text-shahin-dark-blue transition-colors duration-300">{{ site_settings.email }}</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-8">
+                            <a href="#contact" class="w-full bg-gradient-to-r from-shahin-blue to-shahin-light-blue text-white text-center py-4 px-6 rounded-xl hover:from-shahin-light-blue hover:to-shahin-blue transition-all duration-300 transform hover:scale-105 shadow-lg block">
+                                <i class="fas fa-comments ml-2"></i>
+                                درخواست مشاوره رایگان
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Features -->
+                    <div class="bg-white rounded-2xl shadow-shahin p-8 mb-8" data-aos="fade-up" data-aos-delay="400">
+                        <div class="flex items-center mb-6">
+                            <div class="w-10 h-10 bg-gradient-to-r from-shahin-yellow to-shahin-gold rounded-xl flex items-center justify-center ml-3">
+                                <i class="fas fa-star text-gray-900"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800">ویژگی‌های سرویس</h3>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="flex items-center space-x-4 space-x-reverse group">
+                                <div class="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center group-hover:bg-green-200 transition-colors duration-300">
+                                    <i class="fas fa-check text-green-600"></i>
+                                </div>
+                                <span class="text-gray-700 font-medium">استفاده از تجهیزات مدرن</span>
+                            </div>
+                            <div class="flex items-center space-x-4 space-x-reverse group">
+                                <div class="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center group-hover:bg-green-200 transition-colors duration-300">
+                                    <i class="fas fa-check text-green-600"></i>
+                                </div>
+                                <span class="text-gray-700 font-medium">تضمین کیفیت کار</span>
+                            </div>
+                            <div class="flex items-center space-x-4 space-x-reverse group">
+                                <div class="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center group-hover:bg-green-200 transition-colors duration-300">
+                                    <i class="fas fa-check text-green-600"></i>
+                                </div>
+                                <span class="text-gray-700 font-medium">خدمات پس از فروش</span>
+                            </div>
+                            <div class="flex items-center space-x-4 space-x-reverse group">
+                                <div class="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center group-hover:bg-green-200 transition-colors duration-300">
+                                    <i class="fas fa-check text-green-600"></i>
+                                </div>
+                                <span class="text-gray-700 font-medium">قیمت مناسب</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Social Media -->
+                    <div class="bg-white rounded-2xl shadow-shahin p-8" data-aos="fade-up" data-aos-delay="500">
+                        <div class="flex items-center mb-6">
+                            <div class="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center ml-3">
+                                <i class="fab fa-instagram text-white"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800">ما را دنبال کنید</h3>
+                        </div>
+                        <div class="space-y-4">
+                            <a href="{{ site_settings.instagram_url }}" target="_blank" class="group flex items-center space-x-4 space-x-reverse p-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl hover:from-purple-600 hover:to-pink-600 transition-all duration-300 transform hover:scale-105 shadow-lg">
+                                <i class="fab fa-instagram text-2xl group-hover:scale-110 transition-transform duration-300"></i>
+                                <div>
+                                    <p class="font-medium">اینستاگرام</p>
+                                    <p class="text-sm opacity-90">@shahinautoservice</p>
+                                </div>
+                                <i class="fas fa-external-link-alt mr-auto group-hover:translate-x-1 transition-transform duration-300"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Related Services -->
+{% if related_services %}
+<section class="py-20 bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden">
+    <!-- Background Pattern -->
+    <div class="absolute inset-0 opacity-5">
+        <div class="absolute top-0 left-0 w-full h-full bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23FFD700" fill-opacity="0.1"%3E%3Ccircle cx="30" cy="30" r="2"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')]"></div>
+    </div>
+    
+    <div class="container mx-auto px-4 relative z-10">
+        <div class="text-center mb-16" data-aos="fade-up">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-shahin-blue to-shahin-light-blue rounded-full mb-6">
+                <i class="fas fa-cogs text-white text-2xl"></i>
+            </div>
+            <h2 class="text-3xl md:text-4xl font-bold mb-6 bg-gradient-to-r from-shahin-blue to-shahin-light-blue bg-clip-text text-transparent font-vazir">سرویس‌های مرتبط</h2>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto">سرویس‌های مشابه که ممکن است برای شما مفید باشند</p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for related_service in related_services %}
+            <div class="group bg-white rounded-2xl shadow-shahin overflow-hidden hover:shadow-shahin-lg transition-all duration-500 transform hover:-translate-y-2" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:100 }}">
+                <div class="relative overflow-hidden">
+                    <img src="{{ related_service.image.url }}" alt="{{ related_service.name }}" class="w-full h-56 object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div class="absolute top-4 right-4">
+                        <div class="w-12 h-12 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                            <i class="fas fa-cog text-shahin-blue text-lg"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-8">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 line-clamp-2 group-hover:text-shahin-blue transition-colors duration-300">{{ related_service.name }}</h3>
+                    <p class="text-gray-600 mb-6 line-clamp-2 leading-relaxed">{{ related_service.description|truncatewords:15 }}</p>
+                    <div class="flex gap-3">
+                        {% if related_service.instagram_link %}
+                        <a href="{{ related_service.instagram_link }}" target="_blank" class="flex-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-center py-3 px-4 rounded-xl hover:from-purple-600 hover:to-pink-600 transition-all duration-300 transform hover:scale-105 font-medium text-sm">
+                            <i class="fab fa-instagram ml-2"></i>
+                            اینستاگرام
+                        </a>
+                        {% endif %}
+                        <a href="{% url 'service_detail' related_service.slug %}" class="flex-1 bg-gradient-to-r from-shahin-blue to-shahin-light-blue text-white text-center py-3 px-4 rounded-xl hover:from-shahin-light-blue hover:to-shahin-blue transition-all duration-300 transform hover:scale-105 font-medium text-sm">
+                            <i class="fas fa-eye ml-2"></i>
+                            مشاهده
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Pre-Footer Section -->
+<section class="py-16 bg-gray-100">
+    <div class="container mx-auto px-4">
+        <div class="text-center" data-aos="fade-up">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-6">آماده برای شروع؟</h2>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto mb-8">با ما تماس بگیرید و از خدمات حرفه‌ای خودرو بهره‌مند شوید</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="#contact" class="group inline-flex items-center px-8 py-4 bg-gradient-to-r from-shahin-yellow to-shahin-gold text-gray-900 font-bold rounded-xl hover:from-shahin-gold hover:to-shahin-yellow transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-yellow-glow">
+                    <i class="fas fa-phone ml-2 group-hover:scale-110 transition-transform duration-300"></i>
+                    تماس با ما
+                </a>
+                <a href="{{ site_settings.instagram_url }}" target="_blank" class="group inline-flex items-center px-8 py-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold rounded-xl hover:from-purple-600 hover:to-pink-600 transition-all duration-300 transform hover:scale-105 shadow-lg">
+                    <i class="fab fa-instagram ml-2 group-hover:scale-110 transition-transform duration-300"></i>
+                    اینستاگرام
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Back to Top Button -->
+<button id="back-to-top" class="fixed bottom-8 left-8 bg-gradient-to-r from-shahin-blue to-shahin-light-blue text-white p-4 rounded-full shadow-shahin hover:shadow-shahin-lg transition-all duration-300 transform hover:scale-110 hidden group">
+    <i class="fas fa-arrow-up text-lg group-hover:-translate-y-1 transition-transform duration-300"></i>
+</button>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.prose {
+    color: #374151;
+    line-height: 1.75;
+}
+
+.prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+    color: #1f2937;
+    font-weight: 600;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+.prose p {
+    margin-bottom: 1.5rem;
+}
+
+.prose ul, .prose ol {
+    margin-bottom: 1.5rem;
+    padding-right: 1.5rem;
+}
+
+.prose li {
+    margin-bottom: 0.5rem;
+}
+
+.line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Back to top button
+const backToTopButton = document.getElementById('back-to-top');
+
+window.addEventListener('scroll', () => {
+    if (window.pageYOffset > 300) {
+        backToTopButton.classList.remove('hidden');
+    } else {
+        backToTopButton.classList.add('hidden');
+    }
+});
+
+backToTopButton.addEventListener('click', () => {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+});
+
+// Add smooth scrolling to all internal links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    });
+});
+
+// Video lazy loading
+const videoObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            const iframe = entry.target;
+            if (iframe.dataset.src) {
+                iframe.src = iframe.dataset.src;
+                iframe.removeAttribute('data-src');
+                videoObserver.unobserve(iframe);
+            }
+        }
+    });
+});
+
+document.querySelectorAll('iframe[data-src]').forEach(iframe => {
+    videoObserver.observe(iframe);
+});
+</script>
+{% endblock %}
