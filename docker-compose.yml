@@ -11,13 +11,19 @@ services:
       - media_volume:/app/media
     environment:
       - DEBUG=0
-      - SECRET_KEY=your-secret-key-here
-      - DATABASE_URL=mysql://root:password@db:3306/shahin_auto_db
+      - SECRET_KEY=your-secret-key-here-change-in-production
+      - DB_NAME=shahin_db
+      - DB_USER=root
+      - DB_PASSWORD=232330scmj
+      - DB_HOST=db
+      - DB_PORT=3306
       - EMAIL_HOST=smtp.gmail.com
       - EMAIL_PORT=587
       - EMAIL_USE_TLS=True
       - EMAIL_HOST_USER=your-email@gmail.com
       - EMAIL_HOST_PASSWORD=your-app-password
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
     depends_on:
       - db
       - redis
@@ -26,8 +32,8 @@ services:
   db:
     image: mysql:8.0
     environment:
-      - MYSQL_ROOT_PASSWORD=password
-      - MYSQL_DATABASE=shahin_auto_db
+      - MYSQL_ROOT_PASSWORD=232330scmj
+      - MYSQL_DATABASE=shahin_db
       - MYSQL_USER=shahin_user
       - MYSQL_PASSWORD=shahin_password
     volumes:

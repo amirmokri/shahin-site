@@ -1,391 +1,263 @@
-# شاهین - وب‌سایت خدمات خودرو
+# 🚗 Shahin Auto Service
 
-یک وب‌سایت کامل و حرفه‌ای برای ارائه خدمات خودرو با استفاده از Django، Django Rest Framework، MySQL و طراحی ریسپانسیو.
+A world-class, full-stack Django website for an auto service business with beautiful Persian design, professional animations, and comprehensive admin management.
 
-## ویژگی‌ها
+## ✨ Features
 
-### 🎨 طراحی و رابط کاربری
-- **طراحی ریسپانسیو**: بهینه‌سازی شده برای موبایل، تبلت و دسکتاپ
-- **رنگ‌بندی حرفه‌ای**: ترکیب زرد، آبی و سفید
-- **انیمیشن‌های زیبا**: استفاده از AOS و CSS animations
-- **حالت تاریک**: قابلیت تغییر تم
-- **فونت فارسی**: استفاده از فونت Vazir
+### 🎨 Design & User Experience
+- **World-class appearance** with yellow, blue, and white color palette
+- **Fully responsive** design optimized for mobile devices
+- **Beautiful animations** and hover effects using AOS library
+- **Persian language** support throughout the site
+- **Professional typography** with Vazirmatn font
+- **Glassmorphism effects** and gradient backgrounds
 
-### 🏗️ معماری و فناوری
-- **Backend**: Django 4.2.7 + Django Rest Framework
-- **Database**: MySQL 8.0
-- **Frontend**: Django Templates + Tailwind CSS
-- **API**: RESTful API با DRF
-- **Deployment**: Docker + Nginx
+### 📱 Pages & Functionality
+- **Home Page**: Hero section with parallax, advertising video, services grid, recent lectures
+- **Lectures Page**: Paginated grid of all lectures with beautiful cards
+- **Service Detail Pages**: Detailed service information with professional video player
+- **Admin Dashboard**: Comprehensive content management system
+- **Bonus Popup**: Session-based promotional popup on homepage
 
-### 📱 صفحات و عملکردها
-- **صفحه اصلی**: Hero section، سرویس‌ها، مقالات اخیر
-- **مقالات**: لیست مقالات با pagination
-- **جزئیات مقاله**: محتوای کامل با قابلیت اشتراک‌گذاری
-- **سرویس‌ها**: نمایش سرویس‌ها با ویدیو و توضیحات
-- **پنل مدیریت**: مدیریت محتوا و پیام‌ها
+### 🛠️ Technical Features
+- **Django 4.2.7** with Django Rest Framework
+- **MySQL database** with optimized models
+- **File upload system** for images and videos
+- **Professional video player** for service videos
+- **Contact form** with email notifications
+- **SEO optimized** with meta tags and sitemap
+- **Security features** including CSRF protection
+- **Performance optimized** with caching and static file optimization
 
-### 🔧 ویژگی‌های فنی
-- **SEO**: Meta tags، sitemap، structured data
-- **امنیت**: CSRF protection، rate limiting، input validation
-- **عملکرد**: Lazy loading، caching، image optimization
-- **دسترسی**: RTL support، keyboard navigation، screen reader friendly
+### 🎯 Services Included
+- سرویس روغن با شستشو رایگان موتور
+- شستشو دریچه گاز و انژکتور
+- تعمیر موتور تخصصی خودرو های هیونداو کیا
+- تعمیر گیربکس و تعویض دیسک و صحفه
+- تعویض روغن گیربکس اتومات با دستگاه تمام اتوماتیک
+- شستشو رادیاتور و مجاری آب خودرو با دستگاه تمام اتوماتیک
+- تعویض فیلتر بنزین هیوندا کیا و خودرو های خارجی
+- تعویض صافی گیربکس اتومات
+- خدمات مکانیکی انواع خودرو های ایرانی و خارجی
 
-## نصب و راه‌اندازی
+## 🏗️ Project Structure
 
-### پیش‌نیازها
-- Python 3.11+
-- MySQL 8.0+
-- Node.js (برای Tailwind CSS)
-- Docker (اختیاری)
-
-### نصب در Windows
-
-#### 1. کلون کردن پروژه
-```bash
-git clone <repository-url>
-cd shahin-auto
+```
+shahin/
+├── 📁 shahin_auto/           # Django project settings
+│   ├── settings.py           # Development settings
+│   ├── settings_production.py # Production settings
+│   └── urls.py
+├── 📁 main/                  # Main Django app
+│   ├── models.py            # Database models
+│   ├── views.py             # View functions
+│   ├── admin.py             # Admin configuration
+│   ├── serializers.py       # DRF serializers
+│   └── api_views.py         # API endpoints
+├── 📁 templates/             # HTML templates
+│   ├── base.html            # Base template
+│   └── main/                # App templates
+├── 📁 static/               # Static files
+│   ├── css/custom.css       # Custom styles
+│   ├── js/main.js          # JavaScript
+│   └── images/             # Images and icons
+├── 📁 media/                # User uploaded files
+├── 🐳 Dockerfile            # Docker configuration
+├── 🐳 docker-compose.yml    # Multi-container setup
+├── 🌐 nginx.conf            # Nginx configuration
+└── 📋 requirements.txt      # Python dependencies
 ```
 
-#### 2. ایجاد محیط مجازی
+## 🚀 Quick Start
+
+### Development Setup
+
+1. **Clone the repository:**
+```bash
+git clone <your-repo-url>
+cd shahin
+```
+
+2. **Create virtual environment:**
 ```bash
 python -m venv venv
-venv\Scripts\activate
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 ```
 
-#### 3. نصب وابستگی‌ها
+3. **Install dependencies:**
 ```bash
 pip install -r requirements.txt
 ```
 
-#### 4. تنظیم پایگاه داده MySQL
-```sql
-CREATE DATABASE shahin_auto_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-CREATE USER 'shahin_user'@'localhost' IDENTIFIED BY 'your_password';
-GRANT ALL PRIVILEGES ON shahin_auto_db.* TO 'shahin_user'@'localhost';
-FLUSH PRIVILEGES;
-```
+4. **Configure database:**
+   - Update `shahin_auto/settings.py` with your MySQL credentials
+   - Create database: `shahin_db`
 
-#### 5. تنظیم متغیرهای محیطی
-فایل `.env` ایجاد کنید:
-```env
-SECRET_KEY=your-secret-key-here
-DEBUG=True
-DATABASE_URL=mysql://shahin_user:your_password@localhost:3306/shahin_auto_db
-EMAIL_HOST=smtp.gmail.com
-EMAIL_PORT=587
-EMAIL_USE_TLS=True
-EMAIL_HOST_USER=your-email@gmail.com
-EMAIL_HOST_PASSWORD=your-app-password
-```
-
-#### 6. اجرای migrations
+5. **Run migrations:**
 ```bash
-python manage.py makemigrations
 python manage.py migrate
 ```
 
-#### 7. ایجاد superuser
+6. **Create superuser:**
 ```bash
 python manage.py createsuperuser
 ```
 
-#### 8. ایجاد داده‌های نمونه
-```bash
-python manage.py create_sample_data
-```
-
-#### 9. جمع‌آوری فایل‌های استاتیک
+7. **Collect static files:**
 ```bash
 python manage.py collectstatic
 ```
 
-#### 10. اجرای سرور
+8. **Run development server:**
 ```bash
 python manage.py runserver
 ```
 
-## استفاده از Docker
+9. **Access the application:**
+   - Website: http://localhost:8000
+   - Admin: http://localhost:8000/admin
 
-### اجرای با Docker Compose
+### Media Files Setup
+
+Upload your media files to the appropriate directories:
+
+```
+media/
+├── site/
+│   └── hero.jpg              # Hero background image
+├── services/
+│   ├── images/               # Service images
+│   └── videos/               # Service videos (.mp4)
+├── lectures/
+│   └── images/               # Lecture images
+└── bonuses/
+    └── images/               # Bonus popup images
+```
+
+**Static files:**
+- `static/images/logo.png` - Your logo (circular display)
+- `static/css/custom.css` - Custom styles
+- `static/js/main.js` - JavaScript functionality
+
+## 🐳 Docker Deployment
+
+### Quick Docker Setup
+
+1. **Build and start services:**
 ```bash
-# ساخت و اجرای کانتینرها
-docker-compose up --build
-
-# اجرای در پس‌زمینه
-docker-compose up -d
-
-# مشاهده لاگ‌ها
-docker-compose logs -f
-
-# توقف سرویس‌ها
-docker-compose down
+docker-compose up -d --build
 ```
 
-### دسترسی‌ها
-- **وب‌سایت**: http://localhost:8000
-- **پنل مدیریت**: http://localhost:8000/admin
-- **API**: http://localhost:8000/api/
-
-## ساختار پروژه
-
-```
-shahin-auto/
-├── manage.py
-├── requirements.txt
-├── Dockerfile
-├── docker-compose.yml
-├── nginx.conf
-├── shahin_auto/
-│   ├── __init__.py
-│   ├── settings.py
-│   ├── urls.py
-│   ├── wsgi.py
-│   └── asgi.py
-├── main/
-│   ├── __init__.py
-│   ├── models.py
-│   ├── views.py
-│   ├── api_views.py
-│   ├── serializers.py
-│   ├── urls.py
-│   ├── api_urls.py
-│   ├── admin.py
-│   ├── sitemaps.py
-│   └── management/
-│       └── commands/
-│           └── create_sample_data.py
-├── templates/
-│   ├── base.html
-│   └── main/
-│       ├── home.html
-│       ├── lectures.html
-│       ├── lecture_detail.html
-│       ├── service_detail.html
-│       └── admin_dashboard.html
-├── static/
-│   ├── css/
-│   │   └── custom.css
-│   ├── js/
-│   │   └── main.js
-│   └── images/
-│       ├── logo.png
-│       └── favicon.ico
-└── media/
-    ├── lectures/
-    ├── services/
-    └── site/
-```
-
-## مدل‌های پایگاه داده
-
-### Lecture (مقاله)
-- `title`: عنوان مقاله
-- `slug`: URL slug
-- `image`: تصویر مقاله
-- `content`: محتوای کامل
-- `teaser`: متن کوتاه
-- `created_at`: تاریخ ایجاد
-- `is_published`: وضعیت انتشار
-
-### Service (سرویس)
-- `name`: نام سرویس
-- `slug`: URL slug
-- `image`: تصویر سرویس
-- `description`: توضیحات
-- `video_url`: لینک ویدیو
-- `instagram_link`: لینک اینستاگرام
-- `created_at`: تاریخ ایجاد
-- `is_published`: وضعیت انتشار
-
-### ContactMessage (پیام تماس)
-- `name`: نام فرستنده
-- `email`: ایمیل
-- `message`: متن پیام
-- `created_at`: تاریخ ارسال
-- `is_read`: وضعیت خوانده شدن
-
-### SiteSettings (تنظیمات سایت)
-- `site_name`: نام سایت
-- `site_description`: توضیحات سایت
-- `phone`: شماره تلفن
-- `email`: ایمیل
-- `address`: آدرس
-- `instagram_url`: لینک اینستاگرام
-- `hero_image`: تصویر اصلی
-- `hero_video_url`: لینک ویدیو تبلیغاتی
-
-## API Endpoints
-
-### Lectures
-- `GET /api/lectures/` - لیست مقالات
-- `GET /api/lectures/{slug}/` - جزئیات مقاله
-- `GET /api/lectures/recent/` - مقالات اخیر
-- `POST /api/lectures/` - ایجاد مقاله (نیاز به احراز هویت)
-- `PUT /api/lectures/{slug}/` - ویرایش مقاله (نیاز به احراز هویت)
-- `DELETE /api/lectures/{slug}/` - حذف مقاله (نیاز به احراز هویت)
-
-### Services
-- `GET /api/services/` - لیست سرویس‌ها
-- `GET /api/services/{slug}/` - جزئیات سرویس
-- `GET /api/services/all/` - همه سرویس‌ها
-- `POST /api/services/` - ایجاد سرویس (نیاز به احراز هویت)
-- `PUT /api/services/{slug}/` - ویرایش سرویس (نیاز به احراز هویت)
-- `DELETE /api/services/{slug}/` - حذف سرویس (نیاز به احراز هویت)
-
-### Other
-- `GET /api/settings/` - تنظیمات سایت
-- `POST /api/contact/` - ارسال پیام تماس
-
-## پنل مدیریت
-
-### دسترسی
-- URL: `/admin/`
-- کاربر پیش‌فرض: `admin`
-- رمز عبور: `admin123` (در محیط توسعه)
-
-### قابلیت‌ها
-- مدیریت مقالات و سرویس‌ها
-- مدیریت پیام‌های تماس
-- تنظیمات سایت
-- آپلود تصاویر و فایل‌ها
-- پیش‌نمایش محتوا
-
-## امنیت
-
-### ویژگی‌های امنیتی
-- CSRF Protection
-- XSS Protection
-- SQL Injection Prevention
-- Rate Limiting
-- Secure Headers
-- Input Validation
-- File Upload Security
-
-### تنظیمات امنیتی
-```python
-# در settings.py
-SECURE_BROWSER_XSS_FILTER = True
-SECURE_CONTENT_TYPE_NOSNIFF = True
-X_FRAME_OPTIONS = 'DENY'
-SESSION_COOKIE_AGE = 3600
-```
-
-## SEO
-
-### بهینه‌سازی موتورهای جستجو
-- Meta tags کامل
-- Open Graph tags
-- Twitter Card tags
-- Sitemap.xml
-- Robots.txt
-- Structured data
-- Alt text برای تصاویر
-- URL های SEO-friendly
-
-## عملکرد
-
-### بهینه‌سازی‌ها
-- Lazy loading تصاویر
-- Minification CSS/JS
-- Browser caching
-- Database indexing
-- Query optimization
-- Static file compression
-
-## استقرار (Deployment)
-
-### با Docker
+2. **Create superuser:**
 ```bash
-# ساخت image
-docker build -t shahin-auto .
-
-# اجرای container
-docker run -p 8000:8000 shahin-auto
+docker-compose exec web python manage.py createsuperuser
 ```
 
-### با Docker Compose
-```bash
-# اجرای کامل stack
-docker-compose up -d
-```
+3. **Access the application:**
+   - Website: http://localhost
+   - Admin: http://localhost/admin
 
-### تنظیمات Production
-1. تغییر `DEBUG = False`
-2. تنظیم `ALLOWED_HOSTS`
-3. استفاده از HTTPS
-4. تنظیم متغیرهای محیطی
-5. پیکربندی Nginx
-6. تنظیم SSL certificate
+### Production Deployment
 
-## نگهداری
+For production deployment, see the comprehensive [DEPLOYMENT.md](DEPLOYMENT.md) guide which includes:
 
-### Backup پایگاه داده
-```bash
-mysqldump -u shahin_user -p shahin_auto_db > backup.sql
-```
+- Environment configuration
+- SSL/HTTPS setup
+- Security hardening
+- Performance optimization
+- Monitoring and logging
+- Backup strategies
+- Scaling options
 
-### Restore پایگاه داده
-```bash
-mysql -u shahin_user -p shahin_auto_db < backup.sql
-```
+## 🎨 Customization
 
-### Log ها
-- Django logs: `/var/log/django/`
-- Nginx logs: `/var/log/nginx/`
-- Application logs: در console
+### Colors
+The site uses a custom color palette defined in `static/css/custom.css`:
+- **Shahin Yellow**: #FFD700
+- **Shahin Blue**: #1E40AF
+- **Shahin Light Blue**: #3B82F6
+- **Shahin Dark Blue**: #1E3A8A
+- **Shahin Gold**: #FFA500
 
-## عیب‌یابی
+### Fonts
+- **Primary Font**: Vazirmatn (Persian)
+- **Fallback**: Tahoma, Arial, sans-serif
 
-### مشکلات رایج
-1. **خطای اتصال به پایگاه داده**: بررسی تنظیمات MySQL
-2. **خطای static files**: اجرای `collectstatic`
-3. **خطای permissions**: بررسی دسترسی‌های فایل‌ها
-4. **خطای email**: بررسی تنظیمات SMTP
+### Animations
+- **AOS (Animate On Scroll)** for scroll animations
+- **Custom CSS animations** for hover effects
+- **Tailwind CSS** for utility classes
 
-### دستورات مفید
-```bash
-# بررسی وضعیت Django
-python manage.py check
+## 📊 Admin Features
 
-# بررسی migrations
-python manage.py showmigrations
+The admin dashboard provides:
 
-# پاک کردن cache
-python manage.py clear_cache
+- **Content Management**: Add/edit lectures and services
+- **Media Management**: Upload images and videos
+- **Bonus Management**: Configure promotional popups
+- **Contact Management**: View and respond to messages
+- **Site Settings**: Configure site information
+- **Statistics**: View content and message counts
 
-# بررسی static files
-python manage.py findstatic
-```
+## 🔧 API Endpoints
 
-## مشارکت
+The site includes a REST API for content management:
 
-### راهنمای مشارکت
-1. Fork کردن پروژه
-2. ایجاد branch جدید
-3. اعمال تغییرات
-4. تست کردن
-5. ارسال Pull Request
+- `GET /api/lectures/` - List all lectures
+- `GET /api/lectures/{id}/` - Get specific lecture
+- `GET /api/services/` - List all services
+- `GET /api/services/{id}/` - Get specific service
+- `POST /api/contact/` - Submit contact form
 
-### استانداردهای کد
-- استفاده از PEP 8
-- کامنت‌گذاری مناسب
-- نام‌گذاری واضح
-- تست‌نویسی
+## 🛡️ Security Features
 
-## لایسنس
+- **CSRF Protection** enabled
+- **XSS Protection** headers
+- **Content Security Policy** configured
+- **Rate limiting** on API endpoints
+- **Secure session management**
+- **Input validation** and sanitization
 
-این پروژه تحت لایسنس MIT منتشر شده است.
+## 📱 Mobile Optimization
 
-## پشتیبانی
+- **Mobile-first design** approach
+- **Touch-friendly navigation**
+- **Optimized images** with lazy loading
+- **Responsive video players**
+- **Fast loading** with compressed assets
 
-برای پشتیبانی و سوالات:
-- ایمیل: info@shahin-auto.com
-- تلفن: +98-21-12345678
-- اینستاگرام: @shahin_auto
+## 🚀 Performance
+
+- **Static file optimization** with WhiteNoise
+- **Database query optimization**
+- **Image compression** and lazy loading
+- **CSS/JS minification** in production
+- **Caching** with Redis
+- **CDN ready** configuration
+
+## 📞 Support
+
+For technical support or questions:
+
+1. Check the [DEPLOYMENT.md](DEPLOYMENT.md) guide
+2. Review the logs: `docker-compose logs -f`
+3. Verify environment variables
+4. Ensure all services are running: `docker-compose ps`
+
+## 📄 License
+
+This project is proprietary software for Shahin Auto Service.
+
+## 🎯 Performance Metrics
+
+Expected performance on a 2GB RAM server:
+- **Page load time**: < 2 seconds
+- **Database queries**: < 100ms
+- **Static file serving**: < 50ms
+- **Concurrent users**: 100+
 
 ---
 
-**توسعه‌دهنده**: تیم توسعه شاهین  
-**نسخه**: 1.0.0  
-**تاریخ**: 2024
+**Built with ❤️ for Shahin Auto Service**
+
+*Professional auto service management with world-class design and functionality.*

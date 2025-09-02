@@ -194,9 +194,9 @@
             <div class="flex items-center justify-between">
                 <!-- Logo and Site Name -->
                 <div class="flex items-center space-x-4 space-x-reverse group">
-                    <div class="relative">
-                        <img src="{% load static %}{% static 'images/logo.png' %}" alt="شاهین" class="h-14 w-14 object-contain transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-yellow-glow" onerror="this.style.display='none'">
-                        <div class="absolute inset-0 bg-shahin-yellow/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div class="relative h-12 w-12 rounded-full overflow-hidden ring-2 ring-shahin-yellow bg-white shadow-shahin transition-all duration-300 group-hover:scale-110">
+                        <img src="{% load static %}{% static 'images/logo.png' %}" alt="شاهین" class="h-full w-full object-cover" onerror="this.style.display='none'">
+                        <div class="absolute inset-0 rounded-full pointer-events-none"></div>
                     </div>
                     <div>
                         <h1 class="text-3xl font-bold bg-gradient-to-r from-shahin-blue to-shahin-light-blue bg-clip-text text-transparent font-vazir">{{ site_settings.site_name }}</h1>
@@ -214,7 +214,7 @@
                         <span class="relative z-10">مقالات</span>
                         <div class="absolute inset-0 bg-shahin-yellow/10 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300"></div>
                     </a>
-                    <a href="#services" class="relative px-4 py-2 text-gray-700 hover:text-shahin-blue transition-all duration-300 font-medium group">
+                    <a href="{% url 'home' %}#services" class="relative px-4 py-2 text-gray-700 hover:text-shahin-blue transition-all duration-300 font-medium group">
                         <span class="relative z-10">سرویس‌ها</span>
                         <div class="absolute inset-0 bg-shahin-yellow/10 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300"></div>
                     </a>
@@ -242,11 +242,9 @@
             <div id="mobile-menu-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 hidden md:hidden"></div>
 
             <!-- Mobile Menu -->
-            <div id="mobile-menu" class="mobile-menu fixed top-0 right-0 h-full w-80 bg-gradient-to-b from-white to-shahin-yellow/10 backdrop-blur-md shadow-shahin-xl z-50 md:hidden border-l border-shahin-yellow/20">
+            <div id="mobile-menu" class="mobile-menu fixed top-0 right-0 h-screen w-80 bg-white shadow-shahin-xl z-50 md:hidden border-l border-shahin-yellow/20">
                 <!-- Decorative Background -->
-                <div class="absolute inset-0 opacity-10 pointer-events-none">
-                    <div class="absolute top-0 left-0 w-full h-full bg-[url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cg fill=\"none\" fill-rule=\"evenodd\"%3E%3Cg fill=\"%23FFD700\" fill-opacity=\"0.2\"%3E%3Ccircle cx=\"30\" cy=\"30\" r=\"2\"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')]"></div>
-                </div>
+                <div class="absolute inset-0 opacity-5 pointer-events-none"></div>
                 <div class="relative p-6">
                     <div class="flex items-center justify-between mb-8">
                         <div>
@@ -268,7 +266,7 @@
                             <i class="fa-solid fa-newspaper w-5 h-5 ml-3 group-hover:scale-110 transition-transform duration-300"></i>
                             <span>مقالات</span>
                         </a>
-                        <a href="#services" class="flex items-center px-4 py-3 text-gray-700 hover:text-shahin-blue hover:bg-shahin-yellow/10 transition-all duration-300 font-medium rounded-xl group">
+                        <a href="{% url 'home' %}#services" class="flex items-center px-4 py-3 text-gray-700 hover:text-shahin-blue hover:bg-shahin-yellow/10 transition-all duration-300 font-medium rounded-xl group">
                             <i class="fa-solid fa-gears w-5 h-5 ml-3 group-hover:scale-110 transition-transform duration-300"></i>
                             <span>سرویس‌ها</span>
                         </a>
@@ -442,6 +440,15 @@
                 document.body.style.overflow = '';
             }
         });
+
+        // Close mobile menu when clicking overlay
+        if (mobileMenuOverlay) {
+            mobileMenuOverlay.addEventListener('click', () => {
+                mobileMenu.classList.remove('open');
+                mobileMenuOverlay.classList.add('hidden');
+                document.body.style.overflow = '';
+            });
+        }
 
         // Dark mode toggle
         const darkModeToggle = document.getElementById('dark-mode-toggle');
