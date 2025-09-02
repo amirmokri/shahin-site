@@ -11,6 +11,9 @@ urlpatterns = [
     # Admin pages
     path('admin-dashboard/', views.admin_dashboard, name='admin_dashboard'),
     
+    # Health check
+    path('health/', views.health_check, name='health_check'),
+    
     # API endpoints
     path('contact-form/', views.contact_form, name='contact_form'),
 ]

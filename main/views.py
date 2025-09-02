@@ -2,16 +2,29 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.core.mail import send_mail
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.core.paginator import Paginator
 from django.db.models import Q
+from django.db import connection
 import json
 
 from .models import Lecture, Service, ContactMessage, SiteSettings, Bonus
+
+
+def health_check(request):
+    """Health check endpoint for Docker"""
+    try:
+        # Test database connection
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT 1")
+        
+        return HttpResponse("OK", status=200)
+    except Exception as e:
+        return HttpResponse(f"Database error: {str(e)}", status=500)
 
 
 def home(request):
