@@ -29,6 +29,8 @@ DATABASES = {
     }
 }
 
+# Using mysqlclient for MySQL database connection
+
 # Static files configuration
 STATIC_ROOT = '/app/staticfiles'
 MEDIA_ROOT = '/app/media'

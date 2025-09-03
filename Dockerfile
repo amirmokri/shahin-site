@@ -10,12 +10,13 @@ ENV DJANGO_SETTINGS_MODULE=shahin_auto.settings_production
 # Set work directory
 WORKDIR /app
 
-# Install only essential system dependencies
+# Install system dependencies for mysqlclient
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-        default-libmysqlclient-dev \
-        pkg-config \
         curl \
+        default-libmysqlclient-dev \
+        build-essential \
+        pkg-config \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
 
