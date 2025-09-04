@@ -17,6 +17,7 @@ RUN apt-get update \
         default-libmysqlclient-dev \
         build-essential \
         pkg-config \
+        wget \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
 
@@ -28,8 +29,9 @@ RUN pip install --no-cache-dir --upgrade pip \
 # Copy project files
 COPY . /app/
 
-# Create directories
-RUN mkdir -p /app/staticfiles /app/media /app/logs
+# Create directories and set permissions
+RUN mkdir -p /app/staticfiles /app/media /app/logs \
+    && chmod -R 755 /app
 
 # Create a non-root user
 RUN adduser --disabled-password --gecos '' appuser \
@@ -56,13 +58,20 @@ done\n\
 echo "Database is up - continuing"\n\
 \n\
 # Run migrations\n\
-python manage.py migrate\n\
+echo "Running migrations..."\n\
+python manage.py migrate --noinput\n\
+\n\
+# Create superuser if it doesn'\''t exist\n\
+echo "Creating superuser if needed..."\n\
+python manage.py shell -c "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.filter(username='\''admin'\'').exists() or User.objects.create_superuser('\''admin'\'', '\''admin@shahin.com'\'', '\''admin123'\'')"\n\
 \n\
 # Collect static files\n\
+echo "Collecting static files..."\n\
 python manage.py collectstatic --noinput\n\
 \n\
 # Start server\n\
-exec gunicorn --bind 0.0.0.0:8000 --workers 3 --timeout 120 shahin_auto.wsgi:application\n\
+echo "Starting Gunicorn server..."\n\
+exec gunicorn --bind 0.0.0.0:8000 --workers 3 --timeout 120 --access-logfile - --error-logfile - shahin_auto.wsgi:application\n\
 ' > /app/start.sh && chmod +x /app/start.sh
 
 # Run the application
