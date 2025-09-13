@@ -44,9 +44,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sitemaps',
     'rest_framework',
-    'store',
-    'drf_yasg',
+    'corsheaders',
+    'main',
 ]
 
 MIDDLEWARE = [
@@ -138,4 +139,5 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'store/static')]
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
 
