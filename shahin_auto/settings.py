@@ -32,7 +32,7 @@ SECRET_KEY = 'django-insecure-h2eg1l4l38y5bz2()y=hdburt*m66#bx_@ur0)%1=bqk_k994p
 ALLOWED_HOSTS = ['*']
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://c1montazerian.ir',
+    'https://shahinautoservice.ir',
 ]
 
 # Application definition
@@ -139,5 +139,6 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'store/static')]
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
 
 
