@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ['*']
 
 CSRF_TRUSTED_ORIGINS = [
     'https://shahinautoservice.ir',
+    'https://www.shahinautoservice.ir'
 ]
 
 # Application definition
@@ -139,6 +140,7 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'store/static')]
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
 
 
 
