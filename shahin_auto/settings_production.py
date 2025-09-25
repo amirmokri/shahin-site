@@ -12,7 +12,23 @@ DEBUG = False
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-your-secret-key-here-change-in-production')
 
 # Allowed hosts
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+ALLOWED_HOSTS = os.environ.get(
+    'ALLOWED_HOSTS',
+    'shahinautoservice.ir,www.shahinautoservice.ir,localhost,127.0.0.1'
+).split(',')
+# Ensure localhost/127.0.0.1 are always allowed for internal health checks
+ALLOWED_HOSTS = [h.strip() for h in ALLOWED_HOSTS if h.strip()]
+for _h in ('localhost', '127.0.0.1'):
+    if _h not in ALLOWED_HOSTS:
+        ALLOWED_HOSTS.append(_h)
+
+# CSRF trusted origins
+CSRF_TRUSTED_ORIGINS = [
+    'https://shahinautoservice.ir',
+    'https://www.shahinautoservice.ir',
+    'http://shahinautoservice.ir',
+    'http://www.shahinautoservice.ir',
+]
 
 # Database configuration for production
 DATABASES = {
@@ -43,10 +59,14 @@ SECURE_HSTS_SECONDS = 31536000
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
 
+# Respect X-Forwarded-Proto from Nginx for HTTPS detection
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 # Session security
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
-SECURE_SSL_REDIRECT = False  # Set to True if using HTTPS
+# Rely on Nginx to enforce HTTPS; keep app accessible over HTTP on internal network
+SECURE_SSL_REDIRECT = False
 
 # Email settings
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

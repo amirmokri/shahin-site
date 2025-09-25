@@ -49,21 +49,33 @@ HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
 RUN echo '#!/bin/bash\n\
 set -e\n\
 \n\
-# Wait for database\n\
+# Wait for database using Python MySQL connection\n\
 echo "Waiting for database..."\n\
-while ! python manage.py dbshell --command="SELECT 1;" > /dev/null 2>&1; do\n\
-  echo "Database is unavailable - sleeping"\n\
-  sleep 2\n\
-done\n\
-echo "Database is up - continuing"\n\
+python - <<"PYCODE"\n\
+import os, time, sys\n\
+import MySQLdb as mysql\n\
+host = os.environ.get("DB_HOST", "db")\n\
+port = int(os.environ.get("DB_PORT", "3306"))\n\
+user = os.environ.get("DB_USER", "root")\n\
+password = os.environ.get("DB_PASSWORD", "")\n\
+name = os.environ.get("DB_NAME", "")\n\
+for i in range(60):\n\
+    try:\n\
+        conn = mysql.connect(host=host, port=port, user=user, passwd=password, db=name)\n\
+        conn.close()\n\
+        print("Database is up")\n\
+        break\n\
+    except Exception as e:\n\
+        print(f"DB not ready ({e}); retry {i+1}/60")\n\
+        time.sleep(2)\n\
+else:\n\
+    print("Database not reachable after retries", file=sys.stderr)\n\
+    sys.exit(1)\n\
+PYCODE\n\
 \n\
 # Run migrations\n\
 echo "Running migrations..."\n\
 python manage.py migrate --noinput\n\
-\n\
-# Create superuser if it doesn'\''t exist\n\
-echo "Creating superuser if needed..."\n\
-python manage.py shell -c "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.filter(username='\''admin'\'').exists() or User.objects.create_superuser('\''admin'\'', '\''admin@shahin.com'\'', '\''admin123'\'')"\n\
 \n\
 # Collect static files\n\
 echo "Collecting static files..."\n\

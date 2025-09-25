@@ -43,24 +43,8 @@ if ! command -v docker-compose &> /dev/null; then
     exit 1
 fi
 
-# Check if .env file exists
-if [ ! -f .env ]; then
-    print_warning ".env file not found. Creating from template..."
-    if [ -f env.production.example ]; then
-        cp env.production.example .env
-        print_warning "Please edit .env file with your production values before continuing."
-        print_warning "Required values: SECRET_KEY, DB_PASSWORD, EMAIL_HOST_USER, EMAIL_HOST_PASSWORD"
-        exit 1
-    else
-        print_error "env.production.example file not found. Cannot create .env file."
-        exit 1
-    fi
-fi
-
-# Load environment variables
-export $(cat .env | grep -v '^#' | xargs)
-
-print_status "Environment loaded from .env file"
+# .env usage removed; configure variables via docker-compose defaults or CI/CD secrets
+print_status "Using docker-compose defaults and any CI/CD environment variables"
 
 # Create SSL directory if it doesn't exist
 mkdir -p ssl

@@ -50,39 +50,7 @@ chmod +x deploy.sh
 
 ### 3. Environment Configuration
 
-```bash
-# Copy environment template
-cp env.production.example .env
-
-# Edit environment variables
-nano .env
-```
-
-**Required Environment Variables:**
-```env
-# Django Settings
-DEBUG=0
-SECRET_KEY=your-super-secret-key-here-change-this-in-production
-ALLOWED_HOSTS=shahinautoservice.ir,www.shahinautoservice.ir,your-server-ip
-
-# Database Configuration
-DB_NAME=shahin_db
-DB_USER=root
-DB_PASSWORD=your-secure-database-password
-DB_HOST=db
-DB_PORT=3306
-
-# Email Configuration
-EMAIL_HOST=smtp.gmail.com
-EMAIL_PORT=587
-EMAIL_USE_TLS=True
-EMAIL_HOST_USER=your-email@gmail.com
-EMAIL_HOST_PASSWORD=your-app-password
-
-# Redis Configuration
-REDIS_HOST=redis
-REDIS_PORT=6379
-```
+No `.env` file is required. You can override defaults defined in `docker-compose.prod.yml` by exporting variables in your shell or CI/CD.
 
 ### 4. SSL Certificates (Optional but Recommended)
 

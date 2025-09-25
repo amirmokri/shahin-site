@@ -40,20 +40,8 @@ def check_mysql():
     return False
 
 def create_env_file():
-    """Create .env file from example"""
-    if not os.path.exists('.env'):
-        if os.path.exists('env.example'):
-            with open('env.example', 'r') as f:
-                content = f.read()
-            with open('.env', 'w') as f:
-                f.write(content)
-            print("✅ .env file created from example")
-        else:
-            print("⚠️  env.example not found, creating basic .env file")
-            with open('.env', 'w') as f:
-                f.write("SECRET_KEY=your-secret-key-here\nDEBUG=True\n")
-    else:
-        print("✅ .env file already exists")
+    """No .env creation needed (env handled by compose/CI)."""
+    print("ℹ️ Skipping .env creation (not used)")
 
 def main():
     """Main setup function"""
@@ -114,10 +102,9 @@ def main():
     print("\n" + "=" * 50)
     print("🎉 Setup completed!")
     print("\n📋 Next steps:")
-    print("1. Update .env file with your database credentials")
-    print("2. Create a superuser: python manage.py createsuperuser")
-    print("3. Run the server: python manage.py runserver")
-    print("4. Visit http://localhost:8000")
+    print("1. Create a superuser: python manage.py createsuperuser")
+    print("2. Run the server: python manage.py runserver")
+    print("3. Visit http://localhost:8000")
     print("\n🔧 Admin access:")
     print("   Username: admin")
     print("   Password: admin123")

@@ -34,7 +34,7 @@ shahin/
 
 ### 1. Environment Variables
 
-Create a `.env` file in the project root:
+Environment configuration:
 
 ```bash
 # Database
@@ -97,8 +97,7 @@ cd shahin
 
 2. **Create environment file:**
 ```bash
-cp env.example .env
-# Edit .env with your configuration
+No `.env` file is required. You can override defaults by exporting variables in your shell or CI.
 ```
 
 3. **Build and start services:**
