@@ -395,3 +395,5 @@ def comment_form(request):
         
     except Exception as e:
         return JsonResponse({'success': False, 'message': 'خطا در ثبت نظر. لطفاً دوباره تلاش کنید'})
+
+

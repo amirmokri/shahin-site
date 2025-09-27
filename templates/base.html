@@ -97,8 +97,8 @@
     <!-- Swiper (Reviews Carousel) -->
     <link rel="stylesheet" href="https://unpkg.com/swiper@9/swiper-bundle.min.css" />
     
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/Jxv6KVqZr2Q4h+OGnQ4v1j6C1ogwDq5GdJXGxC4F0kq2b6qKQYf8a7bxtxUu2Y0Pp2/5xRLQw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Font Awesome Icons (Local) -->
+    <link rel="stylesheet" href="{% static 'fontawesome/css/all.min.css' %}" />
     
     <!-- Custom CSS -->
     <style>
@@ -270,28 +270,28 @@
                     </div>
                     <nav class="space-y-2">
                         <a href="{% url 'home' %}" class="flex items-center px-4 py-3 text-gray-700 hover:text-shahin-blue hover:bg-shahin-yellow/10 transition-all duration-300 font-medium rounded-xl group">
-                            <i class="fa-solid fa-house w-5 h-5 ml-3 group-hover:scale-110 transition-transform duration-300"></i>
+                            <i class="fas fa-house w-5 h-5 ml-3 group-hover:scale-110 transition-transform duration-300"></i>
                             <span>خانه</span>
                         </a>
                         <a href="{% url 'appointment' %}" class="flex items-center px-4 py-3 text-gray-700 hover:text-shahin-blue hover:bg-shahin-yellow/10 transition-all duration-300 font-medium rounded-xl group">
-                            <i class="fa-solid fa-calendar-check w-5 h-5 ml-3 group-hover:scale-110 transition-transform duration-300"></i>
+                            <i class="fas fa-calendar-check w-5 h-5 ml-3 group-hover:scale-110 transition-transform duration-300"></i>
                             <span>رزرو وقت</span>
                         </a>
                         <a href="{% url 'lectures_list' %}" class="flex items-center px-4 py-3 text-gray-700 hover:text-shahin-blue hover:bg-shahin-yellow/10 transition-all duration-300 font-medium rounded-xl group">
-                            <i class="fa-solid fa-newspaper w-5 h-5 ml-3 group-hover:scale-110 transition-transform duration-300"></i>
+                            <i class="fas fa-newspaper w-5 h-5 ml-3 group-hover:scale-110 transition-transform duration-300"></i>
                             <span>مقالات</span>
                         </a>
                         <a href="{% url 'services' %}" class="flex items-center px-4 py-3 text-gray-700 hover:text-shahin-blue hover:bg-shahin-yellow/10 transition-all duration-300 font-medium rounded-xl group">
-                            <i class="fa-solid fa-gears w-5 h-5 ml-3 group-hover:scale-110 transition-transform duration-300"></i>
+                            <i class="fas fa-gears w-5 h-5 ml-3 group-hover:scale-110 transition-transform duration-300"></i>
                             <span>سرویس‌ها</span>
                         </a>
                         <a href="#contact" class="flex items-center px-4 py-3 text-gray-700 hover:text-shahin-blue hover:bg-shahin-yellow/10 transition-all duration-300 font-medium rounded-xl group">
-                            <i class="fa-solid fa-phone w-5 h-5 ml-3 group-hover:scale-110 transition-transform duration-300"></i>
+                            <i class="fas fa-phone w-5 h-5 ml-3 group-hover:scale-110 transition-transform duration-300"></i>
                             <span>تماس با ما</span>
                         </a>
                         <div class="border-t border-gray-200 my-4"></div>
                         <button id="dark-mode-toggle-mobile" class="flex items-center w-full px-4 py-3 text-gray-700 hover:text-shahin-blue hover:bg-shahin-yellow/10 transition-all duration-300 font-medium rounded-xl group">
-                            <i class="fa-solid fa-moon w-5 h-5 ml-3 group-hover:scale-110 transition-transform duration-300"></i>
+                            <i class="fas fa-moon w-5 h-5 ml-3 group-hover:scale-110 transition-transform duration-300"></i>
                             <span>حالت تاریک</span>
                         </button>
                     </nav>
@@ -318,14 +318,14 @@
                 <div data-aos="fade-up" data-aos-delay="100" class="group">
                     <div class="flex items-center mb-6">
                         <div class="w-12 h-12 bg-gradient-to-r from-shahin-yellow to-shahin-gold rounded-xl flex items-center justify-center ml-4 group-hover:scale-110 transition-transform duration-300 text-gray-900">
-                            <i class="fa-solid fa-phone text-lg"></i>
+                            <i class="fas fa-phone text-lg"></i>
                         </div>
                         <h3 class="text-2xl font-bold bg-gradient-to-r from-shahin-yellow to-shahin-gold bg-clip-text text-transparent font-vazir">تماس با ما</h3>
                     </div>
                     <div class="space-y-4">
                         <div class="flex items-center space-x-4 space-x-reverse group/item">
                             <div class="w-10 h-10 bg-shahin-yellow/20 rounded-lg flex items-center justify-center group-hover/item:bg-shahin-yellow/30 transition-colors duration-300 text-shahin-yellow">
-                                <i class="fa-solid fa-phone"></i>
+                                <i class="fas fa-phone"></i>
                             </div>
                             <div>
                                 <p class="text-gray-300 text-sm">تلفن تماس</p>
@@ -334,7 +334,7 @@
                         </div>
                         <div class="flex items-center space-x-4 space-x-reverse group/item">
                             <div class="w-10 h-10 bg-shahin-yellow/20 rounded-lg flex items-center justify-center group-hover/item:bg-shahin-yellow/30 transition-colors duration-300 text-shahin-yellow">
-                                <i class="fa-solid fa-envelope"></i>
+                                <i class="fas fa-envelope"></i>
                             </div>
                             <div>
                                 <p class="text-gray-300 text-sm">ایمیل</p>
@@ -343,7 +343,7 @@
                         </div>
                         <div class="flex items-start space-x-4 space-x-reverse group/item">
                             <div class="w-10 h-10 bg-shahin-yellow/20 rounded-lg flex items-center justify-center group-hover/item:bg-shahin-yellow/30 transition-colors duration-300 mt-1 text-shahin-yellow">
-                                <i class="fa-solid fa-location-dot"></i>
+                                <i class="fas fa-location-dot"></i>
                             </div>
                             <div>
                                 <p class="text-gray-300 text-sm">آدرس</p>
@@ -357,7 +357,7 @@
                 <div data-aos="fade-up" data-aos-delay="200" class="group">
                     <div class="flex items-center mb-6">
                         <div class="w-12 h-12 bg-gradient-to-r from-shahin-yellow to-shahin-gold rounded-xl flex items-center justify-center ml-4 group-hover:scale-110 transition-transform duration-300 text-gray-900">
-                            <i class="fa-solid fa-circle-info text-lg"></i>
+                            <i class="fas fa-circle-info text-lg"></i>
                         </div>
                         <h3 class="text-2xl font-bold bg-gradient-to-r from-shahin-yellow to-shahin-gold bg-clip-text text-transparent font-vazir">درباره ما</h3>
                     </div>
@@ -366,7 +366,7 @@
                         <a href="{{ site_settings.instagram_url }}" target="_blank" class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-shahin-yellow to-shahin-gold text-gray-900 font-bold rounded-xl hover:from-shahin-gold hover:to-shahin-yellow transition-all duration-300 group/social">
                             <i class="fa-brands fa-instagram text-xl ml-3 group-hover/social:scale-110 transition-transform duration-300"></i>
                             <span>اینستاگرام ما</span>
-                            <i class="fa-solid fa-up-right-from-square text-sm mr-3 group-hover/social:translate-x-1 transition-transform duration-300"></i>
+                            <i class="fas fa-up-right-from-square text-sm mr-3 group-hover/social:translate-x-1 transition-transform duration-300"></i>
                         </a>
                     </div>
                 </div>
@@ -375,7 +375,7 @@
                 <div data-aos="fade-up" data-aos-delay="300" class="group">
                     <div class="flex items-center mb-6">
                         <div class="w-12 h-12 bg-gradient-to-r from-shahin-yellow to-shahin-gold rounded-xl flex items-center justify-center ml-4 group-hover:scale-110 transition-transform duration-300 text-gray-900">
-                            <i class="fa-solid fa-paper-plane text-lg"></i>
+                            <i class="fas fa-paper-plane text-lg"></i>
                         </div>
                         <h3 class="text-2xl font-bold bg-gradient-to-r from-shahin-yellow to-shahin-gold bg-clip-text text-transparent font-vazir">ارسال پیام</h3>
                     </div>

@@ -16,6 +16,7 @@ urlpatterns = [
     # Health check
     path('health/', views.health_check, name='health_check'),
     
+    
     # API endpoints
     path('contact-form/', views.contact_form, name='contact_form'),
     path('appointment-form/', views.appointment_form, name='appointment_form'),
