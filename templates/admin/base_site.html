@@ -1,0 +1,382 @@
+{% extends "admin/base.html" %}
+{% load i18n static %}
+
+{% block title %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block branding %}
+<div id="site-name">
+    <a href="{% url 'admin:index' %}">
+        <img src="{% static 'images/logo.png' %}" alt="شاهین خودرو" style="height: 40px; margin-right: 10px;">
+        {{ site_header|default:_('Django administration') }}
+    </a>
+</div>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+/* Custom Admin Styles */
+:root {
+    --primary-color: #2c3e50;
+    --secondary-color: #3498db;
+    --accent-color: #e74c3c;
+    --success-color: #27ae60;
+    --warning-color: #f39c12;
+    --light-bg: #f8f9fa;
+    --border-color: #dee2e6;
+}
+
+/* Header Styling */
+#header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+#site-name a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+}
+
+#site-name a:hover {
+    color: #f8f9fa;
+}
+
+/* User Tools */
+#user-tools {
+    color: white;
+}
+
+#user-tools a {
+    color: white;
+    text-decoration: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+#user-tools a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Breadcrumbs */
+.breadcrumbs {
+    background: var(--light-bg);
+    border-bottom: 1px solid var(--border-color);
+    padding: 10px 20px;
+}
+
+.breadcrumbs a {
+    color: var(--secondary-color);
+    text-decoration: none;
+}
+
+.breadcrumbs a:hover {
+    text-decoration: underline;
+}
+
+/* Content Area */
+#content {
+    background: white;
+    min-height: calc(100vh - 120px);
+}
+
+/* Module Styling */
+.module {
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+}
+
+.module h2 {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-bottom: 1px solid var(--border-color);
+    padding: 15px 20px;
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.module h3 {
+    background: var(--light-bg);
+    padding: 12px 20px;
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--primary-color);
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* Table Styling */
+.results {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.results table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.results th {
+    background: var(--light-bg);
+    padding: 12px 15px;
+    text-align: right;
+    font-weight: 600;
+    color: var(--primary-color);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.results td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.results tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* Form Styling */
+.form-row {
+    margin-bottom: 20px;
+}
+
+.form-row label {
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 5px;
+    display: block;
+}
+
+.form-row input,
+.form-row textarea,
+.form-row select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+}
+
+.form-row input:focus,
+.form-row textarea:focus,
+.form-row select:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+/* Button Styling */
+.default,
+input[type="submit"],
+input[type="button"],
+.button {
+    background: var(--secondary-color);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+.default:hover,
+input[type="submit"]:hover,
+input[type="button"]:hover,
+.button:hover {
+    background: #2980b9;
+}
+
+.deletelink {
+    background: var(--accent-color);
+}
+
+.deletelink:hover {
+    background: #c0392b;
+}
+
+/* Action Bar */
+.actions {
+    background: var(--light-bg);
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 20px;
+}
+
+.actions select {
+    padding: 8px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    margin-left: 10px;
+}
+
+/* Filter Sidebar */
+#changelist-filter {
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 20px;
+}
+
+#changelist-filter h2 {
+    color: var(--primary-color);
+    font-size: 16px;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+#changelist-filter h3 {
+    color: var(--secondary-color);
+    font-size: 14px;
+    margin: 15px 0 10px 0;
+}
+
+#changelist-filter ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#changelist-filter li {
+    margin-bottom: 5px;
+}
+
+#changelist-filter a {
+    color: #666;
+    text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    display: block;
+    transition: background-color 0.3s ease;
+}
+
+#changelist-filter a:hover,
+#changelist-filter a.selected {
+    background-color: var(--light-bg);
+    color: var(--secondary-color);
+}
+
+/* Messages */
+.messagelist {
+    margin: 20px 0;
+}
+
+.messagelist li {
+    padding: 15px 20px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    border-left: 4px solid;
+}
+
+.messagelist .success {
+    background-color: #d4edda;
+    border-left-color: var(--success-color);
+    color: #155724;
+}
+
+.messagelist .warning {
+    background-color: #fff3cd;
+    border-left-color: var(--warning-color);
+    color: #856404;
+}
+
+.messagelist .error {
+    background-color: #f8d7da;
+    border-left-color: var(--accent-color);
+    color: #721c24;
+}
+
+/* Pagination */
+.paginator {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.paginator a,
+.paginator .this-page {
+    display: inline-block;
+    padding: 8px 12px;
+    margin: 0 2px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    text-decoration: none;
+    color: var(--secondary-color);
+}
+
+.paginator .this-page {
+    background: var(--secondary-color);
+    color: white;
+}
+
+.paginator a:hover {
+    background: var(--light-bg);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    #site-name a {
+        font-size: 16px;
+    }
+    
+    .results th,
+    .results td {
+        padding: 8px 10px;
+        font-size: 13px;
+    }
+    
+    .form-row input,
+    .form-row textarea,
+    .form-row select {
+        padding: 8px 10px;
+    }
+}
+
+/* RTL Support */
+body {
+    direction: rtl;
+    text-align: right;
+}
+
+#changelist-filter {
+    float: left;
+}
+
+#changelist {
+    float: right;
+    width: calc(100% - 250px);
+}
+
+@media (max-width: 768px) {
+    #changelist-filter {
+        float: none;
+        width: 100%;
+        margin-bottom: 20px;
+    }
+    
+    #changelist {
+        float: none;
+        width: 100%;
+    }
+}
+</style>
+{% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" href="{% static 'css/admin-custom.css' %}">
+{% endblock %}

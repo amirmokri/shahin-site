@@ -1,0 +1,206 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+.dashboard-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.stat-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+
+.stat-card h3 {
+    margin: 0 0 10px 0;
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+.stat-card .number {
+    font-size: 32px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.stat-card.services { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+.stat-card.lectures { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+.stat-card.messages { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+.stat-card.appointments { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+.stat-card.comments { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+
+.quick-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin: 30px 0;
+}
+
+.quick-action {
+    background: white;
+    border: 1px solid #e1e5e9;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    text-decoration: none;
+    color: #333;
+    transition: all 0.3s ease;
+}
+
+.quick-action:hover {
+    border-color: #007cba;
+    box-shadow: 0 2px 8px rgba(0, 124, 186, 0.15);
+    text-decoration: none;
+    color: #007cba;
+}
+
+.quick-action i {
+    font-size: 24px;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.recent-activity {
+    background: white;
+    border: 1px solid #e1e5e9;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.recent-activity h3 {
+    margin-top: 0;
+    color: #333;
+    border-bottom: 2px solid #007cba;
+    padding-bottom: 10px;
+}
+
+.activity-item {
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.activity-item:last-child {
+    border-bottom: none;
+}
+
+.activity-item .time {
+    color: #666;
+    font-size: 12px;
+}
+
+.welcome-message {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 30px;
+    border-radius: 10px;
+    margin: 20px 0;
+    text-align: center;
+}
+
+.welcome-message h2 {
+    margin: 0 0 10px 0;
+    font-size: 28px;
+}
+
+.welcome-message p {
+    margin: 0;
+    opacity: 0.9;
+    font-size: 16px;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="welcome-message">
+    <h2>خوش آمدید به پنل مدیریت شاهین خودرو</h2>
+    <p>مدیریت حرفه‌ای خدمات خودرویی شما</p>
+</div>
+
+<div class="dashboard-stats">
+    <div class="stat-card services">
+        <h3>کل سرویس‌ها</h3>
+        <p class="number">{{ stats.total_services }}</p>
+    </div>
+    
+    <div class="stat-card lectures">
+        <h3>کل مقالات</h3>
+        <p class="number">{{ stats.total_lectures }}</p>
+    </div>
+    
+    <div class="stat-card messages">
+        <h3>پیام‌های خوانده نشده</h3>
+        <p class="number">{{ stats.unread_messages }}</p>
+    </div>
+    
+    <div class="stat-card appointments">
+        <h3>درخواست‌های در انتظار</h3>
+        <p class="number">{{ stats.pending_appointments }}</p>
+    </div>
+    
+    <div class="stat-card comments">
+        <h3>نظرات در انتظار تایید</h3>
+        <p class="number">{{ stats.pending_comments }}</p>
+    </div>
+</div>
+
+<div class="quick-actions">
+    <a href="{% url 'admin:main_service_add' %}" class="quick-action">
+        <i class="fas fa-plus"></i>
+        افزودن سرویس جدید
+    </a>
+    
+    <a href="{% url 'admin:main_lecture_add' %}" class="quick-action">
+        <i class="fas fa-edit"></i>
+        افزودن مقاله جدید
+    </a>
+    
+    <a href="{% url 'admin:main_contactmessage_changelist' %}?is_read__exact=0" class="quick-action">
+        <i class="fas fa-envelope"></i>
+        پیام‌های جدید
+    </a>
+    
+    <a href="{% url 'admin:main_appointmentrequest_changelist' %}?is_processed__exact=0" class="quick-action">
+        <i class="fas fa-calendar"></i>
+        درخواست‌های رزرو
+    </a>
+    
+    <a href="{% url 'admin:main_comment_changelist' %}?is_approved__exact=0" class="quick-action">
+        <i class="fas fa-comments"></i>
+        نظرات جدید
+    </a>
+    
+    <a href="{% url 'admin:main_sitesettings_change' 1 %}" class="quick-action">
+        <i class="fas fa-cog"></i>
+        تنظیمات سایت
+    </a>
+</div>
+
+<div class="recent-activity">
+    <h3>آمار کلی</h3>
+    <div class="activity-item">
+        <strong>سرویس‌های منتشر شده:</strong> {{ stats.published_services }} از {{ stats.total_services }}
+    </div>
+    <div class="activity-item">
+        <strong>مقالات منتشر شده:</strong> {{ stats.published_lectures }} از {{ stats.total_lectures }}
+    </div>
+    <div class="activity-item">
+        <strong>کل نظرات:</strong> {{ stats.total_comments }}
+    </div>
+</div>
+
+{{ block.super }}
+{% endblock %}
