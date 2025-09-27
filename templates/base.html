@@ -129,7 +129,7 @@
         }
         
         .hero-bg {
-            background: linear-gradient(rgba(30, 64, 175, 0.7), rgba(255, 215, 0, 0.3)), url('{{ site_settings.hero_image.url|default_if_none:"/media/site/hero.jpg" }}');
+            background: linear-gradient(rgba(30, 64, 175, 0.7), rgba(255, 215, 0, 0.3)), url('/media/site/hero.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: scroll;
@@ -281,7 +281,7 @@
                             <i class="fa-solid fa-newspaper w-5 h-5 ml-3 group-hover:scale-110 transition-transform duration-300"></i>
                             <span>مقالات</span>
                         </a>
-                        <a href="{% url 'home' %}#services" class="flex items-center px-4 py-3 text-gray-700 hover:text-shahin-blue hover:bg-shahin-yellow/10 transition-all duration-300 font-medium rounded-xl group">
+                        <a href="{% url 'services' %}" class="flex items-center px-4 py-3 text-gray-700 hover:text-shahin-blue hover:bg-shahin-yellow/10 transition-all duration-300 font-medium rounded-xl group">
                             <i class="fa-solid fa-gears w-5 h-5 ml-3 group-hover:scale-110 transition-transform duration-300"></i>
                             <span>سرویس‌ها</span>
                         </a>
