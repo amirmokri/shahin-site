@@ -11,7 +11,7 @@
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="{% block og_title %}{{ site_settings.site_name }}{% endblock %}">
     <meta property="og:description" content="{% block og_description %}{{ site_settings.site_description }}{% endblock %}">
-    <meta property="og:image" content="{% block og_image %}{{ site_settings.hero_image.url }}{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}{% if site_settings.hero_image %}{{ site_settings.hero_image.url }}{% else %}/media/site/hero.jpg{% endif %}{% endblock %}">
     <meta property="og:url" content="{{ request.build_absolute_uri }}">
     <meta property="og:type" content="website">
     
@@ -19,7 +19,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="{% block twitter_title %}{{ site_settings.site_name }}{% endblock %}">
     <meta name="twitter:description" content="{% block twitter_description %}{{ site_settings.site_description }}{% endblock %}">
-    <meta name="twitter:image" content="{% block twitter_image %}{{ site_settings.hero_image.url }}{% endblock %}">
+    <meta name="twitter:image" content="{% block twitter_image %}{% if site_settings.hero_image %}{{ site_settings.hero_image.url }}{% else %}/media/site/hero.jpg{% endif %}{% endblock %}">
     
     <title>{% block title %}{{ site_settings.site_name }} - {{ site_settings.site_description }}{% endblock %}</title>
     

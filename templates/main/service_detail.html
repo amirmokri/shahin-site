@@ -7,7 +7,7 @@
 
 {% block og_title %}{{ service.name }}{% endblock %}
 {% block og_description %}{{ service.description|truncatewords:20 }}{% endblock %}
-{% block og_image %}{{ service.image.url }}{% endblock %}
+{% block og_image %}{% if service.image %}{{ service.image.url }}{% else %}/media/services/default.jpg{% endif %}{% endblock %}
 
 {% block content %}
 <!-- Breadcrumb -->
@@ -43,7 +43,7 @@
             <div class="bg-white rounded-2xl shadow-shahin-xl overflow-hidden mb-12" data-aos="fade-up">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-0">
                     <div class="relative group">
-                        <img src="{{ service.image.url }}" alt="{{ service.name }}" class="w-full h-64 lg:h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                        <img src="{% if service.image %}{{ service.image.url }}{% else %}/media/services/default.jpg{% endif %}" alt="{{ service.name }}" class="w-full h-64 lg:h-full object-cover transition-transform duration-500 group-hover:scale-105">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                         <div class="absolute top-6 right-6">
                             <div class="bg-gradient-to-r from-shahin-yellow to-shahin-gold text-gray-900 px-4 py-2 rounded-full text-sm font-bold shadow-lg">
@@ -137,8 +137,8 @@
                             <div class="absolute inset-0 bg-gradient-to-r from-shahin-yellow/20 to-shahin-blue/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-500"></div>
                             <div class="relative bg-black rounded-2xl overflow-hidden shadow-shahin-xl">
                                 <div class="aspect-video">
-                                    <video class="w-full h-full" controls preload="metadata" playsinline poster="{{ service.image.url }}">
-                                        <source src="{{ service.video.url }}" type="video/mp4">
+                                    <video class="w-full h-full" controls preload="metadata" playsinline poster="{% if service.image %}{{ service.image.url }}{% else %}/media/services/default.jpg{% endif %}">
+                                        <source src="{% if service.video %}{{ service.video.url }}{% else %}#{% endif %}" type="video/mp4">
                                         مرورگر شما از ویدیو پشتیبانی نمی‌کند.
                                     </video>
                                 </div>
@@ -268,7 +268,7 @@
             {% for related_service in related_services %}
             <div class="group bg-white rounded-2xl shadow-shahin overflow-hidden hover:shadow-shahin-lg transition-all duration-500 transform hover:-translate-y-2" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:100 }}">
                 <div class="relative overflow-hidden">
-                    <img src="{{ related_service.image.url }}" alt="{{ related_service.name }}" class="w-full h-56 object-cover transition-transform duration-500 group-hover:scale-110">
+                    <img src="{% if related_service.image %}{{ related_service.image.url }}{% else %}/media/services/default.jpg{% endif %}" alt="{{ related_service.name }}" class="w-full h-56 object-cover transition-transform duration-500 group-hover:scale-110">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     <div class="absolute top-4 right-4">
                         <div class="w-12 h-12 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
