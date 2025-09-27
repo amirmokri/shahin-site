@@ -42,6 +42,10 @@ class Service(models.Model):
     # Replaced URL-based video with file upload for professional playback
     video = models.FileField(upload_to='services/videos/', blank=True, null=True, verbose_name="ویدیو (MP4)")
     instagram_link = models.URLField(blank=True, null=True, verbose_name="لینک اینستاگرام")
+    category = models.ForeignKey('ServiceCategory', on_delete=models.SET_NULL, null=True, blank=True, related_name='services', verbose_name="دسته‌بندی")
+    price = models.DecimalField(max_digits=10, decimal_places=0, blank=True, null=True, verbose_name="قیمت (تومان)")
+    duration = models.CharField(max_length=50, blank=True, null=True, verbose_name="مدت زمان")
+    is_featured = models.BooleanField(default=False, verbose_name="ویژه")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="تاریخ ایجاد")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="تاریخ بروزرسانی")
     is_published = models.BooleanField(default=True, verbose_name="منتشر شده")
@@ -126,3 +130,78 @@ class Bonus(models.Model):
             existing = Bonus.objects.first()
             self.pk = existing.pk
         super().save(*args, **kwargs)
+
+
+class ServiceCategory(models.Model):
+    name = models.CharField(max_length=100, verbose_name="نام دسته‌بندی")
+    slug = models.SlugField(unique=True, verbose_name="اسلاگ")
+    description = models.TextField(blank=True, null=True, verbose_name="توضیحات")
+    icon = models.CharField(max_length=50, blank=True, null=True, verbose_name="آیکون")
+    color = models.CharField(max_length=7, default="#3B82F6", verbose_name="رنگ")
+    is_active = models.BooleanField(default=True, verbose_name="فعال")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="تاریخ ایجاد")
+
+    class Meta:
+        verbose_name = "دسته‌بندی سرویس"
+        verbose_name_plural = "دسته‌بندی‌های سرویس"
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
+
+
+class Comment(models.Model):
+    RATING_CHOICES = [
+        (1, '1 ستاره'),
+        (2, '2 ستاره'),
+        (3, '3 ستاره'),
+        (4, '4 ستاره'),
+        (5, '5 ستاره'),
+    ]
+    
+    name = models.CharField(max_length=100, verbose_name="نام")
+    email = models.EmailField(verbose_name="ایمیل")
+    phone = models.CharField(max_length=20, blank=True, null=True, verbose_name="تلفن")
+    rating = models.IntegerField(choices=RATING_CHOICES, verbose_name="امتیاز")
+    comment = models.TextField(verbose_name="نظر")
+    is_approved = models.BooleanField(default=False, verbose_name="تایید شده")
+    is_featured = models.BooleanField(default=False, verbose_name="ویژه")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="تاریخ ثبت")
+    
+    # Relations
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, related_name='comments', blank=True, null=True, verbose_name="سرویس")
+    lecture = models.ForeignKey(Lecture, on_delete=models.CASCADE, related_name='comments', blank=True, null=True, verbose_name="کلاس")
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, related_name='replies', blank=True, null=True, verbose_name="پاسخ به")
+    
+    class Meta:
+        verbose_name = "نظر"
+        verbose_name_plural = "نظرات"
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"نظر از {self.name} - {self.rating} ستاره"
+
+    @property
+    def is_reply(self):
+        return self.parent is not None
+
+
+class AppointmentRequest(models.Model):
+    """Quick appointment/inquiry submitted from homepage"""
+    name = models.CharField(max_length=100, verbose_name="نام")
+    phone = models.CharField(max_length=20, verbose_name="تلفن")
+    email = models.EmailField(blank=True, null=True, verbose_name="ایمیل")
+    preferred_date = models.DateField(blank=True, null=True, verbose_name="تاریخ پیشنهادی")
+    car_model = models.CharField(max_length=120, blank=True, verbose_name="خودرو")
+    service = models.CharField(max_length=120, blank=True, verbose_name="نوع سرویس")
+    message = models.TextField(blank=True, verbose_name="توضیحات")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="تاریخ ثبت")
+    is_processed = models.BooleanField(default=False, verbose_name="پیگیری شد")
+
+    class Meta:
+        verbose_name = "درخواست رزرو"
+        verbose_name_plural = "درخواست‌های رزرو"
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.name} - {self.phone}"

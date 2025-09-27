@@ -10,6 +10,7 @@ from django.utils.decorators import method_decorator
 import json
 
 from .models import Lecture, Service, ContactMessage, SiteSettings
+from django.db.models import Q
 from .serializers import LectureSerializer, ServiceSerializer, ContactMessageSerializer, SiteSettingsSerializer
 
 

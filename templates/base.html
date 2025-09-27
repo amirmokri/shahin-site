@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
+    {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="{% block meta_description %}خدمات حرفه‌ای خودرو با کیفیت جهانی - شاهین{% endblock %}">
@@ -23,7 +24,7 @@
     <title>{% block title %}{{ site_settings.site_name }} - {{ site_settings.site_description }}{% endblock %}</title>
     
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="{% load static %}{% static 'images/favicon.ico' %}">
+    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -93,6 +94,9 @@
     <!-- AOS Animation Library -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     
+    <!-- Swiper (Reviews Carousel) -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper@9/swiper-bundle.min.css" />
+    
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/Jxv6KVqZr2Q4h+OGnQ4v1j6C1ogwDq5GdJXGxC4F0kq2b6qKQYf8a7bxtxUu2Y0Pp2/5xRLQw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     
@@ -106,8 +110,8 @@
         
         body {
             font-family: 'Vazirmatn', 'Vazir', Tahoma, Arial, sans-serif;
-            line-height: 1.7;
-            letter-spacing: 0.5px;
+            line-height: 1.8;
+            letter-spacing: 0.2px;
         }
         
         .rtl {
@@ -125,10 +129,10 @@
         }
         
         .hero-bg {
-            background: linear-gradient(rgba(30, 64, 175, 0.7), rgba(255, 215, 0, 0.3)), url('{{ site_settings.hero_image.url }}');
+            background: linear-gradient(rgba(30, 64, 175, 0.7), rgba(255, 215, 0, 0.3)), url('{{ site_settings.hero_image.url|default_if_none:"/media/site/hero.jpg" }}');
             background-size: cover;
             background-position: center;
-            background-attachment: fixed;
+            background-attachment: scroll;
         }
         
         .card-hover {
@@ -185,6 +189,9 @@
         }
     </style>
     
+    <!-- Project static CSS -->
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+    
     {% block extra_css %}{% endblock %}
 </head>
 <body class="bg-gray-50 dark-mode-toggle">
@@ -195,11 +202,11 @@
                 <!-- Logo and Site Name -->
                 <div class="flex items-center space-x-4 space-x-reverse group">
                     <div class="relative h-12 w-12 rounded-full overflow-hidden ring-2 ring-shahin-yellow bg-white shadow-shahin transition-all duration-300 group-hover:scale-110">
-                        <img src="{% load static %}{% static 'images/logo.png' %}" alt="شاهین" class="h-full w-full object-cover" onerror="this.style.display='none'">
+                        <img src="{% static 'images/logo.png' %}" alt="شاهین" class="h-full w-full object-contain p-1">
                         <div class="absolute inset-0 rounded-full pointer-events-none"></div>
                     </div>
                     <div>
-                        <h1 class="text-3xl font-bold bg-gradient-to-r from-shahin-blue to-shahin-light-blue bg-clip-text text-transparent font-vazir">{{ site_settings.site_name }}</h1>
+                        <h1 class="text-2xl md:text-3xl font-bold bg-gradient-to-r from-shahin-blue to-shahin-light-blue bg-clip-text text-transparent font-vazir">{{ site_settings.site_name }}</h1>
                         <p class="text-sm text-gray-600 font-medium">خدمات حرفه‌ای خودرو</p>
                     </div>
                 </div>
@@ -214,8 +221,12 @@
                         <span class="relative z-10">مقالات</span>
                         <div class="absolute inset-0 bg-shahin-yellow/10 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300"></div>
                     </a>
-                    <a href="{% url 'home' %}#services" class="relative px-4 py-2 text-gray-700 hover:text-shahin-blue transition-all duration-300 font-medium group">
+                    <a href="{% url 'services' %}" class="relative px-4 py-2 text-gray-700 hover:text-shahin-blue transition-all duration-300 font-medium group">
                         <span class="relative z-10">سرویس‌ها</span>
+                        <div class="absolute inset-0 bg-shahin-yellow/10 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300"></div>
+                    </a>
+                    <a href="{% url 'appointment' %}" class="relative px-4 py-2 text-gray-700 hover:text-shahin-blue transition-all duration-300 font-medium group">
+                        <span class="relative z-10">رزرو وقت</span>
                         <div class="absolute inset-0 bg-shahin-yellow/10 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300"></div>
                     </a>
                     <a href="#contact" class="relative px-4 py-2 text-gray-700 hover:text-shahin-blue transition-all duration-300 font-medium group">
@@ -261,6 +272,10 @@
                         <a href="{% url 'home' %}" class="flex items-center px-4 py-3 text-gray-700 hover:text-shahin-blue hover:bg-shahin-yellow/10 transition-all duration-300 font-medium rounded-xl group">
                             <i class="fa-solid fa-house w-5 h-5 ml-3 group-hover:scale-110 transition-transform duration-300"></i>
                             <span>خانه</span>
+                        </a>
+                        <a href="{% url 'appointment' %}" class="flex items-center px-4 py-3 text-gray-700 hover:text-shahin-blue hover:bg-shahin-yellow/10 transition-all duration-300 font-medium rounded-xl group">
+                            <i class="fa-solid fa-calendar-check w-5 h-5 ml-3 group-hover:scale-110 transition-transform duration-300"></i>
+                            <span>رزرو وقت</span>
                         </a>
                         <a href="{% url 'lectures_list' %}" class="flex items-center px-4 py-3 text-gray-700 hover:text-shahin-blue hover:bg-shahin-yellow/10 transition-all duration-300 font-medium rounded-xl group">
                             <i class="fa-solid fa-newspaper w-5 h-5 ml-3 group-hover:scale-110 transition-transform duration-300"></i>
@@ -406,6 +421,7 @@
 
     <!-- Scripts -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://unpkg.com/swiper@9/swiper-bundle.min.js"></script>
     <script>
         // Initialize AOS
         AOS.init({
@@ -535,15 +551,11 @@
             });
         });
 
-        // Add loading animation to images
-        document.querySelectorAll('img').forEach(img => {
-            img.addEventListener('load', function() {
-                this.style.opacity = '1';
-            });
-            img.style.opacity = '0';
-            img.style.transition = 'opacity 0.3s ease';
-        });
+        // Remove global image fade-in to avoid logo flicker
     </script>
+    
+    <!-- Project static JS -->
+    <script src="{% static 'js/main.js' %}"></script>
     
     {% block extra_js %}{% endblock %}
 </body>

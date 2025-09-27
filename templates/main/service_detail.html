@@ -19,7 +19,7 @@
                 خانه
             </a>
             <div class="w-2 h-2 bg-shahin-yellow rounded-full"></div>
-            <a href="#services" class="flex items-center text-shahin-blue hover:text-shahin-dark-blue transition-colors duration-300 group">
+            <a href="{% url 'services' %}" class="flex items-center text-shahin-blue hover:text-shahin-dark-blue transition-colors duration-300 group">
                 <i class="fas fa-cogs ml-2 group-hover:scale-110 transition-transform duration-300"></i>
                 سرویس‌ها
             </a>
@@ -59,8 +59,35 @@
                         </div>
                     </div>
                     <div class="p-8 lg:p-12 flex flex-col justify-center bg-gradient-to-br from-gray-50 to-white">
+                        <div class="flex items-center gap-3 mb-4">
+                            {% if service.category %}
+                            <span class="px-4 py-2 bg-shahin-blue/10 text-shahin-blue rounded-full text-sm font-medium">{{ service.category.name }}</span>
+                            {% endif %}
+                            {% if service.is_featured %}
+                            <span class="px-4 py-2 bg-gradient-to-r from-shahin-yellow to-shahin-gold text-gray-900 rounded-full text-sm font-bold">ویژه</span>
+                            {% endif %}
+                        </div>
                         <h1 class="text-3xl lg:text-5xl font-bold bg-gradient-to-r from-shahin-blue to-shahin-light-blue bg-clip-text text-transparent font-vazir mb-6">{{ service.name }}</h1>
                         <p class="text-lg text-gray-600 mb-8 leading-relaxed">{{ service.description|truncatewords:30 }}</p>
+                        
+                        <!-- Service Info -->
+                        <div class="grid grid-cols-2 gap-4 mb-8">
+                            {% if service.price %}
+                            <div class="bg-shahin-blue/10 rounded-xl p-4 text-center">
+                                <i class="fas fa-tag text-2xl text-shahin-blue mb-2"></i>
+                                <div class="text-2xl font-bold text-shahin-blue">{{ service.price|floatformat:0 }}</div>
+                                <div class="text-sm text-gray-600">تومان</div>
+                            </div>
+                            {% endif %}
+                            {% if service.duration %}
+                            <div class="bg-shahin-yellow/10 rounded-xl p-4 text-center">
+                                <i class="fas fa-clock text-2xl text-shahin-yellow mb-2"></i>
+                                <div class="text-2xl font-bold text-shahin-yellow">{{ service.duration }}</div>
+                                <div class="text-sm text-gray-600">مدت زمان</div>
+                            </div>
+                            {% endif %}
+                        </div>
+                        
                         <div class="flex flex-col sm:flex-row gap-4">
                             {% if service.instagram_link %}
                             <a href="{{ service.instagram_link }}" target="_blank" class="group flex items-center justify-center bg-gradient-to-r from-purple-500 to-pink-500 text-white py-4 px-8 rounded-xl hover:from-purple-600 hover:to-pink-600 transition-all duration-300 transform hover:scale-105 shadow-lg">
@@ -68,6 +95,10 @@
                                 مشاهده در اینستاگرام
                             </a>
                             {% endif %}
+                            <a href="{% url 'appointment' %}" class="group flex items-center justify-center bg-gradient-to-r from-shahin-yellow to-shahin-gold text-gray-900 py-4 px-8 rounded-xl hover:from-shahin-gold hover:to-shahin-yellow transition-all duration-300 transform hover:scale-105 shadow-lg">
+                                <i class="fas fa-calendar-check text-xl ml-3 group-hover:scale-110 transition-transform duration-300"></i>
+                                رزرو وقت
+                            </a>
                             <a href="#contact" class="group flex items-center justify-center bg-gradient-to-r from-shahin-blue to-shahin-light-blue text-white py-4 px-8 rounded-xl hover:from-shahin-light-blue hover:to-shahin-blue transition-all duration-300 transform hover:scale-105 shadow-lg">
                                 <i class="fas fa-phone ml-3 group-hover:scale-110 transition-transform duration-300"></i>
                                 درخواست سرویس
@@ -268,6 +299,97 @@
 </section>
 {% endif %}
 
+<!-- Comments Section -->
+<section class="py-20 bg-gradient-to-br from-gray-50 to-white relative overflow-hidden">
+    <div class="container mx-auto px-4 relative z-10">
+        <div class="max-w-4xl mx-auto">
+            <!-- Comments Header -->
+            <div class="text-center mb-12" data-aos="fade-up">
+                <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-shahin-blue to-shahin-light-blue rounded-full mb-6">
+                    <i class="fas fa-comments text-white text-2xl"></i>
+                </div>
+                <h2 class="text-3xl md:text-4xl font-bold mb-6 bg-gradient-to-r from-shahin-blue to-shahin-light-blue bg-clip-text text-transparent font-vazir">نظرات مشتریان</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">تجربیات و نظرات مشتریان ما درباره این سرویس</p>
+            </div>
+
+            <!-- Comment Form -->
+            <div class="bg-white rounded-2xl shadow-shahin p-8 mb-12" data-aos="fade-up" data-aos-delay="100">
+                <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">نظر خود را ثبت کنید</h3>
+                <form id="comment-form" class="space-y-6">
+                    <input type="hidden" name="service_id" value="{{ service.id }}">
+                    <input type="text" name="company" class="hidden" tabindex="-1" autocomplete="off" style="display:none">
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">نام *</label>
+                            <input type="text" name="name" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-shahin-blue focus:border-transparent transition-all duration-300">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">ایمیل *</label>
+                            <input type="email" name="email" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-shahin-blue focus:border-transparent transition-all duration-300">
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">تلفن</label>
+                            <input type="tel" name="phone" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-shahin-blue focus:border-transparent transition-all duration-300">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">امتیاز *</label>
+                            <div class="flex items-center space-x-2 space-x-reverse">
+                                <input type="range" name="rating" min="1" max="5" value="5" class="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider">
+                                <span id="rating-value" class="text-2xl font-bold text-shahin-yellow">5</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">نظر شما *</label>
+                        <textarea name="comment" rows="4" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-shahin-blue focus:border-transparent transition-all duration-300" placeholder="نظر خود را درباره این سرویس بنویسید..."></textarea>
+                    </div>
+                    
+                    <button type="submit" class="w-full bg-gradient-to-r from-shahin-blue to-shahin-light-blue text-white py-4 px-8 rounded-xl hover:from-shahin-light-blue hover:to-shahin-blue transition-all duration-300 transform hover:scale-105 shadow-lg font-bold">
+                        <i class="fas fa-paper-plane ml-2"></i>
+                        ثبت نظر
+                    </button>
+                </form>
+            </div>
+
+            <!-- Comments List -->
+            <div class="space-y-6">
+                {% for comment in comments %}
+                <div class="bg-white rounded-2xl shadow-shahin p-6" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:200 }}">
+                    <div class="flex items-start space-x-4 space-x-reverse">
+                        <div class="w-12 h-12 bg-gradient-to-r from-shahin-blue to-shahin-light-blue rounded-full flex items-center justify-center text-white font-bold text-lg">
+                            {{ comment.name|first|upper }}
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center justify-between mb-2">
+                                <h4 class="text-lg font-bold text-gray-800">{{ comment.name }}</h4>
+                                <div class="flex items-center space-x-1 space-x-reverse">
+                                    {% for i in "12345" %}
+                                    <i class="fas fa-star text-{% if forloop.counter <= comment.rating %}shahin-yellow{% else %}gray-300{% endif %}"></i>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-3">{{ comment.created_at|date:"Y/m/d H:i" }}</p>
+                            <p class="text-gray-700 leading-relaxed">{{ comment.comment }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="text-center py-12" data-aos="fade-up">
+                    <i class="fas fa-comment-slash text-6xl text-gray-300 mb-4"></i>
+                    <h3 class="text-xl font-bold text-gray-500 mb-2">هنوز نظری ثبت نشده</h3>
+                    <p class="text-gray-400">اولین نفری باشید که نظر خود را ثبت می‌کند</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
 <!-- Pre-Footer Section -->
 <section class="py-16 bg-gray-100">
     <div class="container mx-auto px-4">
@@ -327,6 +449,35 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
+
+.slider {
+    -webkit-appearance: none;
+    appearance: none;
+    background: #e5e7eb;
+    outline: none;
+    border-radius: 8px;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: #3b82f6;
+    cursor: pointer;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: #3b82f6;
+    cursor: pointer;
+    border-radius: 50%;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
 </style>
 {% endblock %}
 
@@ -381,5 +532,86 @@ const videoObserver = new IntersectionObserver((entries) => {
 document.querySelectorAll('iframe[data-src]').forEach(iframe => {
     videoObserver.observe(iframe);
 });
+
+// Comment form handling
+const commentForm = document.getElementById('comment-form');
+const ratingSlider = document.querySelector('input[name="rating"]');
+const ratingValue = document.getElementById('rating-value');
+
+// Rating slider
+if (ratingSlider && ratingValue) {
+    ratingSlider.addEventListener('input', function() {
+        ratingValue.textContent = this.value;
+    });
+}
+
+// Comment form submission
+if (commentForm) {
+    commentForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        
+        // Show loading state
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin ml-2"></i>در حال ثبت...';
+        submitBtn.disabled = true;
+        
+        fetch('{% url "comment_form" %}', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]')?.value || ''
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Show success message
+                const successDiv = document.createElement('div');
+                successDiv.className = 'bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-xl mb-4';
+                successDiv.innerHTML = '<i class="fas fa-check-circle ml-2"></i>' + data.message;
+                commentForm.parentNode.insertBefore(successDiv, commentForm);
+                
+                // Reset form
+                commentForm.reset();
+                ratingValue.textContent = '5';
+                
+                // Remove success message after 5 seconds
+                setTimeout(() => {
+                    successDiv.remove();
+                }, 5000);
+            } else {
+                // Show error message
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-xl mb-4';
+                errorDiv.innerHTML = '<i class="fas fa-exclamation-circle ml-2"></i>' + data.message;
+                commentForm.parentNode.insertBefore(errorDiv, commentForm);
+                
+                // Remove error message after 5 seconds
+                setTimeout(() => {
+                    errorDiv.remove();
+                }, 5000);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-xl mb-4';
+            errorDiv.innerHTML = '<i class="fas fa-exclamation-circle ml-2"></i>خطا در ارسال نظر. لطفاً دوباره تلاش کنید';
+            commentForm.parentNode.insertBefore(errorDiv, commentForm);
+            
+            setTimeout(() => {
+                errorDiv.remove();
+            }, 5000);
+        })
+        .finally(() => {
+            // Reset button
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+        });
+    });
+}
 </script>
 {% endblock %}

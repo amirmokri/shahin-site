@@ -7,48 +7,102 @@
 
 {% block content %}
 <!-- Hero Section -->
-<section class="hero-bg min-h-screen flex items-center justify-center text-white relative overflow-hidden">
-    <!-- Animated Background Elements -->
-    <div class="absolute inset-0">
-        <div class="absolute top-20 left-10 w-20 h-20 bg-shahin-yellow/20 rounded-full animate-float"></div>
-        <div class="absolute top-40 right-20 w-16 h-16 bg-shahin-blue/20 rounded-full animate-float" style="animation-delay: 1s;"></div>
-        <div class="absolute bottom-40 left-20 w-12 h-12 bg-shahin-yellow/30 rounded-full animate-float" style="animation-delay: 2s;"></div>
-        <div class="absolute bottom-20 right-10 w-24 h-24 bg-shahin-blue/20 rounded-full animate-float" style="animation-delay: 0.5s;"></div>
-    </div>
-    
-    <div class="absolute inset-0 bg-gradient-to-br from-black/40 via-black/20 to-black/40"></div>
-    
-    <div class="relative z-10 text-center px-4" data-aos="fade-up">
-        <div class="mb-8" data-aos="fade-in-down" data-aos-delay="200">
-            <h1 class="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-white via-shahin-yellow to-white bg-clip-text text-transparent font-vazir drop-shadow-2xl">
-                {{ site_settings.site_name }}
-            </h1>
-            <div class="w-24 h-1 bg-gradient-to-r from-shahin-yellow to-shahin-gold mx-auto rounded-full"></div>
-        </div>
-        
-        <p class="text-xl md:text-3xl mb-12 text-white/90 max-w-4xl mx-auto leading-relaxed font-medium" data-aos="fade-in-up" data-aos-delay="400">
-            {{ site_settings.site_description }}
-        </p>
-        
-        <div class="flex flex-col sm:flex-row gap-6 justify-center" data-aos="fade-in-up" data-aos-delay="600">
-            <a href="#services" class="group relative px-8 py-4 bg-gradient-to-r from-shahin-yellow to-shahin-gold text-gray-900 font-bold rounded-xl hover:from-shahin-gold hover:to-shahin-yellow transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-yellow-glow">
-                <i class="fas fa-cogs ml-2 group-hover:rotate-180 transition-transform duration-300"></i>
-                مشاهده سرویس‌ها
-                <div class="absolute inset-0 bg-white/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            </a>
-            <a href="{% url 'lectures_list' %}" class="group relative px-8 py-4 bg-transparent border-2 border-white/80 text-white font-bold rounded-xl hover:bg-white hover:text-gray-900 transition-all duration-300 transform hover:scale-105 backdrop-blur-sm">
-                <i class="fas fa-newspaper ml-2 group-hover:scale-110 transition-transform duration-300"></i>
-                مقالات آموزشی
-            </a>
-        </div>
-    </div>
-    
-    <!-- Enhanced Scroll indicator -->
-    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce-slow" data-aos="fade-in-up" data-aos-delay="800">
-        <div class="flex flex-col items-center space-y-2">
-            <span class="text-white/70 text-sm font-medium">اسکرول کنید</span>
-            <div class="w-6 h-10 border-2 border-white/50 rounded-full flex justify-center">
-                <div class="w-1 h-3 bg-white/70 rounded-full mt-2 animate-pulse"></div>
+<section class="relative py-16 bg-gradient-to-br from-gray-50 to-white overflow-hidden min-h-screen flex items-center">
+    <div class="container mx-auto px-4 relative z-10 w-full">
+        <div class="w-full">
+            <!-- Hero Image with Text Overlay -->
+            <div class="relative mb-16">
+                <!-- Rounded Hero Image -->
+                <div class="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white w-full" data-aos="fade-up">
+                    <img src="{{ site_settings.hero_image.url|default_if_none:'/media/site/hero.jpg' }}" alt="{{ site_settings.site_name }}" class="w-full h-[400px] md:h-[500px] object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-transparent"></div>
+                    
+                    <!-- Text Overlays -->
+                    <div class="absolute top-8 right-8 text-right" data-aos="fade-in-down" data-aos-delay="200">
+                        <h1 class="text-3xl md:text-5xl lg:text-6xl font-bold font-vazir mb-4 drop-shadow-2xl" style="background: linear-gradient(45deg, #1E40AF, #3B82F6, #FFD700, #FFA500); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                            اتو سرویس شاهین
+                        </h1>
+                    </div>
+                    
+                    <div class="absolute bottom-8 right-8 left-8 text-right" data-aos="fade-in-up" data-aos-delay="400">
+                        <p class="text-lg md:text-xl leading-relaxed drop-shadow-lg max-w-3xl" style="background: linear-gradient(45deg, #1E40AF, #FFD700); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-shadow: 2px 2px 4px rgba(0,0,0,0.8);">
+                            تیم تخصصی اتو سرویس شاهین با بیش از بیست سال سابقه در تعمیرات و سرویس‌های تخصصی خودروهای ایرانی و خارجی آماده ارائه خدمات عالی و نوین به شما مشتریان گرامی می‌باشد.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Features Section -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Services Link -->
+                <div class="group bg-white rounded-2xl shadow-shahin p-8 hover:shadow-shahin-lg transition-all duration-300 transform hover:-translate-y-2" data-aos="fade-up" data-aos-delay="100">
+                    <div class="flex items-center mb-4">
+                        <div class="w-16 h-16 bg-gradient-to-r from-shahin-blue to-shahin-light-blue rounded-2xl flex items-center justify-center ml-4 group-hover:scale-110 transition-transform duration-300">
+                            <i class="fas fa-cogs text-white text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 group-hover:text-shahin-blue transition-colors">خدمات ما</h3>
+                    </div>
+                    <p class="text-gray-600 mb-6 leading-relaxed">شما می‌توانید تمامی 
+                        <a href="{% url 'services' %}" class="text-shahin-blue font-semibold hover:text-shahin-dark-blue transition-colors underline decoration-2 underline-offset-2">
+                            سرویس‌ها
+                        </a>
+                        مجموعه را در صفحه سرویس‌ها مشاهده کنید
+                    </p>
+                    <a href="{% url 'services' %}" class="inline-flex items-center text-shahin-blue font-semibold hover:text-shahin-dark-blue transition-colors group-hover:translate-x-1">
+                        مشاهده سرویس‌ها
+                        <i class="fas fa-arrow-left mr-2 group-hover:translate-x-1 transition-transform duration-300"></i>
+                    </a>
+                </div>
+                
+                <!-- Phone Consultation -->
+                <div class="group bg-white rounded-2xl shadow-shahin p-8 hover:shadow-shahin-lg transition-all duration-300 transform hover:-translate-y-2" data-aos="fade-up" data-aos-delay="200">
+                    <div class="flex items-center mb-4">
+                        <div class="w-16 h-16 bg-gradient-to-r from-green-500 to-green-600 rounded-2xl flex items-center justify-center ml-4 group-hover:scale-110 transition-transform duration-300">
+                            <i class="fas fa-phone text-white text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 group-hover:text-green-600 transition-colors">مشاوره رایگان</h3>
+                    </div>
+                    <p class="text-gray-600 mb-6 leading-relaxed">برای مشاوره رایگان تلفنی با 
+                        <a href="tel:{{ site_settings.phone }}" class="text-green-600 font-semibold hover:text-green-700 transition-colors underline decoration-2 underline-offset-2">
+                            شماره  
+                        </a>
+                        تماس حاصل فرمایید
+                    </p>
+                    <a href="tel:{{ site_settings.phone }}" class="inline-flex items-center text-green-600 font-semibold hover:text-green-700 transition-colors group-hover:translate-x-1">
+                        تماس مستقیم
+                        <i class="fas fa-arrow-left mr-2 group-hover:translate-x-1 transition-transform duration-300"></i>
+                    </a>
+                </div>
+                
+                <!-- Online Booking -->
+                <div class="group bg-white rounded-2xl shadow-shahin p-8 hover:shadow-shahin-lg transition-all duration-300 transform hover:-translate-y-2" data-aos="fade-up" data-aos-delay="300">
+                    <div class="flex items-center mb-4">
+                        <div class="w-16 h-16 bg-gradient-to-r from-shahin-yellow to-shahin-gold rounded-2xl flex items-center justify-center ml-4 group-hover:scale-110 transition-transform duration-300">
+                            <i class="fas fa-calendar-check text-gray-900 text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 group-hover:text-shahin-yellow transition-colors">رزرو آنلاین</h3>
+                    </div>
+                    <p class="text-gray-600 mb-6 leading-relaxed">برای 
+                        <a href="{% url 'appointment' %}" class="text-shahin-yellow font-semibold hover:text-shahin-gold transition-colors underline decoration-2 underline-offset-2">
+                            رزرو آنلاین
+                        </a>
+                        وقت سرویس و خدمات مکانیکی فرم رزرو آنلاین را پر کنید
+                    </p>
+                    <a href="{% url 'appointment' %}" class="inline-flex items-center text-shahin-yellow font-semibold hover:text-shahin-gold transition-colors group-hover:translate-x-1">
+                        رزرو وقت
+                        <i class="fas fa-arrow-left mr-2 group-hover:translate-x-1 transition-transform duration-300"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Instagram Section -->
+            <div class="mt-12 text-center" data-aos="fade-up" data-aos-delay="400">
+                <div class="inline-flex items-center bg-gradient-to-r from-purple-500 to-pink-500 text-white px-8 py-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 group">
+                    <i class="fab fa-instagram text-2xl ml-3 group-hover:scale-110 transition-transform duration-300"></i>
+                    <span class="font-bold text-lg">ما را در اینستاگرام دنبال کنید</span>
+                    <i class="fas fa-arrow-left mr-3 group-hover:translate-x-1 transition-transform duration-300"></i>
+                    <a href="{{ site_settings.instagram_url }}" target="_blank" class="absolute inset-0"></a>
+                </div>
             </div>
         </div>
     </div>
@@ -193,6 +247,27 @@
     </div>
 </section>
 
+<!-- Vehicles Serviced (Brands) -->
+<section class="py-16 bg-white" data-aos="fade-up">
+    <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-shahin-blue to-shahin-light-blue bg-clip-text text-transparent font-vazir">برندهای تحت پوشش</h2>
+            <p class="text-gray-600 mt-3">خدمات تخصصی برای انواع خودروهای داخلی و خارجی</p>
+        </div>
+        <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-6 items-center">
+            {% for brand in iran_brands %}
+            <div class="p-4 rounded-xl border border-gray-200 text-center hover:shadow-shahin transition card-hover">
+                <span class="text-gray-700 font-medium">{{ brand }}</span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="mt-12 text-center">
+        <a href="#contact" class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-shahin-blue to-shahin-light-blue text-white rounded-xl hover:from-shahin-light-blue hover:to-shahin-blue transition-all">دریافت مشاوره</a>
+    </div>
+    
+</section>
+
 <!-- Recent Lectures Section -->
 <section class="py-20 bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden">
     <!-- Background Pattern -->
@@ -255,6 +330,111 @@
     </div>
 </section>
 
+<!-- Reviews Carousel -->
+<section class="py-20 bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden">
+    <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-shahin-yellow to-shahin-gold rounded-full mb-6">
+                <i class="fa-solid fa-star text-gray-900 text-2xl"></i>
+            </div>
+            <h2 class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-shahin-blue to-shahin-light-blue bg-clip-text text-transparent font-vazir">نظرات مشتریان</h2>
+            <p class="text-gray-600 mt-3">رضایت مشتریان نشان‌دهنده کیفیت خدمات ماست</p>
+        </div>
+        <div class="swiper reviews-swiper">
+            <div class="swiper-wrapper">
+                {% for item in testimonials %}
+                <div class="swiper-slide">
+                    <div class="bg-white rounded-2xl shadow-shahin p-8 mx-2 h-full flex flex-col">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-shahin-blue/10 flex items-center justify-center text-shahin-blue">{{ item.name|first }}</div>
+                                <div>
+                                    <p class="font-bold text-gray-800">{{ item.name }}</p>
+                                    <p class="text-sm text-gray-500">{{ item.date }}</p>
+                                </div>
+                            </div>
+                            <div class="text-yellow-400">
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 leading-relaxed">{{ item.text }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="swiper-pagination"></div>
+        </div>
+    </div>
+</section>
+
+<!-- Quick Appointment Form (Pre-Footer) -->
+<section class="py-16 bg-gradient-to-br from-gray-50 to-gray-100" data-aos="fade-up">
+    <div class="container mx-auto px-4 max-w-5xl">
+        <div class="text-center mb-10">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-shahin-yellow to-shahin-gold rounded-full mb-6">
+                <i class="fa-solid fa-calendar-check text-gray-900 text-2xl"></i>
+            </div>
+            <h2 class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-shahin-blue to-shahin-light-blue bg-clip-text text-transparent font-vazir">درخواست رزرو سریع</h2>
+            <p class="text-gray-600 mt-3">فرم زیر را پر کنید تا در اولین فرصت با شما تماس بگیریم</p>
+        </div>
+        <form id="quick-appointment-form" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div>
+                <input class="form-input" type="text" name="name" placeholder="نام و نام خانوادگی" required />
+            </div>
+            <div>
+                <input class="form-input" type="tel" name="phone" placeholder="تلفن" required />
+            </div>
+            <div>
+                <input class="form-input" type="email" name="email" placeholder="ایمیل (اختیاری)" />
+            </div>
+            <div>
+                <input class="form-input" type="date" name="preferred_date" placeholder="تاریخ پیشنهادی" />
+            </div>
+            <div>
+                <input class="form-input" type="text" name="car_model" placeholder="خودرو (مانند: 206، دنا، پراید...)" />
+            </div>
+            <div>
+                <input class="form-input" type="text" name="service" placeholder="نوع سرویس (مانند: تعویض روغن)" />
+            </div>
+            <div class="md:col-span-2">
+                <textarea class="form-textarea" name="message" rows="4" placeholder="توضیحات"></textarea>
+            </div>
+            <input type="text" name="company" class="hidden" tabindex="-1" autocomplete="off" style="display:none" />
+            <div class="md:col-span-2 flex flex-col sm:flex-row gap-3">
+                <button type="submit" class="btn-primary flex-1">ثبت درخواست</button>
+                <a href="{% url 'appointment' %}" class="btn-secondary flex-1 text-center">جزئیات بیشتر رزرو</a>
+            </div>
+            <div id="quick-appointment-msg" class="md:col-span-2 mt-2 hidden"></div>
+        </form>
+    </div>
+    
+</section>
+
+<!-- Location & Map -->
+<section class="py-20 bg-white">
+    <div class="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+        <div>
+            <h2 class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-shahin-blue to-shahin-light-blue bg-clip-text text-transparent font-vazir mb-4">ما کجا هستیم؟</h2>
+            <p class="text-gray-600 mb-6">{{ site_settings.address }}</p>
+            <div class="flex flex-wrap gap-3">
+                <a href="tel:{{ site_settings.phone }}" class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-shahin-yellow to-shahin-gold text-gray-900 rounded-xl hover:from-shahin-gold hover:to-shahin-yellow transition-all">
+                    <i class="fa-solid fa-phone ml-2"></i> تماس تلفنی
+                </a>
+                <a href="#contact" class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-shahin-blue to-shahin-light-blue text-white rounded-xl hover:from-shahin-light-blue hover:to-shahin-blue transition-all">
+                    <i class="fa-solid fa-paper-plane ml-2"></i> ارسال پیام
+                </a>
+            </div>
+        </div>
+        <div class="rounded-2xl overflow-hidden shadow-shahin-xl">
+            <iframe title="map" src="https://maps.google.com/maps?q={{ site_settings.address|urlencode }}&t=&z=13&ie=UTF8&iwloc=&output=embed" class="w-full h-96" loading="lazy"></iframe>
+        </div>
+    </div>
+</section>
+
 <!-- Pre-Footer Section -->
 <section class="py-16 bg-gray-100">
     <div class="container mx-auto px-4">
@@ -298,7 +478,11 @@
 // Bonus popup (shown once per session)
 document.addEventListener('DOMContentLoaded', function() {
     const hasSeenBonus = sessionStorage.getItem('bonus_shown');
-    const bonusExists = Boolean({% if bonus %}true{% else %}false{% endif %});
+    {% if bonus %}
+    const bonusExists = true;
+    {% else %}
+    const bonusExists = false;
+    {% endif %}
     if (bonusExists && !hasSeenBonus) {
         const modal = document.getElementById('bonus-modal');
         if (modal) {
@@ -379,12 +563,12 @@ document.getElementById('service-modal').addEventListener('click', function(e) {
     }
 });
 
-// Parallax effect for hero section
+// Smooth scroll effect for hero section
 window.addEventListener('scroll', () => {
     const scrolled = window.pageYOffset;
-    const hero = document.querySelector('.hero-bg');
-    if (hero) {
-        hero.style.transform = `translateY(${scrolled * 0.5}px)`;
+    const hero = document.querySelector('section');
+    if (hero && scrolled < window.innerHeight) {
+        hero.style.transform = `translateY(${scrolled * 0.3}px)`;
     }
 });
 
@@ -406,5 +590,59 @@ const observer = new IntersectionObserver((entries) => {
 document.querySelectorAll('.card-hover').forEach(card => {
     observer.observe(card);
 });
+
+// Init Swiper for reviews
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.Swiper) {
+        new Swiper('.reviews-swiper', {
+            slidesPerView: 1,
+            spaceBetween: 16,
+            loop: true,
+            autoplay: { delay: 4000, disableOnInteraction: false },
+            pagination: { el: '.swiper-pagination', clickable: true },
+            breakpoints: {
+                640: { slidesPerView: 1 },
+                768: { slidesPerView: 2 },
+                1024: { slidesPerView: 3 }
+            }
+        });
+    }
+});
+
+// Quick appointment submission
+const quickForm = document.getElementById('quick-appointment-form');
+const quickMsg = document.getElementById('quick-appointment-msg');
+if (quickForm) {
+    quickForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const data = Object.fromEntries(new FormData(quickForm).entries());
+        try {
+            const res = await fetch('{% url "appointment_form" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]')?.value || ''
+                },
+                body: JSON.stringify(data)
+            });
+            const result = await res.json();
+            if (result.success) {
+                quickForm.reset();
+                quickMsg.textContent = result.message || 'درخواست شما ثبت شد';
+                quickMsg.className = 'md:col-span-2 mt-2 p-3 bg-green-100 text-green-800 rounded-lg';
+            } else {
+                quickMsg.textContent = result.message || 'خطا در ثبت درخواست';
+                quickMsg.className = 'md:col-span-2 mt-2 p-3 bg-red-100 text-red-800 rounded-lg';
+            }
+            quickMsg.classList.remove('hidden');
+            setTimeout(() => quickMsg.classList.add('hidden'), 5000);
+        } catch (err) {
+            quickMsg.textContent = 'خطا در ثبت درخواست';
+            quickMsg.className = 'md:col-span-2 mt-2 p-3 bg-red-100 text-red-800 rounded-lg';
+            quickMsg.classList.remove('hidden');
+            setTimeout(() => quickMsg.classList.add('hidden'), 5000);
+        }
+    });
+}
 </script>
 {% endblock %}
