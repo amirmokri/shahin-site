@@ -129,5 +129,5 @@ CORS_ALLOWED_ORIGINS = [
 # Add WhiteNoise for static files
 MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
 
-# WhiteNoise configuration
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# WhiteNoise configuration (use non-manifest storage to avoid missing file errors)
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
