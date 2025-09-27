@@ -134,7 +134,7 @@ class ServiceAdmin(admin.ModelAdmin):
     
     def price_formatted(self, obj):
         if obj.price:
-            return format_html('<span style="color: #28a745; font-weight: bold;">{:,} تومان</span>', obj.price)
+            return format_html('<span style="color: #28a745; font-weight: bold;">{} تومان</span>', f"{obj.price:,}")
         return "قیمت نامشخص"
     price_formatted.short_description = "قیمت"
     
