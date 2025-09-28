@@ -3,12 +3,41 @@ from django.utils.html import format_html
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.db.models import Count
+from django.contrib.admin.views.main import ChangeList
 from .models import Lecture, Service, ContactMessage, SiteSettings, Bonus, AppointmentRequest, ServiceCategory, Comment
 
 # Customize the default admin site
 admin.site.site_header = "پنل مدیریت شاهین خودرو"
 admin.site.site_title = "شاهین خودرو"
 admin.site.index_title = "خوش آمدید به پنل مدیریت"
+
+# Custom admin index view with stats
+from django.contrib.admin.views.main import ChangeList
+from django.views.generic import TemplateView
+
+class CustomAdminIndexView(TemplateView):
+    template_name = 'admin/index.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        # Get statistics
+        stats = {
+            'total_services': Service.objects.count(),
+            'published_services': Service.objects.filter(is_published=True).count(),
+            'total_lectures': Lecture.objects.count(),
+            'published_lectures': Lecture.objects.filter(is_published=True).count(),
+            'total_comments': Comment.objects.count(),
+            'pending_comments': Comment.objects.filter(is_approved=False).count(),
+            'unread_messages': ContactMessage.objects.filter(is_read=False).count(),
+            'pending_appointments': AppointmentRequest.objects.filter(is_processed=False).count(),
+        }
+        
+        context['stats'] = stats
+        return context
+
+# Override the admin index view
+admin.site.index = CustomAdminIndexView.as_view()
 
 
 @admin.register(Lecture)
