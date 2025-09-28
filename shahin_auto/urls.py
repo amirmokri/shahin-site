@@ -19,14 +19,16 @@ from django.urls import path, include
 from django.http import HttpResponse
 from django.conf import settings
 from django.conf.urls.static import static
-from django.contrib.sitemaps.views import sitemap
-from main.sitemaps import StaticViewSitemap, LectureSitemap, ServiceSitemap
+from django.contrib.sitemaps.views import sitemap, index
+from main.sitemaps import StaticViewSitemap, LectureSitemap, ServiceSitemap, ServiceCategorySitemap, MainSitemap
 
 # Sitemap configuration
 sitemaps = {
     'static': StaticViewSitemap,
-    'lectures': LectureSitemap,
+    'service_categories': ServiceCategorySitemap,
     'services': ServiceSitemap,
+    'lectures': LectureSitemap,
+    'main': MainSitemap,
 }
 
 def health_view(_request):
@@ -37,7 +39,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('main.urls')),
     path('api/', include('main.api_urls')),
-    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
+    path('sitemap.xml', index, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.index'),
+    path('sitemap-<section>.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
+    path('robots.txt', lambda r: HttpResponse('User-agent: *\nDisallow: /admin/\nDisallow: /api/\nAllow: /\nSitemap: https://shahinautoservice.ir/sitemap.xml', content_type='text/plain')),
     path('health/', health_view, name='health'),
 ]
 

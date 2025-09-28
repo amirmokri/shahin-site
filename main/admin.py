@@ -213,6 +213,10 @@ class SiteSettingsAdmin(admin.ModelAdmin):
         ('رسانه‌ها', {
             'fields': ('hero_image', 'hero_image_preview', 'hero_video_url')
         }),
+        ('تحلیل و سئو', {
+            'fields': ('google_analytics_id', 'google_site_verification', 'bing_site_verification', 'facebook_pixel_id'),
+            'classes': ('collapse',)
+        }),
     )
     
     def hero_image_preview(self, obj):

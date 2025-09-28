@@ -95,6 +95,12 @@ class SiteSettings(models.Model):
     hero_image = models.ImageField(upload_to='site/', default='site/hero.jpg', verbose_name="تصویر اصلی")
     hero_video_url = models.URLField(blank=True, null=True, verbose_name="لینک ویدیو تبلیغاتی")
     
+    # SEO and Analytics
+    google_analytics_id = models.CharField(max_length=20, blank=True, null=True, verbose_name="Google Analytics ID")
+    google_site_verification = models.CharField(max_length=100, blank=True, null=True, verbose_name="Google Site Verification")
+    bing_site_verification = models.CharField(max_length=100, blank=True, null=True, verbose_name="Bing Site Verification")
+    facebook_pixel_id = models.CharField(max_length=20, blank=True, null=True, verbose_name="Facebook Pixel ID")
+    
     class Meta:
         verbose_name = "تنظیمات سایت"
         verbose_name_plural = "تنظیمات سایت"
