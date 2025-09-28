@@ -4,78 +4,329 @@
 {% block title %}رزرو وقت - {{ site_settings.site_name }}{% endblock %}
 
 {% block content %}
+<!-- Hero Section -->
 <section class="bg-gradient-to-br from-shahin-blue via-shahin-light-blue to-shahin-dark-blue text-white py-20 relative overflow-hidden">
     <div class="container mx-auto px-4 text-center" data-aos="fade-up">
         <div class="inline-flex items-center justify-center w-20 h-20 bg-white/20 backdrop-blur-sm rounded-full mb-8">
             <i class="fas fa-calendar-check text-white text-3xl"></i>
         </div>
-        <h1 class="text-4xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-white via-shahin-yellow to-white bg-clip-text text-transparent font-vazir">رزرو وقت سرویس</h1>
-        <p class="text-lg md:text-2xl opacity-90 max-w-3xl mx-auto leading-relaxed">فرم زیر را تکمیل کنید تا تیم ما در اولین فرصت با شما تماس بگیرد</p>
+        <h1 class="text-4xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-white via-shahin-yellow to-white bg-clip-text text-transparent font-vazir">رزرو نوبت آنلاین</h1>
+        <p class="text-lg md:text-2xl opacity-90 max-w-3xl mx-auto leading-relaxed">سرویس مورد نظر خود را انتخاب کنید و در چند دقیقه نوبت خود را رزرو کنید</p>
     </div>
 </section>
 
-<section class="py-16 bg-white relative overflow-hidden">
-    <div class="container mx-auto px-4">
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
-            <div class="lg:col-span-2">
+<!-- Appointment Booking Section -->
+<section class="py-20 bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden">
+    <!-- Background Pattern -->
+    <div class="absolute inset-0 opacity-5">
+        <div class="absolute top-0 left-0 w-full h-full bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%231E40AF" fill-opacity="0.1"%3E%3Ccircle cx="30" cy="30" r="2"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')]"></div>
+    </div>
+    
+    <div class="container mx-auto px-4 relative z-10">
+        <div class="max-w-6xl mx-auto">
+            <!-- Step Indicator -->
+            <div class="flex items-center justify-center mb-12" data-aos="fade-up">
+                <div class="flex items-center space-x-4 space-x-reverse">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-shahin-blue text-white rounded-full flex items-center justify-center font-bold text-lg step-indicator active" data-step="1">1</div>
+                        <span class="mr-3 text-gray-600 font-medium">انتخاب سرویس</span>
+                    </div>
+                    <div class="w-16 h-1 bg-gray-300 rounded-full">
+                        <div class="h-full bg-shahin-blue rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center font-bold text-lg step-indicator" data-step="2">2</div>
+                        <span class="mr-3 text-gray-600 font-medium">انتخاب زمان</span>
+                    </div>
+                    <div class="w-16 h-1 bg-gray-300 rounded-full">
+                        <div class="h-full bg-shahin-blue rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center font-bold text-lg step-indicator" data-step="3">3</div>
+                        <span class="mr-3 text-gray-600 font-medium">تکمیل اطلاعات</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 1: Service Selection -->
+            <div id="step-1" class="step-content" data-aos="fade-up" data-aos-delay="200">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-shahin-blue to-shahin-light-blue bg-clip-text text-transparent font-vazir">سرویس مورد نظر خود را انتخاب کنید</h2>
+                    <p class="text-gray-600 max-w-2xl mx-auto">از بین سرویس‌های موجود، سرویس مورد نیاز خود را انتخاب کنید</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {% for service in services %}
+                    <div class="service-card group bg-white rounded-2xl shadow-shahin overflow-hidden hover:shadow-shahin-xl transition-all duration-500 transform hover:-translate-y-3 cursor-pointer" 
+                         data-service-id="{{ service.id }}" 
+                         data-service-name="{{ service.name }}"
+                         data-service-price-min="{{ service.min_price|default:0 }}"
+                         data-service-price-max="{{ service.max_price|default:0 }}"
+                         data-service-duration="{{ service.duration|default:'نامشخص' }}">
+                        <div class="relative overflow-hidden">
+                            <img src="{% if service.image %}{{ service.image.url }}{% else %}/media/services/default.jpg{% endif %}" 
+                                 alt="{{ service.name }}" 
+                                 class="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                            <div class="absolute top-4 right-4">
+                                <div class="w-12 h-12 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                                    <i class="fas fa-cog text-shahin-blue text-lg"></i>
+                                </div>
+                            </div>
+                            <div class="absolute bottom-4 right-4 left-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <div class="bg-white/90 backdrop-blur-sm rounded-xl p-3">
+                                    <p class="text-sm font-medium text-gray-800 text-center">برای انتخاب کلیک کنید</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-gray-800 mb-3 group-hover:text-shahin-blue transition-colors duration-300">{{ service.name }}</h3>
+                            <p class="text-gray-600 mb-4 leading-relaxed text-sm">{{ service.description|truncatewords:15 }}</p>
+                            
+                            <!-- Price Range -->
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center space-x-2 space-x-reverse">
+                                    <i class="fas fa-tag text-shahin-blue text-sm"></i>
+                                    <span class="text-sm font-medium text-gray-700">قیمت:</span>
+                                </div>
+                                <div class="text-left">
+                                    {% if service.min_price and service.max_price %}
+                                        <span class="text-lg font-bold text-green-600">{{ service.min_price|floatformat:0|add:0|floatformat:0 }} - {{ service.max_price|floatformat:0|add:0|floatformat:0 }}</span>
+                                        <span class="text-sm text-gray-500">تومان</span>
+                                    {% elif service.min_price %}
+                                        <span class="text-lg font-bold text-green-600">از {{ service.min_price|floatformat:0|add:0|floatformat:0 }}</span>
+                                        <span class="text-sm text-gray-500">تومان</span>
+                                    {% elif service.max_price %}
+                                        <span class="text-lg font-bold text-green-600">تا {{ service.max_price|floatformat:0|add:0|floatformat:0 }}</span>
+                                        <span class="text-sm text-gray-500">تومان</span>
+                                    {% else %}
+                                        <span class="text-sm text-gray-500">قیمت نامشخص</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <!-- Duration -->
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-2 space-x-reverse">
+                                    <i class="fas fa-clock text-shahin-yellow text-sm"></i>
+                                    <span class="text-sm font-medium text-gray-700">مدت زمان:</span>
+                                </div>
+                                <span class="text-sm font-bold text-gray-800">{{ service.duration|default:'نامشخص' }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="col-span-full text-center py-16">
+                        <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class="fas fa-tools text-gray-400 text-3xl"></i>
+                        </div>
+                        <p class="text-gray-500 text-xl">سرویس‌ها به زودی اضافه خواهند شد</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Step 2: Time Selection -->
+            <div id="step-2" class="step-content hidden" data-aos="fade-up" data-aos-delay="200">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-shahin-blue to-shahin-light-blue bg-clip-text text-transparent font-vazir">زمان نوبت خود را انتخاب کنید</h2>
+                    <p class="text-gray-600 max-w-2xl mx-auto">تاریخ و ساعت مورد نظر خود را انتخاب کنید</p>
+                </div>
+                
                 <div class="bg-white rounded-2xl shadow-shahin p-8">
-                    <form id="appointment-form" class="space-y-5">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                            <div>
-                                <label class="block text-sm text-gray-600 mb-2">نام و نام خانوادگی</label>
-                                <input type="text" name="name" class="form-input" placeholder="نام شما" required />
-                            </div>
-                            <div>
-                                <label class="block text-sm text-gray-600 mb-2">ایمیل</label>
-                                <input type="email" name="email" class="form-input" placeholder="example@email.com" required />
-                            </div>
-                            <div>
-                                <label class="block text-sm text-gray-600 mb-2">تلفن</label>
-                                <input type="tel" name="phone" class="form-input" placeholder="09xxxxxxxxx" />
-                            </div>
-                            <div>
-                                <label class="block text-sm text-gray-600 mb-2">تاریخ پیشنهادی</label>
-                                <input type="date" name="date" class="form-input" />
-                            </div>
-                        </div>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <!-- Calendar -->
                         <div>
-                            <label class="block text-sm text-gray-600 mb-2">نوع سرویس درخواستی</label>
-                            <input type="text" name="service" class="form-input" placeholder="مانند: تعویض روغن، ترمز، برق خودرو ..." />
+                            <h3 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+                                <i class="fas fa-calendar-alt text-shahin-blue ml-2"></i>
+                                انتخاب تاریخ
+                            </h3>
+                            <div class="relative">
+                                <input type="date" id="appointment-date" 
+                                       class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-shahin-blue focus:bg-white transition-all duration-300 text-gray-800"
+                                       min="{{ today|date:'Y-m-d' }}">
+                            </div>
                         </div>
+                        
+                        <!-- Time Slots -->
                         <div>
-                            <label class="block text-sm text-gray-600 mb-2">توضیحات</label>
-                            <textarea name="message" class="form-textarea" rows="5" placeholder="توضیحات تکمیلی..." required></textarea>
+                            <h3 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+                                <i class="fas fa-clock text-shahin-yellow ml-2"></i>
+                                انتخاب ساعت
+                            </h3>
+                            <div class="grid grid-cols-3 gap-3" id="time-slots">
+                                <button type="button" class="time-slot bg-gray-100 hover:bg-shahin-blue hover:text-white text-gray-700 py-3 px-4 rounded-xl font-medium transition-all duration-300 transform hover:scale-105" data-time="08:00">08:00</button>
+                                <button type="button" class="time-slot bg-gray-100 hover:bg-shahin-blue hover:text-white text-gray-700 py-3 px-4 rounded-xl font-medium transition-all duration-300 transform hover:scale-105" data-time="09:00">09:00</button>
+                                <button type="button" class="time-slot bg-gray-100 hover:bg-shahin-blue hover:text-white text-gray-700 py-3 px-4 rounded-xl font-medium transition-all duration-300 transform hover:scale-105" data-time="10:00">10:00</button>
+                                <button type="button" class="time-slot bg-gray-100 hover:bg-shahin-blue hover:text-white text-gray-700 py-3 px-4 rounded-xl font-medium transition-all duration-300 transform hover:scale-105" data-time="11:00">11:00</button>
+                                <button type="button" class="time-slot bg-gray-100 hover:bg-shahin-blue hover:text-white text-gray-700 py-3 px-4 rounded-xl font-medium transition-all duration-300 transform hover:scale-105" data-time="12:00">12:00</button>
+                                <button type="button" class="time-slot bg-gray-100 hover:bg-shahin-blue hover:text-white text-gray-700 py-3 px-4 rounded-xl font-medium transition-all duration-300 transform hover:scale-105" data-time="13:00">13:00</button>
+                                <button type="button" class="time-slot bg-gray-100 hover:bg-shahin-blue hover:text-white text-gray-700 py-3 px-4 rounded-xl font-medium transition-all duration-300 transform hover:scale-105" data-time="14:00">14:00</button>
+                                <button type="button" class="time-slot bg-gray-100 hover:bg-shahin-blue hover:text-white text-gray-700 py-3 px-4 rounded-xl font-medium transition-all duration-300 transform hover:scale-105" data-time="15:00">15:00</button>
+                                <button type="button" class="time-slot bg-gray-100 hover:bg-shahin-blue hover:text-white text-gray-700 py-3 px-4 rounded-xl font-medium transition-all duration-300 transform hover:scale-105" data-time="16:00">16:00</button>
+                                <button type="button" class="time-slot bg-gray-100 hover:bg-shahin-blue hover:text-white text-gray-700 py-3 px-4 rounded-xl font-medium transition-all duration-300 transform hover:scale-105" data-time="17:00">17:00</button>
+                                <button type="button" class="time-slot bg-gray-100 hover:bg-shahin-blue hover:text-white text-gray-700 py-3 px-4 rounded-xl font-medium transition-all duration-300 transform hover:scale-105" data-time="18:00">18:00</button>
+                            </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3: Customer Information -->
+            <div id="step-3" class="step-content hidden" data-aos="fade-up" data-aos-delay="200">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-shahin-blue to-shahin-light-blue bg-clip-text text-transparent font-vazir">اطلاعات خود را تکمیل کنید</h2>
+                    <p class="text-gray-600 max-w-2xl mx-auto">لطفاً اطلاعات خود و خودروی خود را وارد کنید</p>
+                </div>
+                
+                <div class="bg-white rounded-2xl shadow-shahin p-8">
+                    <form id="appointment-form" class="space-y-8">
+                        <!-- Selected Service Summary -->
+                        <div class="bg-gradient-to-r from-shahin-blue/5 to-shahin-light-blue/5 rounded-2xl p-6">
+                            <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
+                                <i class="fas fa-check-circle text-green-600 ml-2"></i>
+                                سرویس انتخاب شده
+                            </h3>
+                            <div id="selected-service-summary" class="flex items-center justify-between">
+                                <div class="flex items-center space-x-4 space-x-reverse">
+                                    <img id="selected-service-image" src="" alt="" class="w-16 h-16 rounded-xl object-cover">
+                                    <div>
+                                        <h4 id="selected-service-name" class="font-bold text-gray-800"></h4>
+                                        <p id="selected-service-duration" class="text-sm text-gray-600"></p>
+                                    </div>
+                                </div>
+                                <div class="text-left">
+                                    <p id="selected-service-price" class="font-bold text-green-600"></p>
+                                    <p id="selected-service-time" class="text-sm text-gray-600"></p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Customer Information -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="relative group">
+                                <label class="block text-sm font-bold text-gray-700 mb-2">نام و نام خانوادگی *</label>
+                                <input type="text" name="name" required 
+                                       class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-shahin-blue focus:bg-white transition-all duration-300 text-gray-800 placeholder-gray-400 group-hover:border-shahin-blue/50"
+                                       placeholder="نام کامل خود را وارد کنید">
+                            </div>
+                            <div class="relative group">
+                                <label class="block text-sm font-bold text-gray-700 mb-2">شماره تلفن *</label>
+                                <input type="tel" name="phone" required 
+                                       class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-shahin-blue focus:bg-white transition-all duration-300 text-gray-800 placeholder-gray-400 group-hover:border-shahin-blue/50"
+                                       placeholder="09123456789">
+                            </div>
+                            <div class="relative group">
+                                <label class="block text-sm font-bold text-gray-700 mb-2">ایمیل (اختیاری)</label>
+                                <input type="email" name="email" 
+                                       class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-shahin-blue focus:bg-white transition-all duration-300 text-gray-800 placeholder-gray-400 group-hover:border-shahin-blue/50"
+                                       placeholder="example@email.com">
+                            </div>
+                        </div>
+                        
+                        <!-- Car Information -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="relative group">
+                                <label class="block text-sm font-bold text-gray-700 mb-2">مدل خودرو *</label>
+                                <input type="text" name="car_model" required 
+                                       class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-shahin-blue focus:bg-white transition-all duration-300 text-gray-800 placeholder-gray-400 group-hover:border-shahin-blue/50"
+                                       placeholder="مانند: 206، دنا، پراید">
+                            </div>
+                            <div class="relative group">
+                                <label class="block text-sm font-bold text-gray-700 mb-2">سال تولید</label>
+                                <input type="text" name="car_year" 
+                                       class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-shahin-blue focus:bg-white transition-all duration-300 text-gray-800 placeholder-gray-400 group-hover:border-shahin-blue/50"
+                                       placeholder="1400">
+                            </div>
+                            <div class="relative group">
+                                <label class="block text-sm font-bold text-gray-700 mb-2">شماره پلاک</label>
+                                <input type="text" name="car_plate" 
+                                       class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-shahin-blue focus:bg-white transition-all duration-300 text-gray-800 placeholder-gray-400 group-hover:border-shahin-blue/50"
+                                       placeholder="12-345-67">
+                            </div>
+                        </div>
+                        
+                        <!-- Additional Information -->
+                        <div class="relative group">
+                            <label class="block text-sm font-bold text-gray-700 mb-2">توضیحات اضافی</label>
+                            <textarea name="message" rows="4" 
+                                      class="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-shahin-blue focus:bg-white transition-all duration-300 text-gray-800 placeholder-gray-400 resize-none group-hover:border-shahin-blue/50"
+                                      placeholder="توضیحات اضافی در مورد خودرو یا سرویس مورد نظر..."></textarea>
+                        </div>
+                        
+                        <!-- Hidden Fields -->
+                        <input type="hidden" name="service_id" id="selected-service-id">
+                        <input type="hidden" name="appointment_date" id="selected-date">
+                        <input type="hidden" name="appointment_time" id="selected-time">
                         <input type="text" name="company" class="hidden" tabindex="-1" autocomplete="off" style="display:none" />
-                        <button type="submit" class="w-full btn-primary">درخواست رزرو</button>
+                        
+                        <!-- Submit Button -->
+                        <div class="flex flex-col sm:flex-row gap-4 pt-6">
+                            <button type="submit" class="flex-1 bg-gradient-to-r from-shahin-blue to-shahin-light-blue text-white font-bold py-4 px-8 rounded-xl hover:from-shahin-light-blue hover:to-shahin-blue transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-glow group">
+                                <i class="fas fa-calendar-check ml-2 group-hover:scale-110 transition-transform duration-300"></i>
+                                رزرو نوبت
+                            </button>
+                        </div>
+                        
                         <div id="appointment-form-message" class="mt-4 hidden"></div>
                     </form>
                 </div>
             </div>
-            <div>
-                <div class="bg-white rounded-2xl shadow-shahin p-8 mb-8">
-                    <h3 class="text-xl font-bold text-gray-800 mb-4">اطلاعات تماس</h3>
-                    <div class="space-y-4">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 bg-shahin-blue/10 rounded-xl flex items-center justify-center text-shahin-blue">
-                                <i class="fas fa-phone"></i>
+
+            <!-- Navigation Buttons -->
+            <div class="flex justify-between mt-12" data-aos="fade-up" data-aos-delay="400">
+                <button id="prev-step" class="bg-gray-500 text-white px-8 py-3 rounded-xl hover:bg-gray-600 transition-all duration-300 transform hover:scale-105 hidden">
+                    <i class="fas fa-arrow-right ml-2"></i>
+                    مرحله قبل
+                </button>
+                <button id="next-step" class="bg-gradient-to-r from-shahin-blue to-shahin-light-blue text-white px-8 py-3 rounded-xl hover:from-shahin-light-blue hover:to-shahin-blue transition-all duration-300 transform hover:scale-105">
+                    مرحله بعد
+                    <i class="fas fa-arrow-left mr-2"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Information -->
+<section class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+            <div class="lg:col-span-2">
+                <div class="bg-white rounded-2xl shadow-shahin p-8">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-6">اطلاعات تماس</h3>
+                    <div class="space-y-6">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-shahin-blue/10 rounded-xl flex items-center justify-center text-shahin-blue">
+                                <i class="fas fa-phone text-lg"></i>
                             </div>
-                            <a href="tel:{{ site_settings.phone }}" class="text-shahin-blue hover:text-shahin-dark-blue">{{ site_settings.phone }}</a>
+                            <div>
+                                <p class="text-gray-600 text-sm">تلفن تماس</p>
+                                <a href="tel:{{ site_settings.phone }}" class="text-shahin-blue hover:text-shahin-dark-blue font-bold text-lg">{{ site_settings.phone }}</a>
+                            </div>
                         </div>
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 bg-shahin-yellow/10 rounded-xl flex items-center justify-center text-shahin-yellow">
-                                <i class="fas fa-envelope"></i>
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-shahin-yellow/10 rounded-xl flex items-center justify-center text-shahin-yellow">
+                                <i class="fas fa-envelope text-lg"></i>
                             </div>
-                            <a href="mailto:{{ site_settings.email }}" class="text-shahin-blue hover:text-shahin-dark-blue">{{ site_settings.email }}</a>
+                            <div>
+                                <p class="text-gray-600 text-sm">ایمیل</p>
+                                <a href="mailto:{{ site_settings.email }}" class="text-shahin-blue hover:text-shahin-dark-blue font-bold text-lg">{{ site_settings.email }}</a>
+                            </div>
                         </div>
-                        <div class="flex items-start gap-3">
-                            <div class="w-10 h-10 bg-gray-100 rounded-xl flex items-center justify-center text-gray-700">
-                                <i class="fas fa-location-dot"></i>
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center text-gray-700">
+                                <i class="fas fa-location-dot text-lg"></i>
                             </div>
-                            <p class="text-gray-700">{{ site_settings.address }}</p>
+                            <div>
+                                <p class="text-gray-600 text-sm">آدرس</p>
+                                <p class="text-gray-800 font-medium">{{ site_settings.address }}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
+            </div>
+            <div>
                 <div class="rounded-2xl overflow-hidden shadow-shahin-xl">
                     <iframe title="map" src="https://maps.google.com/maps?q={{ site_settings.address|urlencode }}&t=&z=13&ie=UTF8&iwloc=&output=embed" class="w-full h-64" loading="lazy"></iframe>
                 </div>
@@ -87,43 +338,263 @@
 
 {% block extra_js %}
 <script>
-(function() {
-    const form = document.getElementById('appointment-form');
-    const msg = document.getElementById('appointment-form-message');
-    if (!form) return;
-
-    function showMessage(text, ok) {
-        msg.textContent = text;
-        msg.className = 'mt-4 p-3 rounded-lg ' + (ok ? 'bg-green-100 text-green-800 border border-green-200' : 'bg-red-100 text-red-800 border border-red-200');
-        msg.classList.remove('hidden');
-        setTimeout(() => msg.classList.add('hidden'), 5000);
-    }
-
-    form.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        const data = Object.fromEntries(new FormData(form).entries());
-        const payload = {
-            name: data.name,
-            email: data.email,
-            message: `[Appointment]\nPhone: ${data.phone || '-'}\nPreferred date: ${data.date || '-'}\nService: ${data.service || '-'}\n\n${data.message || ''}`
-        };
-        try {
-            const res = await fetch('/api/contact/', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]')?.value || '' },
-                body: JSON.stringify(payload)
-            });
-            const result = await res.json();
-            if (result.success) {
-                form.reset();
-                showMessage(result.message || 'درخواست شما ثبت شد', true);
-            } else {
-                showMessage(result.message || 'خطا در ثبت درخواست', false);
-            }
-        } catch (err) {
-            showMessage('خطا در ثبت درخواست. لطفاً دوباره تلاش کنید.', false);
+document.addEventListener('DOMContentLoaded', function() {
+    // Step management
+    let currentStep = 1;
+    const totalSteps = 3;
+    const stepContents = document.querySelectorAll('.step-content');
+    const stepIndicators = document.querySelectorAll('.step-indicator');
+    const progressBars = document.querySelectorAll('.w-16 .h-full');
+    const nextBtn = document.getElementById('next-step');
+    const prevBtn = document.getElementById('prev-step');
+    
+    // Service selection
+    let selectedService = null;
+    let selectedDate = null;
+    let selectedTime = null;
+    
+    // Service cards
+    const serviceCards = document.querySelectorAll('.service-card');
+    
+    // Time slots
+    const timeSlots = document.querySelectorAll('.time-slot');
+    
+    // Form elements
+    const appointmentForm = document.getElementById('appointment-form');
+    const appointmentMsg = document.getElementById('appointment-form-message');
+    
+    // Service card click handlers
+    serviceCards.forEach(card => {
+        card.addEventListener('click', function() {
+            // Remove previous selection
+            serviceCards.forEach(c => c.classList.remove('ring-4', 'ring-shahin-blue', 'ring-opacity-50'));
+            
+            // Add selection to current card
+            this.classList.add('ring-4', 'ring-shahin-blue', 'ring-opacity-50');
+            
+            // Store selected service data
+            selectedService = {
+                id: this.dataset.serviceId,
+                name: this.dataset.serviceName,
+                priceMin: this.dataset.servicePriceMin,
+                priceMax: this.dataset.servicePriceMax,
+                duration: this.dataset.serviceDuration,
+                image: this.querySelector('img').src
+            };
+            
+            // Enable next button
+            nextBtn.disabled = false;
+            nextBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        });
+    });
+    
+    // Time slot click handlers
+    timeSlots.forEach(slot => {
+        slot.addEventListener('click', function() {
+            // Remove previous selection
+            timeSlots.forEach(s => s.classList.remove('bg-shahin-blue', 'text-white'));
+            
+            // Add selection to current slot
+            this.classList.add('bg-shahin-blue', 'text-white');
+            
+            // Store selected time
+            selectedTime = this.dataset.time;
+            
+            // Enable next button
+            nextBtn.disabled = false;
+            nextBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        });
+    });
+    
+    // Date change handler
+    const dateInput = document.getElementById('appointment-date');
+    dateInput.addEventListener('change', function() {
+        selectedDate = this.value;
+        
+        // Enable next button if time is also selected
+        if (selectedTime) {
+            nextBtn.disabled = false;
+            nextBtn.classList.remove('opacity-50', 'cursor-not-allowed');
         }
     });
-})();
+    
+    // Step navigation
+    function updateStep(step) {
+        // Hide all steps
+        stepContents.forEach(content => content.classList.add('hidden'));
+        
+        // Show current step
+        document.getElementById(`step-${step}`).classList.remove('hidden');
+        
+        // Update step indicators
+        stepIndicators.forEach((indicator, index) => {
+            if (index + 1 <= step) {
+                indicator.classList.add('bg-shahin-blue', 'text-white');
+                indicator.classList.remove('bg-gray-300', 'text-gray-600');
+            } else {
+                indicator.classList.remove('bg-shahin-blue', 'text-white');
+                indicator.classList.add('bg-gray-300', 'text-gray-600');
+            }
+        });
+        
+        // Update progress bars
+        progressBars.forEach((bar, index) => {
+            if (index + 1 < step) {
+                bar.style.width = '100%';
+            } else if (index + 1 === step) {
+                bar.style.width = '50%';
+            } else {
+                bar.style.width = '0%';
+            }
+        });
+        
+        // Update navigation buttons
+        if (step === 1) {
+            prevBtn.classList.add('hidden');
+        } else {
+            prevBtn.classList.remove('hidden');
+        }
+        
+        if (step === totalSteps) {
+            nextBtn.classList.add('hidden');
+        } else {
+            nextBtn.classList.remove('hidden');
+        }
+        
+        // Update selected service summary in step 3
+        if (step === 3 && selectedService) {
+            updateServiceSummary();
+        }
+    }
+    
+    function updateServiceSummary() {
+        const summaryImage = document.getElementById('selected-service-image');
+        const summaryName = document.getElementById('selected-service-name');
+        const summaryDuration = document.getElementById('selected-service-duration');
+        const summaryPrice = document.getElementById('selected-service-price');
+        const summaryTime = document.getElementById('selected-service-time');
+        
+        if (selectedService) {
+            summaryImage.src = selectedService.image;
+            summaryImage.alt = selectedService.name;
+            summaryName.textContent = selectedService.name;
+            summaryDuration.textContent = `مدت زمان: ${selectedService.duration}`;
+            
+            // Format price
+            if (selectedService.priceMin && selectedService.priceMax) {
+                summaryPrice.textContent = `${parseInt(selectedService.priceMin).toLocaleString()} - ${parseInt(selectedService.priceMax).toLocaleString()} تومان`;
+            } else if (selectedService.priceMin) {
+                summaryPrice.textContent = `از ${parseInt(selectedService.priceMin).toLocaleString()} تومان`;
+            } else if (selectedService.priceMax) {
+                summaryPrice.textContent = `تا ${parseInt(selectedService.priceMax).toLocaleString()} تومان`;
+            } else {
+                summaryPrice.textContent = 'قیمت نامشخص';
+            }
+            
+            // Format time
+            const dateObj = new Date(selectedDate);
+            const persianDate = dateObj.toLocaleDateString('fa-IR');
+            summaryTime.textContent = `${persianDate} - ${selectedTime}`;
+            
+            // Update hidden fields
+            document.getElementById('selected-service-id').value = selectedService.id;
+            document.getElementById('selected-date').value = selectedDate;
+            document.getElementById('selected-time').value = selectedTime;
+        }
+    }
+    
+    // Next step handler
+    nextBtn.addEventListener('click', function() {
+        if (currentStep < totalSteps) {
+            // Validate current step
+            if (currentStep === 1 && !selectedService) {
+                alert('لطفاً سرویس مورد نظر خود را انتخاب کنید');
+                return;
+            }
+            if (currentStep === 2 && (!selectedDate || !selectedTime)) {
+                alert('لطفاً تاریخ و ساعت مورد نظر خود را انتخاب کنید');
+                return;
+            }
+            
+            currentStep++;
+            updateStep(currentStep);
+        }
+    });
+    
+    // Previous step handler
+    prevBtn.addEventListener('click', function() {
+        if (currentStep > 1) {
+            currentStep--;
+            updateStep(currentStep);
+        }
+    });
+    
+    // Form submission
+    if (appointmentForm) {
+        appointmentForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(appointmentForm);
+            const data = Object.fromEntries(formData.entries());
+            
+            // Show loading state
+            const submitBtn = appointmentForm.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin ml-2"></i>در حال ثبت...';
+            submitBtn.disabled = true;
+            
+            try {
+                const response = await fetch('/api/appointments/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]')?.value || ''
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    appointmentMsg.textContent = result.message || 'نوبت شما با موفقیت ثبت شد!';
+                    appointmentMsg.className = 'mt-4 p-4 bg-green-100 text-green-800 rounded-xl border border-green-200';
+                    appointmentForm.reset();
+                    
+                    // Reset to step 1
+                    currentStep = 1;
+                    updateStep(currentStep);
+                    selectedService = null;
+                    selectedDate = null;
+                    selectedTime = null;
+                    
+                    // Clear selections
+                    serviceCards.forEach(c => c.classList.remove('ring-4', 'ring-shahin-blue', 'ring-opacity-50'));
+                    timeSlots.forEach(s => s.classList.remove('bg-shahin-blue', 'text-white'));
+                    dateInput.value = '';
+                } else {
+                    appointmentMsg.textContent = result.message || 'خطا در ثبت نوبت';
+                    appointmentMsg.className = 'mt-4 p-4 bg-red-100 text-red-800 rounded-xl border border-red-200';
+                }
+            } catch (error) {
+                console.error('Appointment form error:', error);
+                appointmentMsg.textContent = 'خطا در ثبت نوبت. لطفاً دوباره تلاش کنید.';
+                appointmentMsg.className = 'mt-4 p-4 bg-red-100 text-red-800 rounded-xl border border-red-200';
+            } finally {
+                // Reset button state
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+                appointmentMsg.classList.remove('hidden');
+                
+                // Hide message after 5 seconds
+                setTimeout(() => {
+                    appointmentMsg.classList.add('hidden');
+                }, 5000);
+            }
+        });
+    }
+    
+    // Initialize
+    updateStep(1);
+});
 </script>
 {% endblock %}

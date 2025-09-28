@@ -183,9 +183,18 @@ def appointment(request):
             site_settings = SiteSettings.objects.create()
     except:
         site_settings = SiteSettings.objects.create()
+    
+    # Get all services for selection
+    services = Service.objects.filter(is_published=True)
+    
+    # Get today's date for date input min value
+    from django.utils import timezone
+    today = timezone.now().date()
 
     context = {
         'site_settings': site_settings,
+        'services': services,
+        'today': today,
     }
     return render(request, 'main/appointment.html', context)
 

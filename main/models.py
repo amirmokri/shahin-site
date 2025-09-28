@@ -43,7 +43,8 @@ class Service(models.Model):
     video = models.FileField(upload_to='services/videos/', blank=True, null=True, verbose_name="ویدیو (MP4)")
     instagram_link = models.URLField(blank=True, null=True, verbose_name="لینک اینستاگرام")
     category = models.ForeignKey('ServiceCategory', on_delete=models.SET_NULL, null=True, blank=True, related_name='services', verbose_name="دسته‌بندی")
-    price = models.DecimalField(max_digits=10, decimal_places=0, blank=True, null=True, verbose_name="قیمت (تومان)")
+    min_price = models.DecimalField(max_digits=10, decimal_places=0, blank=True, null=True, verbose_name="حداقل قیمت (تومان)")
+    max_price = models.DecimalField(max_digits=10, decimal_places=0, blank=True, null=True, verbose_name="حداکثر قیمت (تومان)")
     duration = models.CharField(max_length=50, blank=True, null=True, verbose_name="مدت زمان")
     is_featured = models.BooleanField(default=False, verbose_name="ویژه")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="تاریخ ایجاد")
@@ -211,3 +212,62 @@ class AppointmentRequest(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.phone}"
+
+
+class Appointment(models.Model):
+    """Detailed appointment booking with service and time selection"""
+    STATUS_CHOICES = [
+        ('pending', 'در انتظار تایید'),
+        ('confirmed', 'تایید شده'),
+        ('in_progress', 'در حال انجام'),
+        ('completed', 'تکمیل شده'),
+        ('cancelled', 'لغو شده'),
+    ]
+    
+    # Customer Information
+    name = models.CharField(max_length=100, verbose_name="نام و نام خانوادگی")
+    phone = models.CharField(max_length=20, verbose_name="شماره تلفن")
+    email = models.EmailField(blank=True, null=True, verbose_name="ایمیل")
+    
+    # Service Information
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, related_name='appointments', verbose_name="سرویس")
+    car_model = models.CharField(max_length=120, verbose_name="مدل خودرو")
+    car_year = models.CharField(max_length=10, blank=True, verbose_name="سال تولید")
+    car_plate = models.CharField(max_length=20, blank=True, verbose_name="شماره پلاک")
+    
+    # Scheduling
+    appointment_date = models.DateField(verbose_name="تاریخ نوبت")
+    appointment_time = models.TimeField(verbose_name="ساعت نوبت")
+    
+    # Additional Information
+    message = models.TextField(blank=True, verbose_name="توضیحات اضافی")
+    estimated_duration = models.CharField(max_length=50, blank=True, verbose_name="مدت زمان تخمینی")
+    estimated_price = models.DecimalField(max_digits=10, decimal_places=0, blank=True, null=True, verbose_name="قیمت تخمینی")
+    
+    # Status and Management
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending', verbose_name="وضعیت")
+    is_processed = models.BooleanField(default=False, verbose_name="پیگیری شده")
+    admin_notes = models.TextField(blank=True, verbose_name="یادداشت ادمین")
+    
+    # Timestamps
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="تاریخ ثبت")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="آخرین بروزرسانی")
+    confirmed_at = models.DateTimeField(blank=True, null=True, verbose_name="تاریخ تایید")
+
+    class Meta:
+        verbose_name = "نوبت"
+        verbose_name_plural = "نوبت‌ها"
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.name} - {self.service.name} - {self.appointment_date} {self.appointment_time}"
+    
+    @property
+    def price_range_display(self):
+        if self.service.min_price and self.service.max_price:
+            return f"{self.service.min_price:,} - {self.service.max_price:,} تومان"
+        elif self.service.min_price:
+            return f"از {self.service.min_price:,} تومان"
+        elif self.service.max_price:
+            return f"تا {self.service.max_price:,} تومان"
+        return "قیمت نامشخص"

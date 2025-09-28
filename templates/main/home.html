@@ -379,47 +379,244 @@
     </div>
 </section>
 
-<!-- Quick Appointment Form (Pre-Footer) -->
-<section class="py-16 bg-gradient-to-br from-gray-50 to-gray-100" data-aos="fade-up">
-    <div class="container mx-auto px-4 max-w-5xl">
-        <div class="text-center mb-10">
-            <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-shahin-yellow to-shahin-gold rounded-full mb-6">
-                <i class="fas fa-calendar-check text-gray-900 text-2xl"></i>
-            </div>
-            <h2 class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-shahin-blue to-shahin-light-blue bg-clip-text text-transparent font-vazir">درخواست رزرو سریع</h2>
-            <p class="text-gray-600 mt-3">فرم زیر را پر کنید تا در اولین فرصت با شما تماس بگیریم</p>
-        </div>
-        <form id="quick-appointment-form" class="grid grid-cols-1 md:grid-cols-2 gap-5">
-            <div>
-                <input class="form-input" type="text" name="name" placeholder="نام و نام خانوادگی" required />
-            </div>
-            <div>
-                <input class="form-input" type="tel" name="phone" placeholder="تلفن" required />
-            </div>
-            <div>
-                <input class="form-input" type="email" name="email" placeholder="ایمیل (اختیاری)" />
-            </div>
-            <div>
-                <input class="form-input" type="date" name="preferred_date" placeholder="تاریخ پیشنهادی" />
-            </div>
-            <div>
-                <input class="form-input" type="text" name="car_model" placeholder="خودرو (مانند: 206، دنا، پراید...)" />
-            </div>
-            <div>
-                <input class="form-input" type="text" name="service" placeholder="نوع سرویس (مانند: تعویض روغن)" />
-            </div>
-            <div class="md:col-span-2">
-                <textarea class="form-textarea" name="message" rows="4" placeholder="توضیحات"></textarea>
-            </div>
-            <input type="text" name="company" class="hidden" tabindex="-1" autocomplete="off" style="display:none" />
-            <div class="md:col-span-2 flex flex-col sm:flex-row gap-3">
-                <button type="submit" class="btn-primary flex-1">ثبت درخواست</button>
-                <a href="{% url 'appointment' %}" class="btn-secondary flex-1 text-center">جزئیات بیشتر رزرو</a>
-            </div>
-            <div id="quick-appointment-msg" class="md:col-span-2 mt-2 hidden"></div>
-        </form>
+<!-- World-Class Appointment Section -->
+<section class="py-20 bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden" data-aos="fade-up">
+    <!-- Background Pattern -->
+    <div class="absolute inset-0 opacity-5">
+        <div class="absolute top-0 left-0 w-full h-full bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%231E40AF" fill-opacity="0.1"%3E%3Ccircle cx="30" cy="30" r="2"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')]"></div>
     </div>
     
+    <div class="container mx-auto px-4 relative z-10">
+        <div class="text-center mb-16" data-aos="fade-up">
+            <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-shahin-yellow to-shahin-gold rounded-full mb-8 shadow-2xl">
+                <i class="fas fa-calendar-check text-gray-900 text-3xl"></i>
+            </div>
+            <h2 class="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-shahin-blue to-shahin-light-blue bg-clip-text text-transparent font-vazir">رزرو نوبت آنلاین</h2>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">سرویس مورد نظر خود را انتخاب کنید و در چند دقیقه نوبت خود را رزرو کنید</p>
+            <div class="w-24 h-1 bg-gradient-to-r from-shahin-yellow to-shahin-gold mx-auto mt-6 rounded-full"></div>
+        </div>
+        
+        <!-- Service Selection Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12" data-aos="fade-up" data-aos-delay="200">
+            {% for service in services %}
+            <div class="service-card group bg-white rounded-2xl shadow-shahin overflow-hidden hover:shadow-shahin-xl transition-all duration-500 transform hover:-translate-y-3 cursor-pointer" 
+                 data-service-id="{{ service.id }}" 
+                 data-service-name="{{ service.name }}"
+                 data-service-price-min="{{ service.min_price|default:0 }}"
+                 data-service-price-max="{{ service.max_price|default:0 }}"
+                 data-service-duration="{{ service.duration|default:'نامشخص' }}">
+                <div class="relative overflow-hidden">
+                    <img src="{% if service.image %}{{ service.image.url }}{% else %}/media/services/default.jpg{% endif %}" 
+                         alt="{{ service.name }}" 
+                         class="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div class="absolute top-4 right-4">
+                        <div class="w-12 h-12 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                            <i class="fas fa-cog text-shahin-blue text-lg"></i>
+                        </div>
+                    </div>
+                    <div class="absolute bottom-4 right-4 left-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <div class="bg-white/90 backdrop-blur-sm rounded-xl p-3">
+                            <p class="text-sm font-medium text-gray-800 text-center">برای انتخاب کلیک کنید</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-gray-800 mb-3 group-hover:text-shahin-blue transition-colors duration-300">{{ service.name }}</h3>
+                    <p class="text-gray-600 mb-4 leading-relaxed text-sm">{{ service.description|truncatewords:15 }}</p>
+                    
+                    <!-- Price Range -->
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center space-x-2 space-x-reverse">
+                            <i class="fas fa-tag text-shahin-blue text-sm"></i>
+                            <span class="text-sm font-medium text-gray-700">قیمت:</span>
+                        </div>
+                        <div class="text-left">
+                            {% if service.min_price and service.max_price %}
+                                <span class="text-lg font-bold text-green-600">{{ service.min_price|floatformat:0|add:0|floatformat:0 }} - {{ service.max_price|floatformat:0|add:0|floatformat:0 }}</span>
+                                <span class="text-sm text-gray-500">تومان</span>
+                            {% elif service.min_price %}
+                                <span class="text-lg font-bold text-green-600">از {{ service.min_price|floatformat:0|add:0|floatformat:0 }}</span>
+                                <span class="text-sm text-gray-500">تومان</span>
+                            {% elif service.max_price %}
+                                <span class="text-lg font-bold text-green-600">تا {{ service.max_price|floatformat:0|add:0|floatformat:0 }}</span>
+                                <span class="text-sm text-gray-500">تومان</span>
+                            {% else %}
+                                <span class="text-sm text-gray-500">قیمت نامشخص</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <!-- Duration -->
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-2 space-x-reverse">
+                            <i class="fas fa-clock text-shahin-yellow text-sm"></i>
+                            <span class="text-sm font-medium text-gray-700">مدت زمان:</span>
+                        </div>
+                        <span class="text-sm font-bold text-gray-800">{{ service.duration|default:'نامشخص' }}</span>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-span-full text-center py-16">
+                <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-tools text-gray-400 text-3xl"></i>
+                </div>
+                <p class="text-gray-500 text-xl">سرویس‌ها به زودی اضافه خواهند شد</p>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <!-- Appointment Form Modal -->
+        <div id="appointment-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+            <div class="bg-white rounded-3xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto animate-scale-in">
+                <div class="sticky top-0 bg-white border-b border-gray-200 p-6 rounded-t-3xl">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="text-2xl font-bold bg-gradient-to-r from-shahin-blue to-shahin-light-blue bg-clip-text text-transparent font-vazir">رزرو نوبت</h3>
+                            <p class="text-gray-600 mt-1" id="selected-service-name">سرویس انتخاب شده</p>
+                        </div>
+                        <button onclick="closeAppointmentModal()" class="p-3 rounded-xl bg-gray-100 hover:bg-gray-200 transition-colors duration-300 group">
+                            <i class="fas fa-times text-gray-600 group-hover:text-gray-800"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="p-6">
+                    <form id="appointment-form" class="space-y-6">
+                        <!-- Customer Information -->
+                        <div class="bg-gradient-to-r from-shahin-blue/5 to-shahin-light-blue/5 rounded-2xl p-6">
+                            <h4 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
+                                <i class="fas fa-user text-shahin-blue ml-2"></i>
+                                اطلاعات مشتری
+                            </h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="relative group">
+                                    <label class="block text-sm font-bold text-gray-700 mb-2">نام و نام خانوادگی *</label>
+                                    <input type="text" name="name" required 
+                                           class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl focus:outline-none focus:border-shahin-blue focus:bg-white transition-all duration-300 text-gray-800 placeholder-gray-400 group-hover:border-shahin-blue/50"
+                                           placeholder="نام کامل خود را وارد کنید">
+                                </div>
+                                <div class="relative group">
+                                    <label class="block text-sm font-bold text-gray-700 mb-2">شماره تلفن *</label>
+                                    <input type="tel" name="phone" required 
+                                           class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl focus:outline-none focus:border-shahin-blue focus:bg-white transition-all duration-300 text-gray-800 placeholder-gray-400 group-hover:border-shahin-blue/50"
+                                           placeholder="09123456789">
+                                </div>
+                                <div class="relative group">
+                                    <label class="block text-sm font-bold text-gray-700 mb-2">ایمیل (اختیاری)</label>
+                                    <input type="email" name="email" 
+                                           class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl focus:outline-none focus:border-shahin-blue focus:bg-white transition-all duration-300 text-gray-800 placeholder-gray-400 group-hover:border-shahin-blue/50"
+                                           placeholder="example@email.com">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Car Information -->
+                        <div class="bg-gradient-to-r from-shahin-yellow/5 to-shahin-gold/5 rounded-2xl p-6">
+                            <h4 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
+                                <i class="fas fa-car text-shahin-yellow ml-2"></i>
+                                اطلاعات خودرو
+                            </h4>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div class="relative group">
+                                    <label class="block text-sm font-bold text-gray-700 mb-2">مدل خودرو *</label>
+                                    <input type="text" name="car_model" required 
+                                           class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl focus:outline-none focus:border-shahin-blue focus:bg-white transition-all duration-300 text-gray-800 placeholder-gray-400 group-hover:border-shahin-blue/50"
+                                           placeholder="مانند: 206، دنا، پراید">
+                                </div>
+                                <div class="relative group">
+                                    <label class="block text-sm font-bold text-gray-700 mb-2">سال تولید</label>
+                                    <input type="text" name="car_year" 
+                                           class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl focus:outline-none focus:border-shahin-blue focus:bg-white transition-all duration-300 text-gray-800 placeholder-gray-400 group-hover:border-shahin-blue/50"
+                                           placeholder="1400">
+                                </div>
+                                <div class="relative group">
+                                    <label class="block text-sm font-bold text-gray-700 mb-2">شماره پلاک</label>
+                                    <input type="text" name="car_plate" 
+                                           class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl focus:outline-none focus:border-shahin-blue focus:bg-white transition-all duration-300 text-gray-800 placeholder-gray-400 group-hover:border-shahin-blue/50"
+                                           placeholder="12-345-67">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Date and Time Selection -->
+                        <div class="bg-gradient-to-r from-green-500/5 to-emerald-500/5 rounded-2xl p-6">
+                            <h4 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
+                                <i class="fas fa-calendar-alt text-green-600 ml-2"></i>
+                                انتخاب زمان
+                            </h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="relative group">
+                                    <label class="block text-sm font-bold text-gray-700 mb-2">تاریخ نوبت *</label>
+                                    <input type="date" name="appointment_date" required 
+                                           class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl focus:outline-none focus:border-shahin-blue focus:bg-white transition-all duration-300 text-gray-800 group-hover:border-shahin-blue/50">
+                                </div>
+                                <div class="relative group">
+                                    <label class="block text-sm font-bold text-gray-700 mb-2">ساعت نوبت *</label>
+                                    <select name="appointment_time" required 
+                                            class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl focus:outline-none focus:border-shahin-blue focus:bg-white transition-all duration-300 text-gray-800 group-hover:border-shahin-blue/50">
+                                        <option value="">ساعت مورد نظر را انتخاب کنید</option>
+                                        <option value="08:00">08:00 صبح</option>
+                                        <option value="09:00">09:00 صبح</option>
+                                        <option value="10:00">10:00 صبح</option>
+                                        <option value="11:00">11:00 صبح</option>
+                                        <option value="12:00">12:00 ظهر</option>
+                                        <option value="13:00">01:00 بعدازظهر</option>
+                                        <option value="14:00">02:00 بعدازظهر</option>
+                                        <option value="15:00">03:00 بعدازظهر</option>
+                                        <option value="16:00">04:00 بعدازظهر</option>
+                                        <option value="17:00">05:00 بعدازظهر</option>
+                                        <option value="18:00">06:00 بعدازظهر</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Additional Information -->
+                        <div class="bg-gradient-to-r from-purple-500/5 to-pink-500/5 rounded-2xl p-6">
+                            <h4 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
+                                <i class="fas fa-comment text-purple-600 ml-2"></i>
+                                توضیحات اضافی
+                            </h4>
+                            <div class="relative group">
+                                <textarea name="message" rows="4" 
+                                          class="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl focus:outline-none focus:border-shahin-blue focus:bg-white transition-all duration-300 text-gray-800 placeholder-gray-400 resize-none group-hover:border-shahin-blue/50"
+                                          placeholder="توضیحات اضافی در مورد خودرو یا سرویس مورد نظر..."></textarea>
+                            </div>
+                        </div>
+                        
+                        <!-- Hidden Fields -->
+                        <input type="hidden" name="service_id" id="selected-service-id">
+                        <input type="text" name="company" class="hidden" tabindex="-1" autocomplete="off" style="display:none" />
+                        
+                        <!-- Submit Button -->
+                        <div class="flex flex-col sm:flex-row gap-4 pt-6">
+                            <button type="submit" class="flex-1 bg-gradient-to-r from-shahin-blue to-shahin-light-blue text-white font-bold py-4 px-8 rounded-xl hover:from-shahin-light-blue hover:to-shahin-blue transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-glow group">
+                                <i class="fas fa-calendar-check ml-2 group-hover:scale-110 transition-transform duration-300"></i>
+                                رزرو نوبت
+                            </button>
+                            <button type="button" onclick="closeAppointmentModal()" class="flex-1 bg-gradient-to-r from-gray-500 to-gray-600 text-white font-bold py-4 px-8 rounded-xl hover:from-gray-600 hover:to-gray-700 transition-all duration-300 transform hover:scale-105 shadow-lg">
+                                <i class="fas fa-times ml-2"></i>
+                                انصراف
+                            </button>
+                        </div>
+                        
+                        <div id="appointment-form-message" class="mt-4 hidden"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Call to Action -->
+        <div class="text-center" data-aos="fade-up" data-aos-delay="400">
+            <p class="text-gray-600 mb-6">یا برای مشاوره تلفنی با ما تماس بگیرید</p>
+            <a href="tel:{{ site_settings.phone }}" class="group inline-flex items-center px-8 py-4 bg-gradient-to-r from-shahin-yellow to-shahin-gold text-gray-900 font-bold rounded-xl hover:from-shahin-gold hover:to-shahin-yellow transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-yellow-glow">
+                <i class="fas fa-phone ml-2 group-hover:scale-110 transition-transform duration-300"></i>
+                تماس تلفنی
+            </a>
+        </div>
+    </div>
 </section>
 
 <!-- Location & Map -->
@@ -760,41 +957,108 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Quick appointment submission
-const quickForm = document.getElementById('quick-appointment-form');
-const quickMsg = document.getElementById('quick-appointment-msg');
-if (quickForm) {
-    quickForm.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        const data = Object.fromEntries(new FormData(quickForm).entries());
-        try {
-            const res = await fetch('{% url "appointment_form" %}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]')?.value || ''
-                },
-                body: JSON.stringify(data)
-            });
-            const result = await res.json();
-            if (result.success) {
-                quickForm.reset();
-                quickMsg.textContent = result.message || 'درخواست شما ثبت شد';
-                quickMsg.className = 'md:col-span-2 mt-2 p-3 bg-green-100 text-green-800 rounded-lg';
-            } else {
-                quickMsg.textContent = result.message || 'خطا در ثبت درخواست';
-                quickMsg.className = 'md:col-span-2 mt-2 p-3 bg-red-100 text-red-800 rounded-lg';
-            }
-            quickMsg.classList.remove('hidden');
-            setTimeout(() => quickMsg.classList.add('hidden'), 5000);
-        } catch (err) {
-            quickMsg.textContent = 'خطا در ثبت درخواست';
-            quickMsg.className = 'md:col-span-2 mt-2 p-3 bg-red-100 text-red-800 rounded-lg';
-            quickMsg.classList.remove('hidden');
-            setTimeout(() => quickMsg.classList.add('hidden'), 5000);
+// Service Selection and Appointment Modal
+document.addEventListener('DOMContentLoaded', function() {
+    const serviceCards = document.querySelectorAll('.service-card');
+    const appointmentModal = document.getElementById('appointment-modal');
+    const selectedServiceName = document.getElementById('selected-service-name');
+    const selectedServiceId = document.getElementById('selected-service-id');
+    const appointmentForm = document.getElementById('appointment-form');
+    const appointmentMsg = document.getElementById('appointment-form-message');
+
+    // Service card click handlers
+    serviceCards.forEach(card => {
+        card.addEventListener('click', function() {
+            const serviceId = this.dataset.serviceId;
+            const serviceName = this.dataset.serviceName;
+            
+            // Update modal with selected service
+            selectedServiceName.textContent = serviceName;
+            selectedServiceId.value = serviceId;
+            
+            // Show modal with animation
+            appointmentModal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            
+            // Add selected class to card
+            serviceCards.forEach(c => c.classList.remove('ring-4', 'ring-shahin-blue', 'ring-opacity-50'));
+            this.classList.add('ring-4', 'ring-shahin-blue', 'ring-opacity-50');
+        });
+    });
+
+    // Close modal handlers
+    window.closeAppointmentModal = function() {
+        appointmentModal.classList.add('hidden');
+        document.body.style.overflow = '';
+        
+        // Remove selected class from all cards
+        serviceCards.forEach(c => c.classList.remove('ring-4', 'ring-shahin-blue', 'ring-opacity-50'));
+    };
+
+    // Close modal when clicking outside
+    appointmentModal.addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeAppointmentModal();
         }
     });
-}
+
+    // Appointment form submission
+    if (appointmentForm) {
+        appointmentForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(appointmentForm);
+            const data = Object.fromEntries(formData.entries());
+            
+            // Show loading state
+            const submitBtn = appointmentForm.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin ml-2"></i>در حال ثبت...';
+            submitBtn.disabled = true;
+            
+            try {
+                const response = await fetch('/api/appointments/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]')?.value || ''
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    appointmentMsg.textContent = result.message || 'نوبت شما با موفقیت ثبت شد!';
+                    appointmentMsg.className = 'mt-4 p-4 bg-green-100 text-green-800 rounded-xl border border-green-200';
+                    appointmentForm.reset();
+                    
+                    // Close modal after success
+                    setTimeout(() => {
+                        closeAppointmentModal();
+                    }, 2000);
+                } else {
+                    appointmentMsg.textContent = result.message || 'خطا در ثبت نوبت';
+                    appointmentMsg.className = 'mt-4 p-4 bg-red-100 text-red-800 rounded-xl border border-red-200';
+                }
+            } catch (error) {
+                console.error('Appointment form error:', error);
+                appointmentMsg.textContent = 'خطا در ثبت نوبت. لطفاً دوباره تلاش کنید.';
+                appointmentMsg.className = 'mt-4 p-4 bg-red-100 text-red-800 rounded-xl border border-red-200';
+            } finally {
+                // Reset button state
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+                appointmentMsg.classList.remove('hidden');
+                
+                // Hide message after 5 seconds
+                setTimeout(() => {
+                    appointmentMsg.classList.add('hidden');
+                }, 5000);
+            }
+        });
+    }
+});
 
 // Modern contact form submission
 const modernContactForm = document.getElementById('modern-contact-form');

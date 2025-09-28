@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.db.models import Count
 from django.contrib.admin.views.main import ChangeList
-from .models import Lecture, Service, ContactMessage, SiteSettings, Bonus, AppointmentRequest, ServiceCategory, Comment
+from .models import Lecture, Service, ContactMessage, SiteSettings, Bonus, AppointmentRequest, Appointment, ServiceCategory, Comment
 
 # Customize the default admin site
 admin.site.site_header = "پنل مدیریت شاهین خودرو"
@@ -31,6 +31,8 @@ class CustomAdminIndexView(TemplateView):
             'pending_comments': Comment.objects.filter(is_approved=False).count(),
             'unread_messages': ContactMessage.objects.filter(is_read=False).count(),
             'pending_appointments': AppointmentRequest.objects.filter(is_processed=False).count(),
+            'total_appointments': Appointment.objects.count(),
+            'pending_appointment_requests': Appointment.objects.filter(status='pending').count(),
         }
         
         context['stats'] = stats
@@ -129,9 +131,9 @@ class ServiceCategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Service)
 class ServiceAdmin(admin.ModelAdmin):
-    list_display = ['name', 'image_preview', 'category', 'price_formatted', 'duration', 'is_featured', 'is_published', 'comment_count', 'created_at']
+    list_display = ['name', 'image_preview', 'category', 'price_range_formatted', 'duration', 'is_featured', 'is_published', 'comment_count', 'created_at']
     list_filter = ['category', 'is_featured', 'is_published', 'created_at', 'updated_at']
-    search_fields = ['name', 'description', 'car_model']
+    search_fields = ['name', 'description']
     prepopulated_fields = {'slug': ('name',)}
     readonly_fields = ['created_at', 'updated_at', 'image_preview']
     list_per_page = 20
@@ -143,7 +145,8 @@ class ServiceAdmin(admin.ModelAdmin):
             'fields': ('name', 'slug', 'category', 'image', 'image_preview', 'description', 'is_published')
         }),
         ('قیمت‌گذاری و زمان', {
-            'fields': ('price', 'duration', 'is_featured')
+            'fields': ('min_price', 'max_price', 'duration', 'is_featured'),
+            'description': 'برای تعیین محدوده قیمت، حداقل و حداکثر قیمت را وارد کنید'
         }),
         ('رسانه‌ها', {
             'fields': ('video', 'instagram_link'),
@@ -161,11 +164,16 @@ class ServiceAdmin(admin.ModelAdmin):
         return "بدون تصویر"
     image_preview.short_description = "پیش‌نمایش"
     
-    def price_formatted(self, obj):
-        if obj.price:
-            return format_html('<span style="color: #28a745; font-weight: bold;">{} تومان</span>', f"{obj.price:,}")
+    def price_range_formatted(self, obj):
+        if obj.min_price and obj.max_price:
+            return format_html('<span style="color: #28a745; font-weight: bold;">{} - {} تومان</span>', 
+                             f"{obj.min_price:,}", f"{obj.max_price:,}")
+        elif obj.min_price:
+            return format_html('<span style="color: #28a745; font-weight: bold;">از {} تومان</span>', f"{obj.min_price:,}")
+        elif obj.max_price:
+            return format_html('<span style="color: #28a745; font-weight: bold;">تا {} تومان</span>', f"{obj.max_price:,}")
         return "قیمت نامشخص"
-    price_formatted.short_description = "قیمت"
+    price_range_formatted.short_description = "محدوده قیمت"
     
     def comment_count(self, obj):
         count = obj.comments.count()
@@ -408,3 +416,90 @@ class AppointmentRequestAdmin(admin.ModelAdmin):
         updated = queryset.update(is_processed=False)
         self.message_user(request, f'{updated} مورد به عنوان پیگیری‌نشده علامت‌گذاری شد.')
     mark_unprocessed.short_description = "علامت‌گذاری به عنوان پیگیری‌نشده"
+
+
+@admin.register(Appointment)
+class AppointmentAdmin(admin.ModelAdmin):
+    list_display = ['name', 'phone', 'service', 'appointment_date', 'appointment_time', 'status_display', 'is_processed_status', 'created_at']
+    list_filter = ['status', 'is_processed', 'appointment_date', 'created_at', 'service']
+    search_fields = ['name', 'phone', 'email', 'car_model', 'car_plate', 'service__name']
+    readonly_fields = ['created_at', 'updated_at', 'message_preview', 'price_range_display']
+    actions = ['mark_processed', 'mark_unprocessed', 'confirm_appointments', 'cancel_appointments']
+    list_per_page = 25
+    date_hierarchy = 'appointment_date'
+    ordering = ['-created_at']
+    
+    fieldsets = (
+        ('اطلاعات مشتری', {
+            'fields': ('name', 'phone', 'email')
+        }),
+        ('اطلاعات خودرو', {
+            'fields': ('car_model', 'car_year', 'car_plate')
+        }),
+        ('سرویس و زمان‌بندی', {
+            'fields': ('service', 'appointment_date', 'appointment_time', 'estimated_duration', 'price_range_display')
+        }),
+        ('جزئیات اضافی', {
+            'fields': ('message', 'message_preview', 'estimated_price')
+        }),
+        ('وضعیت و مدیریت', {
+            'fields': ('status', 'is_processed', 'admin_notes')
+        }),
+        ('زمان‌بندی', {
+            'fields': ('created_at', 'updated_at', 'confirmed_at'),
+            'classes': ('collapse',)
+        }),
+    )
+    
+    def message_preview(self, obj):
+        if obj.message and len(obj.message) > 100:
+            return format_html('{}...', obj.message[:100])
+        return obj.message or "بدون توضیحات"
+    message_preview.short_description = "پیش‌نمایش توضیحات"
+    
+    def status_display(self, obj):
+        status_colors = {
+            'pending': '#ffc107',
+            'confirmed': '#28a745',
+            'in_progress': '#17a2b8',
+            'completed': '#6c757d',
+            'cancelled': '#dc3545'
+        }
+        status_texts = {
+            'pending': 'در انتظار تایید',
+            'confirmed': 'تایید شده',
+            'in_progress': 'در حال انجام',
+            'completed': 'تکمیل شده',
+            'cancelled': 'لغو شده'
+        }
+        color = status_colors.get(obj.status, '#6c757d')
+        text = status_texts.get(obj.status, obj.status)
+        return format_html('<span style="color: {}; font-weight: bold;">{}</span>', color, text)
+    status_display.short_description = "وضعیت"
+    
+    def is_processed_status(self, obj):
+        if obj.is_processed:
+            return format_html('<span style="color: #28a745; font-weight: bold;">✓ پیگیری شده</span>')
+        return format_html('<span style="color: #dc3545; font-weight: bold;">✗ پیگیری نشده</span>')
+    is_processed_status.short_description = "وضعیت پیگیری"
+
+    def mark_processed(self, request, queryset):
+        updated = queryset.update(is_processed=True)
+        self.message_user(request, f'{updated} نوبت به عنوان پیگیری‌شده علامت‌گذاری شد.')
+    mark_processed.short_description = "علامت‌گذاری به عنوان پیگیری‌شده"
+
+    def mark_unprocessed(self, request, queryset):
+        updated = queryset.update(is_processed=False)
+        self.message_user(request, f'{updated} نوبت به عنوان پیگیری‌نشده علامت‌گذاری شد.')
+    mark_unprocessed.short_description = "علامت‌گذاری به عنوان پیگیری‌نشده"
+
+    def confirm_appointments(self, request, queryset):
+        from django.utils import timezone
+        updated = queryset.filter(status='pending').update(status='confirmed', confirmed_at=timezone.now())
+        self.message_user(request, f'{updated} نوبت تایید شد.')
+    confirm_appointments.short_description = "تایید نوبت‌های انتخاب شده"
+
+    def cancel_appointments(self, request, queryset):
+        updated = queryset.filter(status__in=['pending', 'confirmed']).update(status='cancelled')
+        self.message_user(request, f'{updated} نوبت لغو شد.')
+    cancel_appointments.short_description = "لغو نوبت‌های انتخاب شده"

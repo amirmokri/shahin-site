@@ -17,4 +17,9 @@ urlpatterns = [
     
     # Contact form API endpoint
     path('contact/', api_views.contact_form_api, name='api_contact_form'),
+    
+    # Appointment API endpoints
+    path('appointments/', api_views.appointment_booking_api, name='api_appointment_booking'),
+    path('appointments/list/', api_views.appointments_list_api, name='api_appointments_list'),
+    path('appointment-form/', api_views.appointment_form_api, name='api_appointment_form'),
 ]
