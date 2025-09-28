@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{% block meta_description %}خدمات حرفه‌ای خودرو با کیفیت جهانی - شاهین{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}خودرو, سرویس, تعمیر, شاهین, خدمات خودرو{% endblock %}">
+    <meta name="author" content="Shahin Auto Service">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="{% block og_title %}{{ site_settings.site_name }}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}{{ site_settings.site_description }}{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}{% if site_settings.hero_image %}{{ site_settings.hero_image.url }}{% else %}/media/site/hero.jpg{% endif %}{% endblock %}">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:type" content="website">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% block twitter_title %}{{ site_settings.site_name }}{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}{{ site_settings.site_description }}{% endblock %}">
+    <meta name="twitter:image" content="{% block twitter_image %}{% if site_settings.hero_image %}{{ site_settings.hero_image.url }}{% else %}/media/site/hero.jpg{% endif %}{% endblock %}">
+    
+    <!-- Google Analytics -->
+    {% if site_settings.google_analytics_id %}
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ site_settings.google_analytics_id }}"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', '{{ site_settings.google_analytics_id }}');
+    </script>
+    {% endif %}
+    
+    <!-- Google Search Console Verification -->
+    {% if site_settings.google_site_verification %}
+    <meta name="google-site-verification" content="{{ site_settings.google_site_verification }}">
+    {% endif %}
+    
+    <!-- Bing Webmaster Tools Verification -->
+    {% if site_settings.bing_site_verification %}
+    <meta name="msvalidate.01" content="{{ site_settings.bing_site_verification }}">
+    {% endif %}
+    
+    <title>{% block title %}{{ site_settings.site_name }} - {{ site_settings.site_description }}{% endblock %}</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'shahin-yellow': '#FFD700',
+                        'shahin-blue': '#1E40AF',
+                        'shahin-light-blue': '#3B82F6',
+                        'shahin-dark-blue': '#1E3A8A',
+                        'shahin-gold': '#FFA500',
+                        'shahin-silver': '#C0C0C0',
+                    },
+                    fontFamily: {
+                        'vazir': ['Vazirmatn', 'Vazir', 'Tahoma', 'Arial', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.6s ease-out',
+                        'fade-in-down': 'fadeInDown 0.6s ease-out',
+                        'scale-in': 'scaleIn 0.3s ease-out',
+                        'slide-in-right': 'slideInRight 0.5s ease-out',
+                        'bounce-slow': 'bounce 2s infinite',
+                        'pulse-slow': 'pulse 3s infinite',
+                        'float': 'float 3s ease-in-out infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(30px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        fadeInDown: {
+                            '0%': { opacity: '0', transform: 'translateY(-30px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        scaleIn: {
+                            '0%': { opacity: '0', transform: 'scale(0.9)' },
+                            '100%': { opacity: '1', transform: 'scale(1)' },
+                        },
+                        slideInRight: {
+                            '0%': { opacity: '0', transform: 'translateX(30px)' },
+                            '100%': { opacity: '1', transform: 'translateX(0)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        glow: {
+                            '0%': { boxShadow: '0 0 5px #FFD700, 0 0 10px #FFD700, 0 0 15px #FFD700' },
+                            '100%': { boxShadow: '0 0 10px #FFD700, 0 0 20px #FFD700, 0 0 30px #FFD700' },
+                        },
+                    },
+                    boxShadow: {
+                        'shahin': '0 10px 25px -5px rgba(30, 64, 175, 0.1), 0 10px 10px -5px rgba(30, 64, 175, 0.04)',
+                        'shahin-lg': '0 20px 25px -5px rgba(30, 64, 175, 0.1), 0 10px 10px -5px rgba(30, 64, 175, 0.04)',
+                        'shahin-xl': '0 25px 50px -12px rgba(30, 64, 175, 0.25)',
+                        'yellow-glow': '0 0 20px rgba(255, 215, 0, 0.3)',
+                        'blue-glow': '0 0 20px rgba(30, 64, 175, 0.3)',
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Swiper (Reviews Carousel) -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper@9/swiper-bundle.min.css" />
+    
+    <!-- Structured Data -->
+    {% include 'structured_data.html' %}
+    
+    <!-- Font Awesome Icons (Local) -->
+    <link rel="stylesheet" href="{% static 'fontawesome/css/all.min.css' %}" />
+    
+    <!-- Custom CSS -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100;200;300;400;500;600;700;800;900&display=swap');
+        
+        * {
+            font-family: 'Vazirmatn', 'Vazir', Tahoma, Arial, sans-serif;
+        }
+        
+        body {
+            font-family: 'Vazirmatn', 'Vazir', Tahoma, Arial, sans-serif;
+            line-height: 1.8;
+            letter-spacing: 0.2px;
+        }
+        
+        .rtl {
+            direction: rtl;
+            text-align: right;
+        }
+        
+        .ltr {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #FFD700 0%, #1E40AF 100%);
+        }
+        
+        .hero-bg {
+            background: linear-gradient(rgba(30, 64, 175, 0.7), rgba(255, 215, 0, 0.3)), url('/media/site/hero.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: scroll;
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .text-shadow {
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #1E40AF;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .mobile-menu {
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        
+        .mobile-menu.open {
+            transform: translateX(0);
+        }
+        
+        .dark-mode {
+            background-color: #1a1a1a;
+            color: #ffffff;
+        }
+        
+        .dark-mode .bg-white {
+            background-color: #2d2d2d !important;
+        }
+        
+        .dark-mode .text-gray-800 {
+            color: #ffffff !important;
+        }
+        
+        .dark-mode .text-gray-600 {
+            color: #d1d5db !important;
+        }
+    </style>
+    
+    <!-- Project static CSS -->
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="bg-gray-50 dark-mode-toggle">
+    <!-- Header -->
+    <header class="bg-white/95 backdrop-blur-md shadow-shahin-lg sticky top-0 z-50 border-b border-shahin-yellow/20">
+        <nav class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <!-- Logo and Site Name -->
+                <div class="flex items-center space-x-4 space-x-reverse group">
+                    <div class="relative h-12 w-12 rounded-full overflow-hidden ring-2 ring-shahin-yellow bg-white shadow-shahin transition-all duration-300 group-hover:scale-110">
+                        <img src="{% static 'images/logo.png' %}" alt="شاهین" class="h-full w-full object-contain p-1">
+                        <div class="absolute inset-0 rounded-full pointer-events-none"></div>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl md:text-3xl font-bold bg-gradient-to-r from-shahin-blue to-shahin-light-blue bg-clip-text text-transparent font-vazir">{{ site_settings.site_name }}</h1>
+                        <p class="text-sm text-gray-600 font-medium">خدمات حرفه‌ای خودرو</p>
+                    </div>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-6 space-x-reverse">
+                    <a href="{% url 'home' %}" class="relative px-4 py-2 text-gray-700 hover:text-shahin-blue transition-all duration-300 font-medium group">
+                        <span class="relative z-10">خانه</span>
+                        <div class="absolute inset-0 bg-shahin-yellow/10 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300"></div>
+                    </a>
+                    <a href="{% url 'lectures_list' %}" class="relative px-4 py-2 text-gray-700 hover:text-shahin-blue transition-all duration-300 font-medium group">
+                        <span class="relative z-10">مقالات</span>
+                        <div class="absolute inset-0 bg-shahin-yellow/10 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300"></div>
+                    </a>
+                    <a href="{% url 'services' %}" class="relative px-4 py-2 text-gray-700 hover:text-shahin-blue transition-all duration-300 font-medium group">
+                        <span class="relative z-10">سرویس‌ها</span>
+                        <div class="absolute inset-0 bg-shahin-yellow/10 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300"></div>
+                    </a>
+                    <a href="{% url 'appointment' %}" class="relative px-4 py-2 text-gray-700 hover:text-shahin-blue transition-all duration-300 font-medium group">
+                        <span class="relative z-10">رزرو وقت</span>
+                        <div class="absolute inset-0 bg-shahin-yellow/10 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300"></div>
+                    </a>
+                    <a href="#contact" class="relative px-4 py-2 text-gray-700 hover:text-shahin-blue transition-all duration-300 font-medium group">
+                        <span class="relative z-10">تماس با ما</span>
+                        <div class="absolute inset-0 bg-shahin-yellow/10 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300"></div>
+                    </a>
+                    <div class="w-px h-8 bg-gray-300 mx-2"></div>
+                    <button id="dark-mode-toggle" class="p-3 rounded-full bg-gradient-to-r from-shahin-yellow/10 to-shahin-blue/10 hover:from-shahin-yellow/20 hover:to-shahin-blue/20 transition-all duration-300 group">
+                        <svg class="w-5 h-5 text-shahin-blue group-hover:text-shahin-dark-blue transition-colors duration-300" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"></path>
+                        </svg>
+                    </button>
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-button" class="md:hidden p-3 rounded-xl bg-gradient-to-r from-shahin-yellow/10 to-shahin-blue/10 hover:from-shahin-yellow/20 hover:to-shahin-blue/20 transition-all duration-300 group">
+                    <svg class="w-6 h-6 text-shahin-blue group-hover:text-shahin-dark-blue transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- Mobile Menu Overlay -->
+            <div id="mobile-menu-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 hidden md:hidden"></div>
+
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="mobile-menu fixed top-0 right-0 h-screen w-80 bg-white shadow-shahin-xl z-50 md:hidden border-l border-shahin-yellow/20">
+                <!-- Decorative Background -->
+                <div class="absolute inset-0 opacity-5 pointer-events-none"></div>
+                <div class="relative p-6">
+                    <div class="flex items-center justify-between mb-8">
+                        <div>
+                            <h2 class="text-2xl font-bold bg-gradient-to-r from-shahin-blue to-shahin-light-blue bg-clip-text text-transparent font-vazir">{{ site_settings.site_name }}</h2>
+                            <p class="text-sm text-gray-600 font-medium">خدمات حرفه‌ای خودرو</p>
+                        </div>
+                        <button id="mobile-menu-close" class="p-3 rounded-xl bg-gradient-to-r from-shahin-yellow/10 to-shahin-blue/10 hover:from-shahin-yellow/20 hover:to-shahin-blue/20 transition-all duration-300 group">
+                            <svg class="w-5 h-5 text-shahin-blue group-hover:text-shahin-dark-blue transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <nav class="space-y-2">
+                        <a href="{% url 'home' %}" class="flex items-center px-4 py-3 text-gray-700 hover:text-shahin-blue hover:bg-shahin-yellow/10 transition-all duration-300 font-medium rounded-xl group">
+                            <i class="fas fa-house w-5 h-5 ml-3 group-hover:scale-110 transition-transform duration-300"></i>
+                            <span>خانه</span>
+                        </a>
+                        <a href="{% url 'appointment' %}" class="flex items-center px-4 py-3 text-gray-700 hover:text-shahin-blue hover:bg-shahin-yellow/10 transition-all duration-300 font-medium rounded-xl group">
+                            <i class="fas fa-calendar-check w-5 h-5 ml-3 group-hover:scale-110 transition-transform duration-300"></i>
+                            <span>رزرو وقت</span>
+                        </a>
+                        <a href="{% url 'lectures_list' %}" class="flex items-center px-4 py-3 text-gray-700 hover:text-shahin-blue hover:bg-shahin-yellow/10 transition-all duration-300 font-medium rounded-xl group">
+                            <i class="fas fa-newspaper w-5 h-5 ml-3 group-hover:scale-110 transition-transform duration-300"></i>
+                            <span>مقالات</span>
+                        </a>
+                        <a href="{% url 'services' %}" class="flex items-center px-4 py-3 text-gray-700 hover:text-shahin-blue hover:bg-shahin-yellow/10 transition-all duration-300 font-medium rounded-xl group">
+                            <i class="fas fa-gears w-5 h-5 ml-3 group-hover:scale-110 transition-transform duration-300"></i>
+                            <span>سرویس‌ها</span>
+                        </a>
+                        <a href="#contact" class="flex items-center px-4 py-3 text-gray-700 hover:text-shahin-blue hover:bg-shahin-yellow/10 transition-all duration-300 font-medium rounded-xl group">
+                            <i class="fas fa-phone w-5 h-5 ml-3 group-hover:scale-110 transition-transform duration-300"></i>
+                            <span>تماس با ما</span>
+                        </a>
+                        <div class="border-t border-gray-200 my-4"></div>
+                        <button id="dark-mode-toggle-mobile" class="flex items-center w-full px-4 py-3 text-gray-700 hover:text-shahin-blue hover:bg-shahin-yellow/10 transition-all duration-300 font-medium rounded-xl group">
+                            <i class="fas fa-moon w-5 h-5 ml-3 group-hover:scale-110 transition-transform duration-300"></i>
+                            <span>حالت تاریک</span>
+                        </button>
+                    </nav>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer id="contact" class="bg-gradient-to-br from-gray-900 via-shahin-dark-blue to-gray-900 text-white py-16 relative overflow-hidden">
+        <!-- Background Pattern -->
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute top-0 left-0 w-full h-full bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23FFD700" fill-opacity="0.1"%3E%3Ccircle cx="30" cy="30" r="2"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')]"></div>
+        </div>
+        
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <!-- Contact Info -->
+                <div data-aos="fade-up" data-aos-delay="100" class="group">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 bg-gradient-to-r from-shahin-yellow to-shahin-gold rounded-xl flex items-center justify-center ml-4 group-hover:scale-110 transition-transform duration-300 text-gray-900">
+                            <i class="fas fa-phone text-lg"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold bg-gradient-to-r from-shahin-yellow to-shahin-gold bg-clip-text text-transparent font-vazir">تماس با ما</h3>
+                    </div>
+                    
+                    <!-- Contact Buttons -->
+                    <div class="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-600/30 shadow-2xl mb-6">
+                        <div class="space-y-4">
+                            <a href="tel:{{ site_settings.phone }}" class="group/btn flex items-center justify-between p-4 bg-gradient-to-r from-green-500/20 to-green-600/20 border border-green-500/30 rounded-xl hover:from-green-500/30 hover:to-green-600/30 hover:border-green-400/50 transition-all duration-300 transform hover:scale-105">
+                                <div class="flex items-center space-x-4 space-x-reverse">
+                                    <div class="w-12 h-12 bg-gradient-to-r from-green-500 to-green-600 rounded-xl flex items-center justify-center group-hover/btn:scale-110 transition-transform duration-300">
+                                        <i class="fas fa-phone text-white text-lg"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-gray-300 text-sm">تماس تلفنی</p>
+                                        <p class="text-white font-bold">{{ site_settings.phone }}</p>
+                                    </div>
+                                </div>
+                                <i class="fas fa-arrow-left text-green-400 group-hover/btn:translate-x-1 transition-transform duration-300"></i>
+                            </a>
+                            
+                            <a href="{{ site_settings.instagram_url }}" target="_blank" class="group/btn flex items-center justify-between p-4 bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 rounded-xl hover:from-purple-500/30 hover:to-pink-500/30 hover:border-purple-400/50 transition-all duration-300 transform hover:scale-105">
+                                <div class="flex items-center space-x-4 space-x-reverse">
+                                    <div class="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center group-hover/btn:scale-110 transition-transform duration-300">
+                                        <i class="fab fa-instagram text-white text-lg"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-gray-300 text-sm">اینستاگرام</p>
+                                        <p class="text-white font-bold">@shahin_autoservice</p>
+                                    </div>
+                                </div>
+                                <i class="fas fa-arrow-left text-purple-400 group-hover/btn:translate-x-1 transition-transform duration-300"></i>
+                            </a>
+                            
+                            <div class="group/btn flex items-center justify-between p-4 bg-gradient-to-r from-blue-500/20 to-blue-600/20 border border-blue-500/30 rounded-xl hover:from-blue-500/30 hover:to-blue-600/30 hover:border-blue-400/50 transition-all duration-300">
+                                <div class="flex items-center space-x-4 space-x-reverse">
+                                    <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl flex items-center justify-center group-hover/btn:scale-110 transition-transform duration-300">
+                                        <i class="fas fa-location-dot text-white text-lg"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-gray-300 text-sm">آدرس</p>
+                                        <p class="text-white font-bold text-sm leading-relaxed">{{ site_settings.address }}</p>
+                                    </div>
+                                </div>
+                                <i class="fas fa-map-marker-alt text-blue-400 group-hover/btn:scale-110 transition-transform duration-300"></i>
+                            </div>
+                            
+                            <a href="mailto:{{ site_settings.email }}" class="group/btn flex items-center justify-between p-4 bg-gradient-to-r from-orange-500/20 to-orange-600/20 border border-orange-500/30 rounded-xl hover:from-orange-500/30 hover:to-orange-600/30 hover:border-orange-400/50 transition-all duration-300 transform hover:scale-105">
+                                <div class="flex items-center space-x-4 space-x-reverse">
+                                    <div class="w-12 h-12 bg-gradient-to-r from-orange-500 to-orange-600 rounded-xl flex items-center justify-center group-hover/btn:scale-110 transition-transform duration-300">
+                                        <i class="fas fa-envelope text-white text-lg"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-gray-300 text-sm">ایمیل</p>
+                                        <p class="text-white font-bold">{{ site_settings.email }}</p>
+                                    </div>
+                                </div>
+                                <i class="fas fa-arrow-left text-orange-400 group-hover/btn:translate-x-1 transition-transform duration-300"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- About Us -->
+                <div data-aos="fade-up" data-aos-delay="200" class="group">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 bg-gradient-to-r from-shahin-yellow to-shahin-gold rounded-xl flex items-center justify-center ml-4 group-hover:scale-110 transition-transform duration-300 text-gray-900">
+                            <i class="fas fa-circle-info text-lg"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold bg-gradient-to-r from-shahin-yellow to-shahin-gold bg-clip-text text-transparent font-vazir">درباره ما</h3>
+                    </div>
+                    
+                    <!-- About Us Content with Icons and Animations -->
+                    <div class="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-600/30 shadow-2xl mb-6">
+                        <div class="space-y-6">
+                            <!-- Main Description -->
+                            <div class="group/desc flex items-start space-x-4 space-x-reverse">
+                                <div class="w-10 h-10 bg-gradient-to-r from-shahin-yellow/20 to-shahin-gold/20 rounded-xl flex items-center justify-center mt-1 group-hover/desc:scale-110 transition-transform duration-300 text-shahin-yellow">
+                                    <i class="fas fa-star text-lg animate-pulse"></i>
+                                </div>
+                                <div>
+                                    <p class="text-gray-300 leading-relaxed text-lg">
+                                        <span class="text-shahin-yellow font-bold">بیست سال؛</span> این فقط یک عدد نیست، این گواهی است بر پایداری، تجربه و اعتماد! اتوسرویس شاهین، با گذر از دو دهه خدمت‌رسانی خالصانه، امروز به خانه‌ای امن برای خودروهای شما تبدیل شده است.
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <!-- Expertise Section -->
+                            <div class="group/exp">
+                                <div class="flex items-center mb-4">
+                                    <div class="w-8 h-8 bg-gradient-to-r from-blue-500/20 to-blue-600/20 rounded-lg flex items-center justify-center ml-3 group-hover/exp:scale-110 transition-transform duration-300 text-blue-400">
+                                        <i class="fas fa-cogs text-sm animate-spin" style="animation-duration: 3s;"></i>
+                                    </div>
+                                    <h4 class="text-xl font-bold text-shahin-yellow">تخصص ما چیست؟</h4>
+                                </div>
+                                
+                                <div class="space-y-4 mr-6">
+                                    <div class="group/item flex items-start space-x-3 space-x-reverse">
+                                        <div class="w-6 h-6 bg-gradient-to-r from-green-500/20 to-green-600/20 rounded-lg flex items-center justify-center mt-1 group-hover/item:scale-110 transition-transform duration-300 text-green-400">
+                                            <i class="fas fa-wrench text-xs"></i>
+                                        </div>
+                                        <div>
+                                            <h5 class="text-white font-bold mb-1">تعمیرات تخصصی:</h5>
+                                            <p class="text-gray-300 text-sm">متمرکز بر برندهای محبوب ایران‌خودرو، کیا و هیوندای.</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="group/item flex items-start space-x-3 space-x-reverse">
+                                        <div class="w-6 h-6 bg-gradient-to-r from-purple-500/20 to-purple-600/20 rounded-lg flex items-center justify-center mt-1 group-hover/item:scale-110 transition-transform duration-300 text-purple-400">
+                                            <i class="fas fa-microchip text-xs"></i>
+                                        </div>
+                                        <div>
+                                            <h5 class="text-white font-bold mb-1">فناوری روز:</h5>
+                                            <p class="text-gray-300 text-sm">استفاده از مدرن‌ترین دستگاه‌های عیب‌یابی اروپایی برای دقیق‌ترین نتایج.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Mission Statement -->
+                            <div class="group/mission flex items-start space-x-4 space-x-reverse">
+                                <div class="w-10 h-10 bg-gradient-to-r from-shahin-yellow/20 to-shahin-gold/20 rounded-xl flex items-center justify-center mt-1 group-hover/mission:scale-110 transition-transform duration-300 text-shahin-yellow">
+                                    <i class="fas fa-heart text-lg animate-bounce" style="animation-duration: 2s;"></i>
+                                </div>
+                                <div>
+                                    <p class="text-gray-300 leading-relaxed">
+                                        اتوسرویس شاهین، تنها ارائه‌دهنده خدمات مکانیکی نیستیم؛ ما مشاورانی امین برای حفظ سلامت و افزایش عمر خودروی شما هستیم. خوشحالیم که شما نیز بخشی از این داستان موفقیت ما خواهید بود.
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <!-- Final Statement -->
+                            <div class="text-center p-4 bg-gradient-to-r from-shahin-yellow/10 to-shahin-gold/10 rounded-xl border border-shahin-yellow/20">
+                                <p class="text-shahin-yellow font-bold text-lg">
+                                    اتوسرویس شاهین؛ جایی که اعتماد شما، بزرگ‌ترین سرمایه ماست.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+
+            
+            <!-- Copyright -->
+            <div class="border-t border-gray-700/50 mt-12 pt-8 text-center">
+                <div class="flex items-center justify-center space-x-2 space-x-reverse mb-4">
+                    <div class="w-8 h-8 bg-gradient-to-r from-shahin-yellow to-shahin-gold rounded-lg flex items-center justify-center">
+                        <i class="fas fa-copyright text-gray-900 text-sm"></i>
+                    </div>
+                    <p class="text-gray-300 font-medium">2025 {{ site_settings.site_name }}</p>
+                </div>
+                <p class="text-gray-400 text-sm">تمامی حقوق محفوظ است. طراحی شده با ❤️ برای خدمات حرفه‌ای خودرو</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Loading Spinner -->
+    <div id="loading-spinner" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://unpkg.com/swiper@9/swiper-bundle.min.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            once: true,
+            offset: 100
+        });
+
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileMenuClose = document.getElementById('mobile-menu-close');
+        const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.add('open');
+            mobileMenuOverlay.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        });
+
+        mobileMenuClose.addEventListener('click', () => {
+            mobileMenu.classList.remove('open');
+            mobileMenuOverlay.classList.add('hidden');
+            document.body.style.overflow = '';
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!mobileMenu.contains(e.target) && !mobileMenuButton.contains(e.target)) {
+                mobileMenu.classList.remove('open');
+                mobileMenuOverlay.classList.add('hidden');
+                document.body.style.overflow = '';
+            }
+        });
+
+        // Close mobile menu when clicking overlay
+        if (mobileMenuOverlay) {
+            mobileMenuOverlay.addEventListener('click', () => {
+                mobileMenu.classList.remove('open');
+                mobileMenuOverlay.classList.add('hidden');
+                document.body.style.overflow = '';
+            });
+        }
+
+        // Dark mode toggle
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        const darkModeToggleMobile = document.getElementById('dark-mode-toggle-mobile');
+        const body = document.body;
+
+        // Check for saved dark mode preference
+        const savedDarkMode = localStorage.getItem('darkMode');
+        if (savedDarkMode === 'true') {
+            body.classList.add('dark-mode');
+        }
+
+        function toggleDarkMode() {
+            body.classList.toggle('dark-mode');
+            const isDarkMode = body.classList.contains('dark-mode');
+            localStorage.setItem('darkMode', isDarkMode);
+        }
+
+        darkModeToggle.addEventListener('click', toggleDarkMode);
+        darkModeToggleMobile.addEventListener('click', toggleDarkMode);
+
+        // Contact form handling
+        const contactForm = document.getElementById('contact-form');
+        const contactFormMessage = document.getElementById('contact-form-message');
+        const loadingSpinner = document.getElementById('loading-spinner');
+
+        contactForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(contactForm);
+            const data = {
+                name: formData.get('name'),
+                email: formData.get('email'),
+                message: formData.get('message')
+            };
+
+            loadingSpinner.classList.remove('hidden');
+
+            try {
+                const response = await fetch('/api/contact/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]')?.value || ''
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    contactFormMessage.textContent = result.message;
+                    contactFormMessage.className = 'mt-4 p-3 bg-green-100 text-green-800 rounded-lg';
+                    contactForm.reset();
+                } else {
+                    contactFormMessage.textContent = result.message || 'خطا در ارسال پیام';
+                    contactFormMessage.className = 'mt-4 p-3 bg-red-100 text-red-800 rounded-lg';
+                }
+            } catch (error) {
+                contactFormMessage.textContent = 'خطا در ارسال پیام';
+                contactFormMessage.className = 'mt-4 p-3 bg-red-100 text-red-800 rounded-lg';
+            } finally {
+                loadingSpinner.classList.add('hidden');
+                contactFormMessage.classList.remove('hidden');
+                
+                // Hide message after 5 seconds
+                setTimeout(() => {
+                    contactFormMessage.classList.add('hidden');
+                }, 5000);
+            }
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Remove global image fade-in to avoid logo flicker
+    </script>
+    
+    <!-- Project static JS -->
+    <script src="{% static 'js/main.js' %}"></script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
