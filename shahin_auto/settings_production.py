@@ -57,7 +57,7 @@ ROBOTS_SITEMAP_URLS = [
 ]
 
 # Storage settings
-USE_S3 = os.getenv('USE_S3', 'True').lower() == 'true'
+USE_S3 = os.getenv('USE_S3', 'False').lower() == 'true'
 
 if USE_S3:
     # AWS S3 settings
@@ -81,9 +81,11 @@ if USE_S3:
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
     MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
 else:
-    # Local storage for development
+    # Local storage for production (served by nginx)
     STATIC_ROOT = '/app/staticfiles'
+    STATIC_URL = '/static/'
     MEDIA_ROOT = '/app/media'
+    MEDIA_URL = '/media/'
 
 # Security settings for production
 SECURE_BROWSER_XSS_FILTER = True
@@ -160,8 +162,8 @@ CORS_ALLOWED_ORIGINS = [
     "https://www.shahinautoservice.ir",
 ]
 
-# Add WhiteNoise for static files
-MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
-
-# WhiteNoise configuration (use non-manifest storage to avoid missing file errors)
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+# Add WhiteNoise for static files (only when not using S3)
+if not USE_S3:
+    MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
+    # WhiteNoise configuration (use non-manifest storage to avoid missing file errors)
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
