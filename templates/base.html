@@ -494,6 +494,14 @@
                     <p class="text-gray-300 font-medium">2025 {{ site_settings.site_name }}</p>
                 </div>
                 <p class="text-gray-400 text-sm">تمامی حقوق محفوظ است. طراحی شده با ❤️ برای خدمات حرفه‌ای خودرو</p>
+                
+                <!-- Hidden Sitemap Link for SEO -->
+                <div class="hidden">
+                    <a href="{% url 'django.contrib.sitemaps.views.index' %}" title="Sitemap">Sitemap</a>
+                    <a href="{% url 'django.contrib.sitemaps.views.sitemap' 'static' %}" title="Static Pages Sitemap">Static Pages</a>
+                    <a href="{% url 'django.contrib.sitemaps.views.sitemap' 'services' %}" title="Services Sitemap">Services</a>
+                    <a href="{% url 'django.contrib.sitemaps.views.sitemap' 'lectures' %}" title="Lectures Sitemap">Lectures</a>
+                </div>
             </div>
         </div>
     </footer>

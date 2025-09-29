@@ -77,10 +77,23 @@ PYCODE\n\
 echo "Running migrations..."\n\
 python manage.py migrate --noinput\n\
 \n\
-# Set up storage and create buckets if using object storage\n\
-if [ "$STORAGE_TYPE" = "minio" ] || [ "$STORAGE_TYPE" = "aws" ]; then\n\
-    echo "Setting up object storage..."\n\
-    python manage.py setup_storage --storage-type=$STORAGE_TYPE --create-buckets || echo "Storage setup failed, continuing..."\n\
+# Wait for MinIO to be ready if using MinIO\n\
+if [ "$STORAGE_TYPE" = "minio" ]; then\n\
+    echo "Waiting for MinIO to be ready..."\n\
+    for i in {1..30}; do\n\
+        if curl -f http://minio:9000/minio/health/live >/dev/null 2>&1; then\n\
+            echo "MinIO is ready!"\n\
+            break\n\
+        fi\n\
+        echo "Waiting for MinIO... ($i/30)"\n\
+        sleep 2\n\
+    done\n\
+    \n\
+    echo "Setting up MinIO storage..."\n\
+    python manage.py setup_storage --storage-type=minio --create-buckets || echo "Storage setup failed, continuing..."\n\
+elif [ "$STORAGE_TYPE" = "aws" ]; then\n\
+    echo "Setting up AWS S3 storage..."\n\
+    python manage.py setup_storage --storage-type=aws --create-buckets || echo "Storage setup failed, continuing..."\n\
 fi\n\
 \n\
 # Collect static files\n\
