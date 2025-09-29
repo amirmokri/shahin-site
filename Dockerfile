@@ -31,7 +31,8 @@ COPY . /app/
 
 # Create directories and set permissions
 RUN mkdir -p /app/staticfiles /app/media /app/logs \
-    && chmod -R 755 /app
+    && chmod -R 755 /app \
+    && chmod -R 755 /app/media
 
 # Create a non-root user
 RUN adduser --disabled-password --gecos '' appuser \
@@ -76,25 +77,6 @@ PYCODE\n\
 # Run migrations\n\
 echo "Running migrations..."\n\
 python manage.py migrate --noinput\n\
-\n\
-# Wait for MinIO to be ready if using MinIO\n\
-if [ "$STORAGE_TYPE" = "minio" ]; then\n\
-    echo "Waiting for MinIO to be ready..."\n\
-    for i in {1..30}; do\n\
-        if curl -f http://minio:9000/minio/health/live >/dev/null 2>&1; then\n\
-            echo "MinIO is ready!"\n\
-            break\n\
-        fi\n\
-        echo "Waiting for MinIO... ($i/30)"\n\
-        sleep 2\n\
-    done\n\
-    \n\
-    echo "Setting up MinIO storage..."\n\
-    python manage.py setup_storage --storage-type=minio --create-buckets || echo "Storage setup failed, continuing..."\n\
-elif [ "$STORAGE_TYPE" = "aws" ]; then\n\
-    echo "Setting up AWS S3 storage..."\n\
-    python manage.py setup_storage --storage-type=aws --create-buckets || echo "Storage setup failed, continuing..."\n\
-fi\n\
 \n\
 # Collect static files\n\
 echo "Collecting static files..."\n\

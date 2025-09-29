@@ -57,34 +57,9 @@ ROBOTS_SITEMAP_URLS = [
 ]
 
 # Storage settings
-STORAGE_TYPE = os.getenv('STORAGE_TYPE', 'minio')  # Options: 'minio', 'aws', 'local'
+USE_S3 = os.getenv('USE_S3', 'False').lower() == 'true'
 
-if STORAGE_TYPE == 'minio':
-    # MinIO settings
-    MINIO_ENDPOINT_URL = os.getenv('MINIO_ENDPOINT_URL', 'http://minio:9000')
-    MINIO_ACCESS_KEY = os.getenv('MINIO_ACCESS_KEY', 'minioadmin')
-    MINIO_SECRET_KEY = os.getenv('MINIO_SECRET_KEY', 'minioadmin')
-    MINIO_BUCKET_NAME = os.getenv('MINIO_BUCKET_NAME', 'shahin-media')
-    MINIO_STATIC_BUCKET_NAME = os.getenv('MINIO_STATIC_BUCKET_NAME', 'shahin-static')
-    MINIO_REGION_NAME = os.getenv('MINIO_REGION_NAME', 'us-east-1')
-    MINIO_USE_SSL = os.getenv('MINIO_USE_SSL', 'False').lower() == 'true'
-    MINIO_CUSTOM_DOMAIN = os.getenv('MINIO_CUSTOM_DOMAIN')
-    MINIO_QUERYSTRING_AUTH = os.getenv('MINIO_QUERYSTRING_AUTH', 'False').lower() == 'true'
-    MINIO_SIGNATURE_VERSION = os.getenv('MINIO_SIGNATURE_VERSION', 's3v4')
-    
-    # Static files
-    STATICFILES_STORAGE = 'main.storage.MinIOStaticStorage'
-    STATIC_URL = f'{MINIO_CUSTOM_DOMAIN}/static/' if MINIO_CUSTOM_DOMAIN else f'{MINIO_ENDPOINT_URL}/{MINIO_STATIC_BUCKET_NAME}/static/'
-    
-    # Media files
-    DEFAULT_FILE_STORAGE = 'main.storage.MinIOMediaStorage'
-    MEDIA_URL = f'{MINIO_CUSTOM_DOMAIN}/media/' if MINIO_CUSTOM_DOMAIN else f'{MINIO_ENDPOINT_URL}/{MINIO_BUCKET_NAME}/media/'
-    
-    # File upload settings
-    MAX_UPLOAD_SIZE = int(os.getenv('MAX_UPLOAD_SIZE', 50 * 1024 * 1024))  # 50MB
-    USE_FALLBACK_STORAGE = os.getenv('USE_FALLBACK_STORAGE', 'True').lower() == 'true'
-
-elif STORAGE_TYPE == 'aws':
+if USE_S3:
     # AWS S3 settings
     AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
     AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
@@ -99,25 +74,18 @@ elif STORAGE_TYPE == 'aws':
     AWS_QUERYSTRING_AUTH = False
     
     # Static files
-    STATICFILES_STORAGE = 'main.storage.AWSStaticStorage'
+    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
     STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
     
     # Media files
-    DEFAULT_FILE_STORAGE = 'main.storage.AWSMediaStorage'
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
     MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
-    
-    # File upload settings
-    MAX_UPLOAD_SIZE = int(os.getenv('MAX_UPLOAD_SIZE', 50 * 1024 * 1024))  # 50MB
-
 else:
     # Local storage for production (served by nginx)
     STATIC_ROOT = '/app/staticfiles'
-    STATIC_URL = '/static/'
     MEDIA_ROOT = '/app/media'
+    STATIC_URL = '/static/'
     MEDIA_URL = '/media/'
-    
-    # File upload settings
-    MAX_UPLOAD_SIZE = int(os.getenv('MAX_UPLOAD_SIZE', 50 * 1024 * 1024))  # 50MB
 
 # Security settings for production
 SECURE_BROWSER_XSS_FILTER = True
@@ -194,8 +162,8 @@ CORS_ALLOWED_ORIGINS = [
     "https://www.shahinautoservice.ir",
 ]
 
-# Add WhiteNoise for static files (only when using local storage)
-if STORAGE_TYPE == 'local':
+# Add WhiteNoise for static files (only if not using S3)
+if not USE_S3:
     MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
     # WhiteNoise configuration (use non-manifest storage to avoid missing file errors)
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'

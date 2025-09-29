@@ -1,38 +1,42 @@
-# 🖼️ Media Files Troubleshooting Guide
+# Media Files Troubleshooting Guide
 
-## Issue: Images Not Displaying in Production
+## Problem
+Images are not displaying on the deployed website at hamravesh.com, but they work fine locally.
 
-### Root Causes Identified:
+## Root Causes Identified
 
-1. **S3 Storage Configuration Conflict**
-   - Production settings had `USE_S3 = True` by default
-   - No S3 credentials configured, causing media URL generation failures
+### 1. **S3 Storage Configuration Conflict**
+- **Issue**: Production settings had `USE_S3 = True` by default
+- **Problem**: Django was trying to serve media files from S3 URLs that don't exist
+- **Fix**: Changed default to `USE_S3 = False` for local file storage
 
-2. **Missing Media URL Patterns**
-   - Production URLs didn't include media file serving patterns
-   - Django couldn't serve media files in production
+### 2. **Missing Media URL Configuration**
+- **Issue**: Media URLs were not properly configured for local storage in production
+- **Problem**: Django couldn't generate correct URLs for media files
+- **Fix**: Added explicit `MEDIA_URL = '/media/'` for local storage
 
-3. **WhiteNoise Configuration Conflict**
-   - WhiteNoise was overriding S3 settings incorrectly
-   - Caused conflicts between local and cloud storage
+### 3. **WhiteNoise Configuration Conflict**
+- **Issue**: WhiteNoise was configured regardless of storage backend
+- **Problem**: WhiteNoise can interfere with media file serving
+- **Fix**: Only enable WhiteNoise when not using S3
 
-4. **Template Hardcoded Paths**
-   - Templates used hardcoded `/media/` paths instead of proper URL handling
-   - Caused 404 errors when files weren't found
+### 4. **File Permissions**
+- **Issue**: Media directory permissions might not be correct
+- **Problem**: Web server couldn't access media files
+- **Fix**: Added explicit permissions in Dockerfile
 
-### ✅ Fixes Applied:
+## Files Modified
 
-#### 1. Updated Production Settings (`shahin_auto/settings_production.py`)
+### 1. `shahin_auto/settings_production.py`
 ```python
-# Changed default S3 usage to False
+# Changed default from True to False
 USE_S3 = os.getenv('USE_S3', 'False').lower() == 'true'
 
-# Added proper local storage configuration
+# Added explicit local storage configuration
 else:
-    # Local storage for production (served by nginx)
     STATIC_ROOT = '/app/staticfiles'
-    STATIC_URL = '/static/'
     MEDIA_ROOT = '/app/media'
+    STATIC_URL = '/static/'
     MEDIA_URL = '/media/'
 
 # Fixed WhiteNoise configuration
@@ -41,120 +45,144 @@ if not USE_S3:
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 ```
 
-#### 2. Updated URL Patterns (`shahin_auto/urls.py`)
-```python
-# Added fallback media serving for production
-elif not getattr(settings, 'USE_S3', False):
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-```
-
-#### 3. Fixed Template References
-- Replaced hardcoded `/media/` paths with proper static file references
-- Updated fallback images to use `{% static %}` template tag
-
-#### 4. Updated Environment Configuration
-- Changed default `USE_S3=False` in `env.example`
-
-### 🚀 Deployment Steps:
-
-1. **Set Environment Variables:**
-   ```bash
-   export USE_S3=False
-   export DJANGO_SETTINGS_MODULE=shahin_auto.settings_production
-   ```
-
-2. **Run Media Fix Script:**
-   ```bash
-   ./fix_media_deployment.sh
-   ```
-
-3. **Deploy with Docker Compose:**
-   ```bash
-   docker-compose -f docker-compose.prod.yml down
-   docker-compose -f docker-compose.prod.yml up -d
-   ```
-
-4. **Verify Media Files:**
-   ```bash
-   # Check if media files are accessible
-   curl -I https://your-domain.com/media/site/hero.jpg
-   
-   # Check nginx logs
-   docker-compose -f docker-compose.prod.yml logs nginx
-   ```
-
-### 🔍 Verification Checklist:
-
-- [ ] Media files are accessible via direct URLs
-- [ ] Nginx serves media files correctly
-- [ ] Django admin can upload new media files
-- [ ] Template images display properly
-- [ ] Static files are collected and served
-- [ ] No 404 errors in browser console
-
-### 🛠️ Additional Troubleshooting:
-
-#### If Images Still Don't Show:
-
-1. **Check File Permissions:**
-   ```bash
-   docker-compose -f docker-compose.prod.yml exec web ls -la /app/media/
-   ```
-
-2. **Verify Nginx Configuration:**
-   ```bash
-   docker-compose -f docker-compose.prod.yml exec nginx nginx -t
-   ```
-
-3. **Check Django Logs:**
-   ```bash
-   docker-compose -f docker-compose.prod.yml logs web
-   ```
-
-4. **Test Media URL Generation:**
-   ```bash
-   docker-compose -f docker-compose.prod.yml exec web python manage.py shell
-   >>> from django.conf import settings
-   >>> print(settings.MEDIA_URL)
-   >>> print(settings.MEDIA_ROOT)
-   ```
-
-### 📋 Production Best Practices:
-
-1. **Use CDN for Media Files:**
-   - Consider implementing S3 or similar cloud storage
-   - Set up proper CDN for better performance
-
-2. **Optimize Images:**
-   - Compress images before upload
-   - Use appropriate formats (WebP, AVIF)
-   - Implement responsive images
-
-3. **Monitor Performance:**
-   - Set up monitoring for media file serving
-   - Track 404 errors for missing files
-   - Monitor storage usage
-
-### 🔧 Alternative Solutions:
-
-#### Option 1: Use S3 Storage
+### 2. `env.example`
 ```bash
-export USE_S3=True
-export AWS_ACCESS_KEY_ID=your-key
-export AWS_SECRET_ACCESS_KEY=your-secret
-export AWS_STORAGE_BUCKET_NAME=your-bucket
+# Changed default from True to False
+USE_S3=False
 ```
 
-#### Option 2: Use MinIO (Self-hosted S3)
-- Follow the MinIO setup guide
-- Configure as S3-compatible storage
+### 3. `Dockerfile`
+```dockerfile
+# Added explicit media directory permissions
+RUN mkdir -p /app/staticfiles /app/media /app/logs \
+    && chmod -R 755 /app \
+    && chmod -R 755 /app/media
+```
 
-#### Option 3: Optimize Nginx for Media
-- Add image optimization modules
-- Implement caching strategies
-- Use gzip compression
+## Deployment Steps
 
----
+### Option 1: Use the Fix Script (Recommended)
+```bash
+# For Linux/Mac
+./deploy_media_fix.sh
 
-**Last Updated:** $(date)
-**Status:** ✅ Fixed and Tested
+# For Windows
+deploy_media_fix.bat
+```
+
+### Option 2: Manual Deployment
+```bash
+# Set environment variable
+export USE_S3=False
+
+# Build and deploy
+docker-compose -f docker-compose.prod.yml build --no-cache
+docker-compose -f docker-compose.prod.yml down
+docker-compose -f docker-compose.prod.yml up -d
+
+# Wait for services to start
+sleep 30
+
+# Collect static files
+docker-compose -f docker-compose.prod.yml exec web python manage.py collectstatic --noinput
+```
+
+## Verification Steps
+
+### 1. Check Media Directory
+```bash
+docker-compose -f docker-compose.prod.yml exec web ls -la /app/media/
+```
+
+### 2. Test Media File Access
+```bash
+docker-compose -f docker-compose.prod.yml exec web curl -I http://localhost:8000/media/site/hero.jpg
+```
+
+### 3. Check Nginx Configuration
+```bash
+docker-compose -f docker-compose.prod.yml logs nginx
+```
+
+### 4. Check Django Logs
+```bash
+docker-compose -f docker-compose.prod.yml logs web
+```
+
+## Nginx Configuration (Already Correct)
+Your nginx configuration is properly set up:
+```nginx
+# Media files
+location /media/ {
+    alias /app/media/;
+    expires 1y;
+    add_header Cache-Control "public";
+}
+```
+
+## Environment Variables
+Make sure your production environment has:
+```bash
+USE_S3=False
+```
+
+## Common Issues and Solutions
+
+### Issue 1: 404 Errors for Media Files
+**Symptoms**: Images return 404 errors
+**Solution**: 
+1. Verify `USE_S3=False` in environment
+2. Check nginx is serving `/media/` requests
+3. Ensure media files exist in `/app/media/`
+
+### Issue 2: Permission Denied
+**Symptoms**: 403 Forbidden errors
+**Solution**:
+1. Check file permissions: `ls -la /app/media/`
+2. Ensure nginx user can read files
+3. Run: `chmod -R 755 /app/media/`
+
+### Issue 3: Wrong URLs Generated
+**Symptoms**: Images try to load from S3 URLs
+**Solution**:
+1. Verify `MEDIA_URL = '/media/'` in production settings
+2. Check `USE_S3=False` environment variable
+3. Restart Django application
+
+### Issue 4: Static Files Working but Media Not
+**Symptoms**: CSS/JS loads but images don't
+**Solution**:
+1. Check nginx media location block
+2. Verify media directory volume mounting
+3. Ensure media files are copied to container
+
+## Testing Commands
+
+### Test Media URL Generation
+```bash
+docker-compose -f docker-compose.prod.yml exec web python manage.py shell
+```
+```python
+from django.conf import settings
+print(f"MEDIA_URL: {settings.MEDIA_URL}")
+print(f"MEDIA_ROOT: {settings.MEDIA_ROOT}")
+print(f"USE_S3: {getattr(settings, 'USE_S3', 'Not set')}")
+```
+
+### Test File Existence
+```bash
+docker-compose -f docker-compose.prod.yml exec web find /app/media -name "*.jpg" -o -name "*.png"
+```
+
+## Contact Information
+If issues persist, check:
+1. Hamravesh.com deployment logs
+2. Docker container logs
+3. Nginx access/error logs
+4. Django application logs
+
+## Additional Notes
+- The fix ensures media files are served locally by nginx
+- S3 integration is available but disabled by default
+- All media files should be accessible via `/media/` URLs
+- Static files continue to work with WhiteNoise or S3
