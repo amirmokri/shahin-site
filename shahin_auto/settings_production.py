@@ -194,8 +194,8 @@ CORS_ALLOWED_ORIGINS = [
     "https://www.shahinautoservice.ir",
 ]
 
-# Add WhiteNoise for static files (only when not using S3)
-if not USE_S3:
+# Add WhiteNoise for static files (only when using local storage)
+if STORAGE_TYPE == 'local':
     MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
     # WhiteNoise configuration (use non-manifest storage to avoid missing file errors)
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'

@@ -77,6 +77,12 @@ PYCODE\n\
 echo "Running migrations..."\n\
 python manage.py migrate --noinput\n\
 \n\
+# Set up storage and create buckets if using object storage\n\
+if [ "$STORAGE_TYPE" = "minio" ] || [ "$STORAGE_TYPE" = "aws" ]; then\n\
+    echo "Setting up object storage..."\n\
+    python manage.py setup_storage --storage-type=$STORAGE_TYPE --create-buckets || echo "Storage setup failed, continuing..."\n\
+fi\n\
+\n\
 # Collect static files\n\
 echo "Collecting static files..."\n\
 python manage.py collectstatic --noinput\n\

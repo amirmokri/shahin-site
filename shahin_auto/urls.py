@@ -50,7 +50,7 @@ if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 # In production, nginx serves media files directly
-elif not getattr(settings, 'USE_S3', False):
-    # For production without S3, we still need Django to serve media files
+elif getattr(settings, 'STORAGE_TYPE', 'local') == 'local':
+    # For production with local storage, we still need Django to serve media files
     # This is a fallback - nginx should handle this in production
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
