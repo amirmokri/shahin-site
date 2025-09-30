@@ -56,30 +56,54 @@ ROBOTS_SITEMAP_URLS = [
     'https://shahinautoservice.ir/sitemap.xml',
 ]
 
-# Storage settings
+"""Object storage (Hamravesh/Arvan S3-compatible) configuration"""
 USE_S3 = os.getenv('USE_S3', 'False').lower() == 'true'
 
 if USE_S3:
-    # AWS S3 settings
-    AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
-    AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
-    AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
-    AWS_S3_REGION_NAME = os.getenv('AWS_S3_REGION_NAME', 'us-east-1')
-    AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+    # Read ARVAN_* envs and map to django-storages AWS_* settings
+    ARVAN_ACCESS_KEY_ID = os.getenv('ARVAN_ACCESS_KEY_ID') or os.getenv('AWS_ACCESS_KEY_ID')
+    ARVAN_SECRET_ACCESS_KEY = os.getenv('ARVAN_SECRET_ACCESS_KEY') or os.getenv('AWS_SECRET_ACCESS_KEY')
+    ARVAN_BUCKET_NAME = os.getenv('ARVAN_BUCKET_NAME') or os.getenv('AWS_STORAGE_BUCKET_NAME')
+    ARVAN_REGION = os.getenv('ARVAN_REGION', 'ir-thr-at1') or os.getenv('AWS_S3_REGION_NAME', 'ir-thr-at1')
+    ARVAN_ENDPOINT_URL = os.getenv('ARVAN_ENDPOINT_URL') or os.getenv('AWS_S3_ENDPOINT_URL')
+    ARVAN_ADDRESSING_STYLE = os.getenv('ARVAN_ADDRESSING_STYLE', os.getenv('AWS_S3_ADDRESSING_STYLE', 'virtual'))
+    ARVAN_CUSTOM_DOMAIN = os.getenv('ARVAN_CUSTOM_DOMAIN') or os.getenv('AWS_S3_CUSTOM_DOMAIN')
+    ARVAN_SIGNATURE_VERSION = os.getenv('ARVAN_SIGNATURE_VERSION', 's3v4')
+
+    AWS_ACCESS_KEY_ID = ARVAN_ACCESS_KEY_ID
+    AWS_SECRET_ACCESS_KEY = ARVAN_SECRET_ACCESS_KEY
+    AWS_STORAGE_BUCKET_NAME = ARVAN_BUCKET_NAME
+    AWS_S3_REGION_NAME = ARVAN_REGION
+    AWS_S3_ENDPOINT_URL = ARVAN_ENDPOINT_URL
+    AWS_S3_ADDRESSING_STYLE = ARVAN_ADDRESSING_STYLE
+    AWS_S3_CUSTOM_DOMAIN = ARVAN_CUSTOM_DOMAIN
+    AWS_S3_SIGNATURE_VERSION = ARVAN_SIGNATURE_VERSION
+
+    # Public access and caching
     AWS_DEFAULT_ACL = 'public-read'
+    AWS_QUERYSTRING_AUTH = False
+    AWS_S3_FILE_OVERWRITE = False
     AWS_S3_OBJECT_PARAMETERS = {
         'CacheControl': 'max-age=86400',
     }
-    AWS_S3_FILE_OVERWRITE = False
-    AWS_QUERYSTRING_AUTH = False
-    
-    # Static files
-    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-    STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
-    
-    # Media files
-    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-    MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
+
+    # Derive custom domain when not explicitly provided
+    if not AWS_S3_CUSTOM_DOMAIN:
+        _endpoint = (AWS_S3_ENDPOINT_URL or '').replace('https://', '').replace('http://', '').rstrip('/')
+        AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.{_endpoint}' if _endpoint else None
+
+    # Use dedicated backends for static and media
+    STATICFILES_STORAGE = 'main.storage_backends.StaticStorage'
+    DEFAULT_FILE_STORAGE = 'main.storage_backends.MediaStorage'
+
+    # URLs
+    if AWS_S3_CUSTOM_DOMAIN:
+        STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
+        MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
+    else:
+        base = AWS_S3_ENDPOINT_URL.rstrip('/') if AWS_S3_ENDPOINT_URL else ''
+        STATIC_URL = f'{base}/{AWS_STORAGE_BUCKET_NAME}/static/'
+        MEDIA_URL = f'{base}/{AWS_STORAGE_BUCKET_NAME}/media/'
 else:
     # Local storage for production (served by nginx)
     STATIC_ROOT = '/app/staticfiles'

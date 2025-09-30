@@ -23,6 +23,16 @@ services:
       - EMAIL_HOST_PASSWORD=${EMAIL_HOST_PASSWORD:-your-app-password}
       - REDIS_HOST=redis
       - REDIS_PORT=6379
+      # S3-compatible Object Storage (Hamravesh/Arvan)
+      - USE_S3=${USE_S3:-True}
+      - ARVAN_ACCESS_KEY_ID=${ARVAN_ACCESS_KEY_ID}
+      - ARVAN_SECRET_ACCESS_KEY=${ARVAN_SECRET_ACCESS_KEY}
+      - ARVAN_BUCKET_NAME=${ARVAN_BUCKET_NAME}
+      - ARVAN_REGION=${ARVAN_REGION:-ir-thr-at1}
+      - ARVAN_ENDPOINT_URL=${ARVAN_ENDPOINT_URL}
+      - ARVAN_ADDRESSING_STYLE=${ARVAN_ADDRESSING_STYLE:-virtual}
+      - ARVAN_CUSTOM_DOMAIN=${ARVAN_CUSTOM_DOMAIN}
+      - ARVAN_SIGNATURE_VERSION=${ARVAN_SIGNATURE_VERSION:-s3v4}
     depends_on:
       db:
         condition: service_healthy
