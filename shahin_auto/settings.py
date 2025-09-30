@@ -222,8 +222,6 @@ if USE_S3:
         },
     }
 
-    STATICFILES_STORAGE = 'storages.backends.s3.S3Storage'
-
     if AWS_S3_CUSTOM_DOMAIN:
         STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
         MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'

@@ -130,9 +130,6 @@ if USE_S3:
         },
     }
 
-    # Legacy setting kept per request
-    STATICFILES_STORAGE = 'storages.backends.s3.S3Storage'
-
     # URLs
     if AWS_S3_CUSTOM_DOMAIN:
         STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
