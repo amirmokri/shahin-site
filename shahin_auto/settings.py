@@ -189,6 +189,7 @@ if USE_S3:
         'default': {
             'BACKEND': 'storages.backends.s3.S3Storage',
             'OPTIONS': {
+                'location': 'media',
                 'access_key': AWS_ACCESS_KEY_ID,
                 'secret_key': AWS_SECRET_ACCESS_KEY,
                 'bucket_name': AWS_STORAGE_BUCKET_NAME,
@@ -196,9 +197,27 @@ if USE_S3:
                 'endpoint_url': AWS_S3_ENDPOINT_URL,
                 'addressing_style': AWS_S3_ADDRESSING_STYLE,
                 'signature_version': AWS_S3_SIGNATURE_VERSION,
-                'default_acl': AWS_DEFAULT_ACL,
+                'default_acl': None,
                 'querystring_auth': AWS_QUERYSTRING_AUTH,
                 'file_overwrite': AWS_S3_FILE_OVERWRITE,
+                'object_parameters': AWS_S3_OBJECT_PARAMETERS,
+                'custom_domain': AWS_S3_CUSTOM_DOMAIN,
+            },
+        },
+        'static': {
+            'BACKEND': 'storages.backends.s3.S3Storage',
+            'OPTIONS': {
+                'location': 'static',
+                'access_key': AWS_ACCESS_KEY_ID,
+                'secret_key': AWS_SECRET_ACCESS_KEY,
+                'bucket_name': AWS_STORAGE_BUCKET_NAME,
+                'region_name': AWS_S3_REGION_NAME,
+                'endpoint_url': AWS_S3_ENDPOINT_URL,
+                'addressing_style': AWS_S3_ADDRESSING_STYLE,
+                'signature_version': AWS_S3_SIGNATURE_VERSION,
+                'default_acl': None,
+                'querystring_auth': AWS_QUERYSTRING_AUTH,
+                'file_overwrite': True,
                 'object_parameters': AWS_S3_OBJECT_PARAMETERS,
                 'custom_domain': AWS_S3_CUSTOM_DOMAIN,
             },
@@ -206,6 +225,7 @@ if USE_S3:
         'staticfiles': {
             'BACKEND': 'storages.backends.s3.S3Storage',
             'OPTIONS': {
+                'location': 'static',
                 'access_key': AWS_ACCESS_KEY_ID,
                 'secret_key': AWS_SECRET_ACCESS_KEY,
                 'bucket_name': AWS_STORAGE_BUCKET_NAME,
