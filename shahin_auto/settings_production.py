@@ -92,11 +92,8 @@ if USE_S3:
         _endpoint = (AWS_S3_ENDPOINT_URL or '').replace('https://', '').replace('http://', '').rstrip('/')
         AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.{_endpoint}' if _endpoint else None
 
-    # STORAGES config using custom storage backends
+    # STORAGES config for static files only (media files now in static structure)
     STORAGES = {
-        'default': {
-            'BACKEND': 'main.storage_backends.MediaStorage',
-        },
         'staticfiles': {
             'BACKEND': 'main.storage_backends.StaticStorage',
         },
@@ -105,17 +102,18 @@ if USE_S3:
     # URLs
     if AWS_S3_CUSTOM_DOMAIN:
         STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
-        MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
     else:
         base = AWS_S3_ENDPOINT_URL.rstrip('/') if AWS_S3_ENDPOINT_URL else ''
         STATIC_URL = f'{base}/{AWS_STORAGE_BUCKET_NAME}/static/'
-        MEDIA_URL = f'{base}/{AWS_STORAGE_BUCKET_NAME}/media/'
+    
+    # Media files are now served from static URL
+    MEDIA_URL = STATIC_URL + 'media/'
 else:
     # Local storage for production (served by nginx)
     STATIC_ROOT = '/app/staticfiles'
-    MEDIA_ROOT = '/app/media'
     STATIC_URL = '/static/'
-    MEDIA_URL = '/media/'
+    # Media files are now served from static URL
+    MEDIA_URL = STATIC_URL + 'media/'
 
 # Security settings for production
 SECURE_BROWSER_XSS_FILTER = True

@@ -185,11 +185,8 @@ if USE_S3:
         _endpoint = AWS_S3_ENDPOINT_URL.replace('https://', '').replace('http://', '').rstrip('/')
         AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.{_endpoint}'
 
-    # Use modern STORAGES configuration (replaces DEFAULT_FILE_STORAGE and STATICFILES_STORAGE)
+    # Use modern STORAGES configuration for static files only
     STORAGES = {
-        'default': {
-            'BACKEND': 'main.storage_backends.MediaStorage',
-        },
         'staticfiles': {
             'BACKEND': 'main.storage_backends.StaticStorage',
         },
@@ -197,11 +194,12 @@ if USE_S3:
 
     if AWS_S3_CUSTOM_DOMAIN:
         STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
-        MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
     else:
         base = AWS_S3_ENDPOINT_URL.rstrip('/') if AWS_S3_ENDPOINT_URL else ''
         STATIC_URL = f'{base}/{AWS_STORAGE_BUCKET_NAME}/static/'
-        MEDIA_URL = f'{base}/{AWS_STORAGE_BUCKET_NAME}/media/'
+    
+    # Media files are now served from static URL
+    MEDIA_URL = STATIC_URL + 'media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
