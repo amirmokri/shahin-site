@@ -185,9 +185,15 @@ if USE_S3:
         _endpoint = AWS_S3_ENDPOINT_URL.replace('https://', '').replace('http://', '').rstrip('/')
         AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.{_endpoint}'
 
-    # Use custom storage backends for better control
-    DEFAULT_FILE_STORAGE = 'main.storage_backends.MediaStorage'
-    STATICFILES_STORAGE = 'main.storage_backends.StaticStorage'
+    # Use modern STORAGES configuration (replaces DEFAULT_FILE_STORAGE and STATICFILES_STORAGE)
+    STORAGES = {
+        'default': {
+            'BACKEND': 'main.storage_backends.MediaStorage',
+        },
+        'staticfiles': {
+            'BACKEND': 'main.storage_backends.StaticStorage',
+        },
+    }
 
     if AWS_S3_CUSTOM_DOMAIN:
         STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
