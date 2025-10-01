@@ -64,8 +64,11 @@ class LectureAdmin(admin.ModelAdmin):
     )
     
     def image_preview(self, obj):
-        if obj.image:
-            return format_html('<img src="{}" width="50" height="50" style="border-radius: 4px;" />', obj.image.url)
+        if obj.image and obj.image.name:
+            try:
+                return format_html('<img src="{}" width="50" height="50" style="border-radius: 4px;" />', obj.image.url)
+            except (ValueError, AttributeError):
+                return "خطا در بارگذاری تصویر"
         return "بدون تصویر"
     image_preview.short_description = "پیش‌نمایش"
     
@@ -159,8 +162,11 @@ class ServiceAdmin(admin.ModelAdmin):
     )
     
     def image_preview(self, obj):
-        if obj.image:
-            return format_html('<img src="{}" width="50" height="50" style="border-radius: 4px;" />', obj.image.url)
+        if obj.image and obj.image.name:
+            try:
+                return format_html('<img src="{}" width="50" height="50" style="border-radius: 4px;" />', obj.image.url)
+            except (ValueError, AttributeError):
+                return "خطا در بارگذاری تصویر"
         return "بدون تصویر"
     image_preview.short_description = "پیش‌نمایش"
     
@@ -257,8 +263,11 @@ class SiteSettingsAdmin(admin.ModelAdmin):
     )
     
     def hero_image_preview(self, obj):
-        if obj.hero_image:
-            return format_html('<img src="{}" width="200" height="100" style="border-radius: 8px; border: 1px solid #ddd;" />', obj.hero_image.url)
+        if obj.hero_image and obj.hero_image.name:
+            try:
+                return format_html('<img src="{}" width="200" height="100" style="border-radius: 8px; border: 1px solid #ddd;" />', obj.hero_image.url)
+            except (ValueError, AttributeError):
+                return "خطا در بارگذاری تصویر"
         return "بدون تصویر"
     hero_image_preview.short_description = "پیش‌نمایش تصویر اصلی"
 
@@ -287,8 +296,11 @@ class BonusAdmin(admin.ModelAdmin):
     )
     
     def image_preview(self, obj):
-        if obj.image:
-            return format_html('<img src="{}" width="150" height="100" style="border-radius: 8px; border: 1px solid #ddd;" />', obj.image.url)
+        if obj.image and obj.image.name:
+            try:
+                return format_html('<img src="{}" width="150" height="100" style="border-radius: 8px; border: 1px solid #ddd;" />', obj.image.url)
+            except (ValueError, AttributeError):
+                return "خطا در بارگذاری تصویر"
         return "بدون تصویر"
     image_preview.short_description = "پیش‌نمایش تصویر"
 

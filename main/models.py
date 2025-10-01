@@ -3,13 +3,22 @@ from django.contrib.auth.models import User
 from django.utils.text import slugify
 from django.urls import reverse
 from django.utils import timezone
+from django.conf import settings
+
+
+def get_storage():
+    """Get the appropriate storage backend"""
+    if getattr(settings, 'USE_S3', False):
+        from .storage_backends import MediaStorage
+        return MediaStorage()
+    return None
 
 
 class Lecture(models.Model):
     """Model for storing lecture content"""
     title = models.CharField(max_length=200, verbose_name="عنوان")
     slug = models.SlugField(max_length=200, unique=True, blank=True, verbose_name="اسلاگ")
-    image = models.ImageField(upload_to='lectures/', verbose_name="تصویر")
+    image = models.ImageField(upload_to='lectures/', storage=get_storage(), verbose_name="تصویر", blank=True, null=True)
     content = models.TextField(verbose_name="محتوای کامل")
     teaser = models.TextField(max_length=300, verbose_name="متن کوتاه")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="تاریخ ایجاد")
@@ -26,7 +35,12 @@ class Lecture(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.title)
+            # Generate slug from title, handle Persian characters
+            import uuid
+            base_slug = slugify(self.title, allow_unicode=True)
+            if not base_slug:  # If slugify returns empty (all Persian), use uuid
+                base_slug = f'lecture-{uuid.uuid4().hex[:8]}'
+            self.slug = base_slug
         super().save(*args, **kwargs)
 
     def get_absolute_url(self):
@@ -37,10 +51,10 @@ class Service(models.Model):
     """Model for storing service information"""
     name = models.CharField(max_length=200, verbose_name="نام سرویس")
     slug = models.SlugField(max_length=200, unique=True, blank=True, verbose_name="اسلاگ")
-    image = models.ImageField(upload_to='services/', verbose_name="تصویر")
+    image = models.ImageField(upload_to='services/', storage=get_storage(), verbose_name="تصویر", blank=True, null=True)
     description = models.TextField(verbose_name="توضیحات")
     # Replaced URL-based video with file upload for professional playback
-    video = models.FileField(upload_to='services/videos/', blank=True, null=True, verbose_name="ویدیو (MP4)")
+    video = models.FileField(upload_to='services/videos/', storage=get_storage(), blank=True, null=True, verbose_name="ویدیو (MP4)")
     instagram_link = models.URLField(blank=True, null=True, verbose_name="لینک اینستاگرام")
     category = models.ForeignKey('ServiceCategory', on_delete=models.SET_NULL, null=True, blank=True, related_name='services', verbose_name="دسته‌بندی")
     min_price = models.DecimalField(max_digits=10, decimal_places=0, blank=True, null=True, verbose_name="حداقل قیمت (تومان)")
@@ -61,7 +75,12 @@ class Service(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.name)
+            # Generate slug from name, handle Persian characters
+            import uuid
+            base_slug = slugify(self.name, allow_unicode=True)
+            if not base_slug:  # If slugify returns empty (all Persian), use uuid
+                base_slug = f'service-{uuid.uuid4().hex[:8]}'
+            self.slug = base_slug
         super().save(*args, **kwargs)
 
     def get_absolute_url(self):
@@ -93,7 +112,7 @@ class SiteSettings(models.Model):
     email = models.EmailField(default="info@shahin-auto.com", verbose_name="ایمیل")
     address = models.TextField(default="کرج، ایران", verbose_name="آدرس")
     instagram_url = models.URLField(default="https://instagram.com/shahinautoservice", verbose_name="لینک اینستاگرام")
-    hero_image = models.ImageField(upload_to='site/', default='site/hero.jpg', verbose_name="تصویر اصلی")
+    hero_image = models.ImageField(upload_to='site/', storage=get_storage(), default='site/hero.jpg', verbose_name="تصویر اصلی")
     hero_video_url = models.URLField(blank=True, null=True, verbose_name="لینک ویدیو تبلیغاتی")
     
     # SEO and Analytics
@@ -120,7 +139,7 @@ class Bonus(models.Model):
     """Singleton model to store promotional bonus (offer/advertising) for homepage popup"""
     name = models.CharField(max_length=150, verbose_name="نام پکیج")
     description = models.TextField(verbose_name="توضیحات")
-    image = models.ImageField(upload_to='bonus/', verbose_name="تصویر")
+    image = models.ImageField(upload_to='bonus/', storage=get_storage(), verbose_name="تصویر")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="آخرین بروزرسانی")
 
     class Meta:

@@ -642,5 +642,89 @@
     <script src="{% static 'js/main.js' %}"></script>
     
     {% block extra_js %}{% endblock %}
+    
+    <!-- Floating Call Button -->
+    <a href="tel:{{ site_settings.phone }}" id="floatingCallBtn" class="fixed left-6 bottom-6 z-50 group transition-all duration-500 hover:scale-110" style="display: none;">
+        <div class="relative">
+            <!-- Pulsing Ring Animation -->
+            <div class="absolute inset-0 bg-gradient-to-r from-shahin-yellow to-shahin-gold rounded-full animate-ping opacity-75"></div>
+            <div class="absolute inset-0 bg-gradient-to-r from-shahin-yellow to-shahin-gold rounded-full animate-pulse opacity-50"></div>
+            
+            <!-- Main Button -->
+            <div class="relative flex items-center bg-gradient-to-r from-shahin-yellow via-shahin-gold to-shahin-yellow text-gray-900 px-5 py-3 rounded-full shadow-2xl hover:shadow-yellow-glow transition-all duration-500 border-2 border-white/30 backdrop-blur-sm hover:border-white/50">
+                <i class="fas fa-phone-alt text-lg mr-3 transform group-hover:rotate-12 group-hover:scale-110 transition-all duration-300"></i>
+                <span class="font-bold text-sm whitespace-nowrap tracking-wide">تماس با کارشناس</span>
+            </div>
+            
+            <!-- Subtle glow effect -->
+            <div class="absolute inset-0 bg-gradient-to-r from-shahin-yellow to-shahin-gold rounded-full blur-sm opacity-30 group-hover:opacity-50 transition-opacity duration-300 -z-10"></div>
+        </div>
+    </a>
+    
+    <script>
+        // Floating call button visibility control
+        const floatingCallBtn = document.getElementById('floatingCallBtn');
+        let lastScrollTop = 0;
+        let isButtonVisible = false;
+        
+        function updateButtonVisibility() {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const windowHeight = window.innerHeight;
+            const documentHeight = document.documentElement.scrollHeight;
+            const footerHeight = 500; // Increased footer buffer
+            
+            // Show button after scrolling down a bit
+            if (scrollTop > 200 && !isButtonVisible) {
+                floatingCallBtn.style.display = 'block';
+                floatingCallBtn.style.opacity = '0';
+                floatingCallBtn.style.transform = 'translateY(20px)';
+                
+                // Animate in
+                setTimeout(() => {
+                    floatingCallBtn.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+                    floatingCallBtn.style.opacity = '1';
+                    floatingCallBtn.style.transform = 'translateY(0)';
+                }, 50);
+                
+                isButtonVisible = true;
+            } else if (scrollTop <= 200 && isButtonVisible) {
+                // Animate out
+                floatingCallBtn.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+                floatingCallBtn.style.opacity = '0';
+                floatingCallBtn.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    floatingCallBtn.style.display = 'none';
+                }, 300);
+                
+                isButtonVisible = false;
+            }
+            
+            // Hide button when near footer to avoid blocking content
+            if (scrollTop + windowHeight >= documentHeight - footerHeight && isButtonVisible) {
+                floatingCallBtn.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+                floatingCallBtn.style.opacity = '0.3';
+                floatingCallBtn.style.pointerEvents = 'none';
+                floatingCallBtn.style.transform = 'translateY(10px)';
+            } else if (scrollTop + windowHeight < documentHeight - footerHeight && isButtonVisible) {
+                floatingCallBtn.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+                floatingCallBtn.style.opacity = '1';
+                floatingCallBtn.style.pointerEvents = 'auto';
+                floatingCallBtn.style.transform = 'translateY(0)';
+            }
+        }
+        
+        // Throttled scroll listener for better performance
+        let scrollTimeout;
+        window.addEventListener('scroll', function() {
+            if (scrollTimeout) {
+                clearTimeout(scrollTimeout);
+            }
+            scrollTimeout = setTimeout(updateButtonVisibility, 10);
+        });
+        
+        // Initial check
+        updateButtonVisibility();
+    </script>
 </body>
 </html>

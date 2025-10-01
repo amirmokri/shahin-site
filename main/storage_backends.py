@@ -7,6 +7,18 @@ class StaticStorage(S3Boto3Storage):
     default_acl = 'public-read'
     file_overwrite = True
     custom_domain = getattr(settings, 'AWS_S3_CUSTOM_DOMAIN', None)
+    
+    def __init__(self, *args, **kwargs):
+        kwargs.update({
+            'access_key': getattr(settings, 'AWS_ACCESS_KEY_ID', None),
+            'secret_key': getattr(settings, 'AWS_SECRET_ACCESS_KEY', None),
+            'bucket_name': getattr(settings, 'AWS_STORAGE_BUCKET_NAME', None),
+            'region_name': getattr(settings, 'AWS_S3_REGION_NAME', None),
+            'endpoint_url': getattr(settings, 'AWS_S3_ENDPOINT_URL', None),
+            'addressing_style': getattr(settings, 'AWS_S3_ADDRESSING_STYLE', 'virtual'),
+            'signature_version': getattr(settings, 'AWS_S3_SIGNATURE_VERSION', 's3v4'),
+        })
+        super().__init__(*args, **kwargs)
 
 
 class MediaStorage(S3Boto3Storage):
@@ -14,4 +26,16 @@ class MediaStorage(S3Boto3Storage):
     default_acl = 'public-read'
     file_overwrite = False
     custom_domain = getattr(settings, 'AWS_S3_CUSTOM_DOMAIN', None)
+    
+    def __init__(self, *args, **kwargs):
+        kwargs.update({
+            'access_key': getattr(settings, 'AWS_ACCESS_KEY_ID', None),
+            'secret_key': getattr(settings, 'AWS_SECRET_ACCESS_KEY', None),
+            'bucket_name': getattr(settings, 'AWS_STORAGE_BUCKET_NAME', None),
+            'region_name': getattr(settings, 'AWS_S3_REGION_NAME', None),
+            'endpoint_url': getattr(settings, 'AWS_S3_ENDPOINT_URL', None),
+            'addressing_style': getattr(settings, 'AWS_S3_ADDRESSING_STYLE', 'virtual'),
+            'signature_version': getattr(settings, 'AWS_S3_SIGNATURE_VERSION', 's3v4'),
+        })
+        super().__init__(*args, **kwargs)
 
