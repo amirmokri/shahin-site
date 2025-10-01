@@ -185,8 +185,15 @@ if USE_S3:
         _endpoint = AWS_S3_ENDPOINT_URL.replace('https://', '').replace('http://', '').rstrip('/')
         AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.{_endpoint}'
 
-    # Use modern STORAGES configuration for static files only
+    # Use modern STORAGES configuration
     STORAGES = {
+        'default': {
+            'BACKEND': 'django.core.files.storage.FileSystemStorage',
+            'OPTIONS': {
+                'location': os.path.join(BASE_DIR, 'staticfiles'),
+                'base_url': STATIC_URL,
+            },
+        },
         'staticfiles': {
             'BACKEND': 'main.storage_backends.StaticStorage',
         },
@@ -197,6 +204,23 @@ if USE_S3:
     else:
         base = AWS_S3_ENDPOINT_URL.rstrip('/') if AWS_S3_ENDPOINT_URL else ''
         STATIC_URL = f'{base}/{AWS_STORAGE_BUCKET_NAME}/static/'
+    
+    # Media files are now served from static URL
+    MEDIA_URL = STATIC_URL + 'media/'
+else:
+    # Local development storage
+    STORAGES = {
+        'default': {
+            'BACKEND': 'django.core.files.storage.FileSystemStorage',
+            'OPTIONS': {
+                'location': os.path.join(BASE_DIR, 'staticfiles'),
+                'base_url': STATIC_URL,
+            },
+        },
+        'staticfiles': {
+            'BACKEND': 'django.contrib.staticfiles.storage.StaticFilesStorage',
+        },
+    }
     
     # Media files are now served from static URL
     MEDIA_URL = STATIC_URL + 'media/'

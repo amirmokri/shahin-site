@@ -92,8 +92,15 @@ if USE_S3:
         _endpoint = (AWS_S3_ENDPOINT_URL or '').replace('https://', '').replace('http://', '').rstrip('/')
         AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.{_endpoint}' if _endpoint else None
 
-    # STORAGES config for static files only (media files now in static structure)
+    # STORAGES config (media files now in static structure)
     STORAGES = {
+        'default': {
+            'BACKEND': 'django.core.files.storage.FileSystemStorage',
+            'OPTIONS': {
+                'location': '/app/staticfiles',
+                'base_url': STATIC_URL,
+            },
+        },
         'staticfiles': {
             'BACKEND': 'main.storage_backends.StaticStorage',
         },
@@ -114,6 +121,20 @@ else:
     STATIC_URL = '/static/'
     # Media files are now served from static URL
     MEDIA_URL = STATIC_URL + 'media/'
+    
+    # STORAGES config for local storage
+    STORAGES = {
+        'default': {
+            'BACKEND': 'django.core.files.storage.FileSystemStorage',
+            'OPTIONS': {
+                'location': STATIC_ROOT,
+                'base_url': STATIC_URL,
+            },
+        },
+        'staticfiles': {
+            'BACKEND': 'whitenoise.storage.CompressedStaticFilesStorage',
+        },
+    }
 
 # Security settings for production
 SECURE_BROWSER_XSS_FILTER = True
@@ -193,5 +214,3 @@ CORS_ALLOWED_ORIGINS = [
 # Add WhiteNoise for static files (only if not using S3)
 if not USE_S3:
     MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
-    # WhiteNoise configuration (use non-manifest storage to avoid missing file errors)
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
