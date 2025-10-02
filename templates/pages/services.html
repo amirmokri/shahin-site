@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}سرویس‌ها - {{ site_settings.site_name }}{% endblock %}
+
+{% block content %}
+<section class="bg-gradient-to-br from-shahin-blue via-shahin-light-blue to-shahin-dark-blue text-white py-16">
+    <div class="container mx-auto px-4 text-center">
+        <h1 class="text-3xl md:text-5xl font-bold bg-gradient-to-r from-white via-shahin-yellow to-white bg-clip-text text-transparent font-vazir">سرویس‌های ما</h1>
+        <p class="opacity-90 mt-4 max-w-2xl mx-auto">لیست کامل خدمات تخصصی ما با کیفیت تضمین‌شده</p>
+        <div class="mt-8 grid grid-cols-1 md:grid-cols-4 gap-4">
+            <input id="srv-search" class="form-input" placeholder="جستجو در سرویس‌ها..." />
+            <select id="srv-category" class="form-input">
+                <option value="">همه دسته‌ها</option>
+                {% for category in categories %}
+                <option value="{{ category.slug }}" {% if current_category == category.slug %}selected{% endif %}>{{ category.name }}</option>
+                {% endfor %}
+            </select>
+            <select id="srv-sort" class="form-input">
+                <option value="new">جدیدترین</option>
+                <option value="az">مرتب‌سازی الفبا</option>
+                <option value="featured">ویژه</option>
+            </select>
+            <a href="{% url 'appointment' %}" class="btn-secondary text-center">رزرو سریع</a>
+        </div>
+    </div>
+</section>
+
+<section class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+        <div id="srv-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {% for service in services %}
+            <a href="{% url 'service_detail' service.slug %}" class="group bg-white rounded-2xl shadow-shahin overflow-hidden card-hover relative">
+                <div class="relative aspect-[4/5]">
+                    <img src="{% if service.image %}{{ service.image.url }}{% else %}{% static 'images/logo.png' %}{% endif %}" alt="{{ service.name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"/>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="absolute top-3 right-3 z-10 flex gap-2">
+                        {% if service.is_featured %}
+                        <span class="px-3 py-1 rounded-full text-xs bg-gradient-to-r from-shahin-yellow to-shahin-gold text-gray-900 shadow font-bold">ویژه</span>
+                        {% endif %}
+                        {% if service.category %}
+                        <span class="px-3 py-1 rounded-full text-xs bg-white/90 text-gray-900 shadow">{{ service.category.name }}</span>
+                        {% endif %}
+                    </div>
+                    {% if service.price %}
+                    <div class="absolute bottom-3 left-3 z-10">
+                        <span class="px-3 py-1 rounded-lg text-sm font-bold bg-shahin-blue text-white shadow-lg">{{ service.price|floatformat:0 }} تومان</span>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="p-4">
+                    <h3 class="text-sm md:text-base font-bold text-gray-800 line-clamp-2 group-hover:text-shahin-blue transition-colors">{{ service.name }}</h3>
+                    <p class="text-xs md:text-sm text-gray-500 mt-2 line-clamp-2">{{ service.description|truncatewords:16 }}</p>
+                    {% if service.duration %}
+                    <div class="mt-2 flex items-center text-xs text-gray-400">
+                        <i class="fas fa-clock ml-1"></i>
+                        <span>{{ service.duration }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="absolute bottom-3 left-3 right-3 flex justify-between opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span class="px-3 py-1 text-xs rounded-lg bg-white/90 text-gray-700">مشاهده جزئیات</span>
+                    <span class="px-3 py-1 text-xs rounded-lg bg-gradient-to-r from-shahin-blue to-shahin-light-blue text-white">رزرو</span>
+                </div>
+            </a>
+            {% empty %}
+            <div class="col-span-full text-center text-gray-500 py-12">سرویسی ثبت نشده است</div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function(){
+  const search = document.getElementById('srv-search');
+  const category = document.getElementById('srv-category');
+  const sort = document.getElementById('srv-sort');
+  const cards = Array.from(document.querySelectorAll('#srv-grid > a'));
+  
+  function normalize(s){return (s||'').toString().trim().toLowerCase();}
+  
+  function apply(){
+    const q = normalize(search.value);
+    const cat = category.value;
+    const mode = sort.value;
+    let list = cards.slice();
+    
+    // filter by search
+    list.forEach(card=>{
+      const title = normalize(card.querySelector('h3')?.textContent);
+      const desc = normalize(card.querySelector('p')?.textContent);
+      const matchesSearch = (!q || title.includes(q) || desc.includes(q));
+      card.style.display = matchesSearch ? '' : 'none';
+    });
+    
+    // filter by category (server-side already filtered, but keep for client-side search)
+    if(cat) {
+      list.forEach(card=>{
+        const categorySpan = card.querySelector('.absolute.top-3.right-3 span:last-child');
+        const cardCategory = categorySpan ? normalize(categorySpan.textContent) : '';
+        if(card.style.display !== 'none') {
+          card.style.display = cardCategory.includes(normalize(cat)) ? '' : 'none';
+        }
+      });
+    }
+    
+    // sort
+    const grid = document.getElementById('srv-grid');
+    const visible = list.filter(c=>c.style.display !== 'none');
+    visible.sort((a,b)=>{
+      if(mode==='az'){
+        return normalize(a.querySelector('h3')?.textContent).localeCompare(normalize(b.querySelector('h3')?.textContent));
+      } else if(mode==='featured'){
+        const aFeatured = a.querySelector('.absolute.top-3.right-3 span:first-child')?.textContent.includes('ویژه');
+        const bFeatured = b.querySelector('.absolute.top-3.right-3 span:first-child')?.textContent.includes('ویژه');
+        return bFeatured - aFeatured;
+      }
+      return 0; // new default
+    });
+    visible.forEach(c=>grid.appendChild(c));
+  }
+  
+  if(search) search.addEventListener('input', apply);
+  if(category) category.addEventListener('change', apply);
+  if(sort) sort.addEventListener('change', apply);
+})();
+</script>
+{% endblock %}

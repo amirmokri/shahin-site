@@ -67,7 +67,7 @@ def home(request):
         'iran_brands': iran_brands,
         'testimonials': testimonials,
     }
-    return render(request, 'main/home.html', context)
+    return render(request, 'pages/home.html', context)
 
 
 def lectures_list(request):
@@ -90,7 +90,7 @@ def lectures_list(request):
         'page_obj': page_obj,
         'lectures': page_obj,
     }
-    return render(request, 'main/lectures.html', context)
+    return render(request, 'pages/lectures.html', context)
 
 
 def lecture_detail(request, slug):
@@ -116,7 +116,7 @@ def lecture_detail(request, slug):
         'related_lectures': related_lectures,
         'comments': comments,
     }
-    return render(request, 'main/lecture_detail.html', context)
+    return render(request, 'pages/lecture_detail.html', context)
 
 
 def service_detail(request, slug):
@@ -142,7 +142,7 @@ def service_detail(request, slug):
         'related_services': related_services,
         'comments': comments,
     }
-    return render(request, 'main/service_detail.html', context)
+    return render(request, 'pages/service_detail.html', context)
 
 
 def services_list(request):
@@ -174,7 +174,7 @@ def services_list(request):
         'current_category': category_slug,
         'current_featured': featured,
     }
-    return render(request, 'main/services.html', context)
+    return render(request, 'pages/services.html', context)
 def appointment(request):
     """Appointment request page"""
     try:
@@ -196,7 +196,7 @@ def appointment(request):
         'services': services,
         'today': today,
     }
-    return render(request, 'main/appointment.html', context)
+    return render(request, 'pages/appointment.html', context)
 
 
 
@@ -224,7 +224,7 @@ def admin_dashboard(request):
         'appointments': appointments,
         'new_appointments_count': new_appointments_count,
     }
-    return render(request, 'main/admin_dashboard.html', context)
+    return render(request, 'pages/admin_dashboard.html', context)
 
 
 @csrf_exempt
