@@ -47,5 +47,7 @@ urlpatterns = [
 
 # Serve media files in development
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    # For local development, media files are stored in staticfiles/media
+    media_root = getattr(settings, 'STORAGES', {}).get('default', {}).get('OPTIONS', {}).get('location', settings.MEDIA_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=media_root)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

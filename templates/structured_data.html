@@ -87,7 +87,7 @@ Structured Data (JSON-LD) for SEO
     "telephone": "{{ site_settings.phone }}",
     "email": "{{ site_settings.email }}"
   },
-  "image": "{% if service.image %}{{ service.image.url }}{% else %}{% static 'images/services/default.jpg' %}{% endif %}",
+  "image": "{% if service.image %}{{ service.image.url }}{% else %}{% static 'images/logo.png' %}{% endif %}",
   "offers": {
     "@type": "Offer",
     "price": "{{ service.price }}",
@@ -106,7 +106,7 @@ Structured Data (JSON-LD) for SEO
   "@type": "Article",
   "headline": "{{ lecture.title }}",
   "description": "{{ lecture.teaser }}",
-  "image": "{% if lecture.image %}{{ lecture.image.url }}{% else %}{% static 'images/lectures/default.jpg' %}{% endif %}",
+  "image": "{% if lecture.image %}{{ lecture.image.url }}{% else %}{% static 'images/logo.png' %}{% endif %}",
   "author": {
     "@type": "Organization",
     "name": "{{ site_settings.site_name }}"

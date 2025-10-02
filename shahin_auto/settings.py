@@ -213,8 +213,8 @@ else:
         'default': {
             'BACKEND': 'django.core.files.storage.FileSystemStorage',
             'OPTIONS': {
-                'location': os.path.join(BASE_DIR, 'staticfiles'),
-                'base_url': STATIC_URL,
+                'location': os.path.join(BASE_DIR, 'staticfiles', 'media'),
+                'base_url': '/media/',
             },
         },
         'staticfiles': {
@@ -222,8 +222,8 @@ else:
         },
     }
     
-    # Media files are now served from static URL
-    MEDIA_URL = STATIC_URL + 'media/'
+    # Media files are served from separate media URL in development
+    MEDIA_URL = '/media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
