@@ -1,0 +1,111 @@
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
+    environment:
+      - DEBUG=0
+      - DJANGO_SETTINGS_MODULE=shahin_auto.settings_production
+      - SECRET_KEY=${SECRET_KEY:-django-insecure-your-secret-key-here-change-in-production}
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS:-shahinautoservice.ir,www.shahinautoservice.ir,localhost,127.0.0.1}
+      - DB_NAME=${DB_NAME:-shahin_db}
+      - DB_USER=${DB_USER:-root}
+      - DB_PASSWORD=${DB_PASSWORD:-232330scmj}
+      - DB_HOST=db
+      - DB_PORT=3306
+      - EMAIL_HOST=${EMAIL_HOST:-smtp.gmail.com}
+      - EMAIL_PORT=${EMAIL_PORT:-587}
+      - EMAIL_USE_TLS=${EMAIL_USE_TLS:-True}
+      - EMAIL_HOST_USER=${EMAIL_HOST_USER:-your-email@gmail.com}
+      - EMAIL_HOST_PASSWORD=${EMAIL_HOST_PASSWORD:-your-app-password}
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      # S3-compatible Object Storage (Hamravesh/Arvan)
+      - USE_S3=${USE_S3:-True}
+      - ARVAN_ACCESS_KEY_ID=${ARVAN_ACCESS_KEY_ID}
+      - ARVAN_SECRET_ACCESS_KEY=${ARVAN_SECRET_ACCESS_KEY}
+      - ARVAN_BUCKET_NAME=${ARVAN_BUCKET_NAME}
+      - ARVAN_REGION=${ARVAN_REGION:-ir-thr-at1}
+      - ARVAN_ENDPOINT_URL=${ARVAN_ENDPOINT_URL}
+      - ARVAN_ADDRESSING_STYLE=${ARVAN_ADDRESSING_STYLE:-virtual}
+      - ARVAN_CUSTOM_DOMAIN=${ARVAN_CUSTOM_DOMAIN}
+      - ARVAN_SIGNATURE_VERSION=${ARVAN_SIGNATURE_VERSION:-s3v4}
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-H", "Host: shahinautoservice.ir", "-f", "http://localhost:8000/health/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - shahin_network
+
+  db:
+    image: mysql:8.0
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD:-232330scmj}
+      - MYSQL_DATABASE=${DB_NAME:-shahin_db}
+      - MYSQL_USER=shahin_user
+      - MYSQL_PASSWORD=shahin_password
+    volumes:
+      - db_data:/var/lib/mysql
+    # no external port exposure needed in production
+    restart: unless-stopped
+    command: --default-authentication-plugin=mysql_native_password
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_PASSWORD:-232330scmj}"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    networks:
+      - shahin_network
+
+  redis:
+    image: redis:7-alpine
+    # no external port exposure needed in production
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    networks:
+      - shahin_network
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.prod.conf:/etc/nginx/nginx.conf
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
+      - ./ssl:/etc/nginx/ssl
+    depends_on:
+      web:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - shahin_network
+
+volumes:
+  db_data:
+  redis_data:
+  static_volume:
+  media_volume:
+
+networks:
+  shahin_network:
+    driver: bridge

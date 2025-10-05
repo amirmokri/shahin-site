@@ -1,0 +1,30 @@
+# Core Django
+Django==4.2.7
+djangorestframework==3.14.0
+django-cors-headers==4.3.1
+
+# Database
+mysqlclient==2.2.0
+
+# Image processing
+Pillow==10.1.0
+
+# Production server
+gunicorn==21.2.0
+
+# Static files
+whitenoise==6.6.0
+
+# Storage backends
+django-storages==1.14.2
+boto3==1.34.0
+django-storages[s3]
+
+# Cache
+redis==5.0.1
+
+# File cleanup
+django-cleanup==8.0.0
+
+# SEO and sitemaps
+django-robots==4.0

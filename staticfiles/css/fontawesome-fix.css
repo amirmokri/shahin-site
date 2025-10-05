@@ -1,0 +1,111 @@
+/* Font Awesome Fix CSS - Custom font paths */
+
+/* Font Awesome 6 Free Solid */
+@font-face {
+  font-family: "Font Awesome 6 Free";
+  font-style: normal;
+  font-weight: 900;
+  font-display: block;
+  src: url("../fontawesome/webfonts/fa-solid-900.woff2") format("woff2"),
+       url("../fontawesome/webfonts/fa-solid-900.ttf") format("truetype");
+}
+
+/* Font Awesome 6 Free Regular */
+@font-face {
+  font-family: "Font Awesome 6 Free";
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url("../fontawesome/webfonts/fa-regular-400.woff2") format("woff2");
+}
+
+/* Font Awesome 6 Brands */
+@font-face {
+  font-family: "Font Awesome 6 Brands";
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url("../fontawesome/webfonts/fa-brands-400.woff2") format("woff2"),
+       url("../fontawesome/webfonts/fa-brands-400.ttf") format("truetype");
+}
+
+/* Ensure proper font family inheritance */
+.fa, .fas, .far, .fab, .fal {
+  font-family: "Font Awesome 6 Free", "Font Awesome 6 Pro", "Font Awesome 6 Brands", "Font Awesome 6 Duotone" !important;
+  font-style: normal !important;
+  font-variant: normal !important;
+  text-rendering: auto !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  display: inline-block !important;
+  line-height: 1 !important;
+}
+
+.fas {
+  font-weight: 900 !important;
+}
+
+.far {
+  font-weight: 400 !important;
+}
+
+.fab {
+  font-family: "Font Awesome 6 Brands" !important;
+  font-weight: 400 !important;
+}
+
+/* Force icon display */
+i[class*="fa-"] {
+  font-style: normal !important;
+  font-weight: normal !important;
+  text-decoration: none !important;
+  display: inline-block !important;
+}
+
+/* Specific icon fixes */
+.fa-home:before { content: "\f015"; }
+.fa-phone:before { content: "\f095"; }
+.fa-envelope:before { content: "\f0e0"; }
+.fa-calendar-check:before { content: "\f274"; }
+.fa-newspaper:before { content: "\f1ea"; }
+.fa-cogs:before { content: "\f085"; }
+.fa-cog:before { content: "\f013"; }
+.fa-gears:before { content: "\f085"; }
+.fa-star:before { content: "\f005"; }
+.fa-check:before { content: "\f00c"; }
+.fa-arrow-left:before { content: "\f060"; }
+.fa-arrow-up:before { content: "\f062"; }
+.fa-play:before { content: "\f04b"; }
+.fa-clock:before { content: "\f017"; }
+.fa-tag:before { content: "\f02b"; }
+.fa-eye:before { content: "\f06e"; }
+.fa-book:before { content: "\f02d"; }
+.fa-comments:before { content: "\f086"; }
+.fa-comment-slash:before { content: "\f4b3"; }
+.fa-paper-plane:before { content: "\f1d8"; }
+.fa-location-dot:before { content: "\f3c5"; }
+.fa-moon:before { content: "\f186"; }
+.fa-chart-bar:before { content: "\f080"; }
+.fa-tools:before { content: "\f7d9"; }
+.fa-server:before { content: "\f233"; }
+.fa-code:before { content: "\f121"; }
+.fa-database:before { content: "\f1c0"; }
+.fa-rocket:before { content: "\f135"; }
+.fa-plus:before { content: "\f067"; }
+.fa-sign-out-alt:before { content: "\f2f5"; }
+.fa-exclamation-triangle:before { content: "\f071"; }
+.fa-spinner:before { content: "\f110"; }
+.fa-check-circle:before { content: "\f058"; }
+.fa-exclamation-circle:before { content: "\f06a"; }
+.fa-external-link-alt:before { content: "\f35d"; }
+.fa-user:before { content: "\f007"; }
+.fa-comment:before { content: "\f075"; }
+.fa-list:before { content: "\f03a"; }
+.fa-chevron-left:before { content: "\f053"; }
+.fa-chevron-right:before { content: "\f054"; }
+.fa-headset:before { content: "\f590"; }
+.fa-circle-info:before { content: "\f05a"; }
+.fa-info-circle:before { content: "\f05a"; }
+
+/* Brand icons */
+.fa-instagram:before { content: "\f16d"; }

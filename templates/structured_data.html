@@ -1,0 +1,148 @@
+{% load static %}
+{% comment %}
+Structured Data (JSON-LD) for SEO
+{% endcomment %}
+
+<!-- Organization Schema -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "AutoRepair",
+  "name": "{{ site_settings.site_name }}",
+  "description": "{{ site_settings.site_description }}",
+  "url": "{{ request.build_absolute_uri }}",
+  "logo": "{% if site_settings.hero_image %}{{ site_settings.hero_image.url }}{% else %}{% static 'images/logo.png' %}{% endif %}",
+  "image": "{% if site_settings.hero_image %}{{ site_settings.hero_image.url }}{% else %}{% static 'images/logo.png' %}{% endif %}",
+  "telephone": "{{ site_settings.phone }}",
+  "email": "{{ site_settings.email }}",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "{{ site_settings.address }}",
+    "addressCountry": "IR"
+  },
+  "openingHours": "Mo-Sa 08:00-18:00",
+  "priceRange": "$$",
+  "serviceArea": {
+    "@type": "GeoCircle",
+    "geoMidpoint": {
+      "@type": "GeoCoordinates",
+      "latitude": "35.8400",
+      "longitude": "50.9391"
+    },
+    "geoRadius": "50000"
+  },
+  "sameAs": [
+    "{{ site_settings.instagram_url }}"
+  ],
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "خدمات خودرو",
+    "itemListElement": [
+      {% for service in services|slice:":5" %}
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "{{ service.name }}",
+          "description": "{{ service.description|truncatewords:20 }}"
+        }
+      }{% if not forloop.last %},{% endif %}
+      {% endfor %}
+    ]
+  }
+}
+</script>
+
+<!-- Breadcrumb Schema -->
+{% if breadcrumbs %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {% for breadcrumb in breadcrumbs %}
+    {
+      "@type": "ListItem",
+      "position": {{ forloop.counter }},
+      "name": "{{ breadcrumb.name }}",
+      "item": "{{ breadcrumb.url }}"
+    }{% if not forloop.last %},{% endif %}
+    {% endfor %}
+  ]
+}
+</script>
+{% endif %}
+
+<!-- Service Schema (for service detail pages) -->
+{% if service %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": "{{ service.name }}",
+  "description": "{{ service.description }}",
+  "provider": {
+    "@type": "AutoRepair",
+    "name": "{{ site_settings.site_name }}",
+    "telephone": "{{ site_settings.phone }}",
+    "email": "{{ site_settings.email }}"
+  },
+  "image": "{% if service.image %}{{ service.image.url }}{% else %}{% static 'images/logo.png' %}{% endif %}",
+  "offers": {
+    "@type": "Offer",
+    "price": "{{ service.price }}",
+    "priceCurrency": "IRR",
+    "availability": "https://schema.org/InStock"
+  }
+}
+</script>
+{% endif %}
+
+<!-- Article Schema (for lecture detail pages) -->
+{% if lecture %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "{{ lecture.title }}",
+  "description": "{{ lecture.teaser }}",
+  "image": "{% if lecture.image %}{{ lecture.image.url }}{% else %}{% static 'images/logo.png' %}{% endif %}",
+  "author": {
+    "@type": "Organization",
+    "name": "{{ site_settings.site_name }}"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "{{ site_settings.site_name }}",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "{% static 'images/logo.png' %}"
+    }
+  },
+  "datePublished": "{{ lecture.created_at|date:'c' }}",
+  "dateModified": "{{ lecture.updated_at|date:'c' }}"
+}
+</script>
+{% endif %}
+
+<!-- FAQ Schema (if available) -->
+{% if faqs %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {% for faq in faqs %}
+    {
+      "@type": "Question",
+      "name": "{{ faq.question }}",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "{{ faq.answer }}"
+      }
+    }{% if not forloop.last %},{% endif %}
+    {% endfor %}
+  ]
+}
+</script>
+{% endif %}

@@ -1,0 +1,46 @@
+# Placeholder Images
+
+This directory should contain the following images:
+
+## Required Images:
+- logo.png (Site logo - recommended size: 200x200px)
+- favicon.ico (Site favicon - 32x32px)
+- hero.jpg (Hero section background - recommended size: 1920x1080px)
+- team.jpg (Team photo for hero section - recommended size: 1920x1080px)
+
+## Service Images (service1.jpg to service9.jpg):
+- service1.jpg (سرویس روغن با شستشو رایگان موتور)
+- service2.jpg (شستشو دریچه گاز و انژکتور)
+- service3.jpg (تعمیر موتور تخصصی خودرو های هیونداو کیا)
+- service4.jpg (تعمیر گیربکس و تعویض دیسک و صحفه)
+- service5.jpg (تعویض روغن گیربکس اتومات با دستگاه تمام اتوماتیک)
+- service6.jpg (شستشو رادیاتور و مجاری آب خودرو با دستگاه تمام اتوماتیک)
+- service7.jpg (تعویض فیلتر بنزین هیوندا کیا و خودرو های خارجی)
+- service8.jpg (تعویض صافی گیربکس اتومات)
+- service9.jpg (خدمات مکانیکی انواع خودرو های ایرانی و خارجی)
+
+## Lecture Images:
+- lecture1.jpg (راهنمای کامل تعمیر موتور خودرو)
+- lecture2.jpg (نحوه تعویض روغن خودرو)
+- lecture3.jpg (تعمیر گیربکس اتوماتیک)
+
+## Image Guidelines:
+- Format: JPG or PNG
+- Quality: High resolution for web
+- Optimization: Compress for web use
+- Alt text: Descriptive and SEO-friendly
+- Responsive: Consider different screen sizes
+
+## Tools for Image Optimization:
+- TinyPNG (https://tinypng.com/)
+- ImageOptim (Mac)
+- GIMP (Free alternative to Photoshop)
+- Canva (For creating graphics)
+
+## Color Palette:
+- Primary Yellow: #FFD700
+- Primary Blue: #1E40AF
+- Secondary Blue: #3B82F6
+- Accent Yellow: #FEF3C7
+- White: #FFFFFF
+- Gray: #6B7280
