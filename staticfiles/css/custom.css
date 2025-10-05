@@ -473,7 +473,7 @@ body {
 
 /* Hero Section */
 .hero-bg {
-    background: linear-gradient(rgba(30, 64, 175, 0.7), rgba(255, 215, 0, 0.3)), url('/media/site/hero.jpg');
+    background: linear-gradient(rgba(30, 64, 175, 0.7), rgba(255, 215, 0, 0.3)), url('../images/hero.webp');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
