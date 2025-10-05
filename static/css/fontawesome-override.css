@@ -1,0 +1,69 @@
+/* Font Awesome Override for S3 Storage */
+/* This ensures Font Awesome icons work correctly with S3 storage */
+
+@font-face {
+  font-family: "Font Awesome 6 Free";
+  font-style: normal;
+  font-weight: 900;
+  font-display: block;
+  src: url("/static/fontawesome/webfonts/fa-solid-900.woff2") format("woff2"),
+       url("/static/fontawesome/webfonts/fa-solid-900.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Font Awesome 6 Free";
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url("/static/fontawesome/webfonts/fa-regular-400.woff2") format("woff2"),
+       url("/static/fontawesome/webfonts/fa-regular-400.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Font Awesome 6 Brands";
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url("/static/fontawesome/webfonts/fa-brands-400.woff2") format("woff2"),
+       url("/static/fontawesome/webfonts/fa-brands-400.ttf") format("truetype");
+}
+
+/* Ensure Font Awesome classes work */
+.fa, .fas, .far, .fal, .fab {
+  font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands" !important;
+  font-weight: 900;
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  line-height: 1;
+}
+
+.fab {
+  font-family: "Font Awesome 6 Brands" !important;
+  font-weight: 400;
+}
+
+.far {
+  font-weight: 400;
+}
+
+/* Specific icon fixes */
+.fa-cogs:before { content: "\f085"; }
+.fa-gears:before { content: "\f085"; }
+.fa-phone:before { content: "\f095"; }
+.fa-calendar-check:before { content: "\f274"; }
+.fa-newspaper:before { content: "\f1ea"; }
+.fa-moon:before { content: "\f186"; }
+.fa-instagram:before { content: "\f16d"; }
+.fa-location-dot:before { content: "\f3c5"; }
+.fa-envelope:before { content: "\f0e0"; }
+.fa-circle-info:before { content: "\f05a"; }
+.fa-star:before { content: "\f005"; }
+.fa-wrench:before { content: "\f0ad"; }
+.fa-tools:before { content: "\f0ad"; }
+.fa-book:before { content: "\f02d"; }
+.fa-eye:before { content: "\f06e"; }
+.fa-cog:before { content: "\f013"; }
+.fa-play:before { content: "\f04b"; }
+.fa-arrow-left:before { content: "\f060"; }
+.fa-house:before { content: "\f015"; }
