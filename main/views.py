@@ -39,10 +39,10 @@ def home(request):
         site_settings = SiteSettings.objects.create()
     
     # Get recent lectures (last 3)
-    recent_lectures = Lecture.objects.filter(is_published=True)[:3]
+    recent_lectures = Lecture.objects.filter(is_published=True).order_by('-created_at')[:3]
     
-    # Get all services
-    services = Service.objects.filter(is_published=True)
+    # Get recent services (last 3)
+    services = Service.objects.filter(is_published=True).order_by('-created_at')[:3]
     
     # Get singleton bonus if exists
     bonus = Bonus.objects.first()
