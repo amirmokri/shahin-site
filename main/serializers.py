@@ -41,7 +41,7 @@ class SiteSettingsSerializer(serializers.ModelSerializer):
     """Serializer for SiteSettings model"""
     class Meta:
         model = SiteSettings
-        fields = ['site_name', 'site_description', 'phone', 'email', 'address', 'instagram_url', 'hero_image', 'hero_video_url']
+        fields = ['site_name', 'site_description', 'phone', 'email', 'address', 'instagram_url', 'hero_image', 'hero_video_url', 'hero_video_file', 'hero_video_poster']
 
 
 class AppointmentSerializer(serializers.ModelSerializer):

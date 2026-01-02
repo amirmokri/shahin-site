@@ -105,7 +105,9 @@ class SiteSettings(models.Model):
     address = models.TextField(default="کرج، ایران", verbose_name="آدرس")
     instagram_url = models.URLField(default="https://instagram.com/shahinautoservice", verbose_name="لینک اینستاگرام")
     hero_image = models.ImageField(upload_to='site/', blank=True, null=True, verbose_name="تصویر اصلی")
-    hero_video_url = models.URLField(blank=True, null=True, verbose_name="لینک ویدیو تبلیغاتی")
+    hero_video_url = models.URLField(blank=True, null=True, verbose_name="لینک ویدیو تبلیغاتی (YouTube/Vimeo)")
+    hero_video_file = models.FileField(upload_to='site/videos/', blank=True, null=True, verbose_name="فایل ویدیو تبلیغاتی (MP4)")
+    hero_video_poster = models.ImageField(upload_to='site/videos/', blank=True, null=True, verbose_name="تصویر پیش‌نمایش ویدیو")
     
     # SEO and Analytics
     google_analytics_id = models.CharField(max_length=20, blank=True, null=True, verbose_name="Google Analytics ID")

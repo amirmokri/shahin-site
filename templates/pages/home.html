@@ -153,8 +153,8 @@
 {% endif %}
 
 <!-- Advertising Video Section -->
-{% if site_settings.hero_video_url %}
-<section class="py-20 bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden" data-aos="fade-up">
+{% if site_settings.hero_video_file or site_settings.hero_video_url %}
+<section class="py-20 bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden" data-aos="fade-up" id="advertising-video">
     <!-- Background Pattern -->
     <div class="absolute inset-0 opacity-5">
         <div class="absolute top-0 left-0 w-full h-full bg-[url('data:image/svg+xml,%3Csvg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="%23FFD700" fill-opacity="0.1"%3E%3Cpath d="M20 20c0-5.5-4.5-10-10-10s-10 4.5-10 10 4.5 10 10 10 10-4.5 10-10zm10 0c0-5.5-4.5-10-10-10s-10 4.5-10 10 4.5 10 10 10 10-4.5 10-10z"/%3E%3C/g%3E%3C/svg%3E')]"></div>
@@ -173,20 +173,91 @@
             <div class="relative group" data-aos="scale-in" data-aos-delay="200">
                 <div class="absolute inset-0 bg-gradient-to-r from-shahin-yellow/20 to-shahin-blue/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-500"></div>
                 <div class="relative bg-gray-900 rounded-2xl overflow-hidden shadow-shahin-xl group-hover:shadow-shahin-xl transition-all duration-500">
-                    <div class="aspect-video">
-                        <iframe 
-                            src="{{ site_settings.hero_video_url }}" 
-                            class="w-full h-full"
-                            frameborder="0" 
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                            allowfullscreen>
-                        </iframe>
+                    <div class="aspect-video relative">
+                        {% if site_settings.hero_video_file %}
+                            <!-- HTML5 Video Player (Local File from Media) -->
+                            <video 
+                                id="advertising-video-player"
+                                class="w-full h-full object-cover"
+                                {% if site_settings.hero_video_poster %}poster="{{ site_settings.hero_video_poster.url }}"{% endif %}
+                                preload="none"
+                                playsinline
+                                controls
+                                controlsList="nodownload"
+                                aria-label="ویدیو تبلیغاتی {{ site_settings.site_name }}">
+                                <source src="{{ site_settings.hero_video_file.url }}" type="video/mp4">
+                                <p class="text-white p-4">مرورگر شما از پخش ویدیو پشتیبانی نمی‌کند. <a href="{{ site_settings.hero_video_file.url }}" class="underline">برای دانلود کلیک کنید</a>.</p>
+                            </video>
+                        {% elif site_settings.hero_video_url %}
+                            <!-- External Video (YouTube/Vimeo) -->
+                            <iframe 
+                                src="{{ site_settings.hero_video_url }}?rel=0&modestbranding=1" 
+                                class="w-full h-full"
+                                frameborder="0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen
+                                loading="lazy"
+                                title="ویدیو تبلیغاتی {{ site_settings.site_name }}">
+                            </iframe>
+                        {% else %}
+                            <!-- Fallback: Check static folder for tabliq.mp4 -->
+                            <video 
+                                id="advertising-video-player"
+                                class="w-full h-full object-cover"
+                                preload="none"
+                                playsinline
+                                controls
+                                controlsList="nodownload"
+                                aria-label="ویدیو تبلیغاتی {{ site_settings.site_name }}">
+                                <source src="{% static 'tabliq.mp4' %}" type="video/mp4">
+                                <p class="text-white p-4">مرورگر شما از پخش ویدیو پشتیبانی نمی‌کند.</p>
+                            </video>
+                            <!-- Play Button Overlay (hidden when video is playing) -->
+                            <div id="video-play-overlay" class="absolute inset-0 flex items-center justify-center bg-black/30 cursor-pointer transition-opacity duration-300 hover:bg-black/40" onclick="playVideo()">
+                                <div class="w-20 h-20 bg-white/90 rounded-full flex items-center justify-center shadow-2xl transform hover:scale-110 transition-transform duration-300">
+                                    <i class="fas fa-play text-shahin-blue text-3xl mr-1"></i>
+                                </div>
+                            </div>
+                        {% endif %}
+                        <!-- Play Button Overlay for uploaded video file -->
+                        {% if site_settings.hero_video_file %}
+                            <div id="video-play-overlay" class="absolute inset-0 flex items-center justify-center bg-black/30 cursor-pointer transition-opacity duration-300 hover:bg-black/40" onclick="playVideo()">
+                                <div class="w-20 h-20 bg-white/90 rounded-full flex items-center justify-center shadow-2xl transform hover:scale-110 transition-transform duration-300">
+                                    <i class="fas fa-play text-shahin-blue text-3xl mr-1"></i>
+                                </div>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
+
+<!-- Schema.org VideoObject Structured Data for SEO -->
+{% if site_settings.hero_video_file or not site_settings.hero_video_url %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "VideoObject",
+  "name": "ویدیو تبلیغاتی {{ site_settings.site_name }}",
+  "description": "آشنایی با خدمات و تخصص {{ site_settings.site_name }} در زمینه تعمیر و نگهداری خودرو",
+  "thumbnailUrl": "{% if site_settings.hero_video_poster %}{{ site_settings.hero_video_poster.url }}{% else %}{% if site_settings.hero_image %}{{ site_settings.hero_image.url }}{% else %}{% static 'images/logo.png' %}{% endif %}{% endif %}",
+  "uploadDate": "{% now 'Y-m-d' %}",
+  "contentUrl": "{% if site_settings.hero_video_file %}{{ site_settings.hero_video_file.url }}{% else %}{% static 'tabliq.mp4' %}{% endif %}",
+  "embedUrl": "{{ request.build_absolute_uri }}#advertising-video",
+  "duration": "PT1M",
+  "publisher": {
+    "@type": "Organization",
+    "name": "{{ site_settings.site_name }}",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "{% static 'images/logo.png' %}"
+    }
+  }
+}
+</script>
+{% endif %}
 {% endif %}
 
 <!-- Services Section -->
@@ -881,5 +952,52 @@ if (modernContactForm) {
         }
     });
 }
+
+// Video Player Functionality
+function playVideo() {
+    const video = document.getElementById('advertising-video-player');
+    const overlay = document.getElementById('video-play-overlay');
+    
+    if (video && overlay) {
+        video.play().then(() => {
+            overlay.style.display = 'none';
+        }).catch(error => {
+            console.error('Error playing video:', error);
+        });
+    }
+}
+
+// Hide overlay when video starts playing
+document.addEventListener('DOMContentLoaded', function() {
+    const video = document.getElementById('advertising-video-player');
+    const overlay = document.getElementById('video-play-overlay');
+    
+    if (video && overlay) {
+        // Hide overlay when video starts playing
+        video.addEventListener('play', function() {
+            overlay.style.display = 'none';
+        });
+        
+        // Show overlay when video is paused
+        video.addEventListener('pause', function() {
+            if (video.currentTime === 0) {
+                overlay.style.display = 'flex';
+            }
+        });
+        
+        // Lazy load video when it comes into viewport
+        const videoObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Video is in viewport, but we keep preload="none" for performance
+                    // Video will load when user clicks play
+                    videoObserver.unobserve(entry.target);
+                }
+            });
+        }, { rootMargin: '50px' });
+        
+        videoObserver.observe(video);
+    }
+});
 </script>
 {% endblock %}

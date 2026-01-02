@@ -244,7 +244,7 @@ class ContactMessageAdmin(admin.ModelAdmin):
 @admin.register(SiteSettings)
 class SiteSettingsAdmin(admin.ModelAdmin):
     list_display = ['site_name', 'phone', 'email']
-    readonly_fields = ['hero_image_preview']
+    readonly_fields = ['hero_image_preview', 'hero_video_poster_preview']
     
     fieldsets = (
         ('اطلاعات عمومی', {
@@ -254,7 +254,7 @@ class SiteSettingsAdmin(admin.ModelAdmin):
             'fields': ('phone', 'email', 'address', 'instagram_url')
         }),
         ('رسانه‌ها', {
-            'fields': ('hero_image', 'hero_image_preview', 'hero_video_url')
+            'fields': ('hero_image', 'hero_image_preview', 'hero_video_file', 'hero_video_poster', 'hero_video_poster_preview', 'hero_video_url')
         }),
         ('تحلیل و سئو', {
             'fields': ('google_analytics_id', 'google_site_verification', 'bing_site_verification', 'facebook_pixel_id'),
@@ -270,6 +270,15 @@ class SiteSettingsAdmin(admin.ModelAdmin):
                 return "خطا در بارگذاری تصویر"
         return "بدون تصویر"
     hero_image_preview.short_description = "پیش‌نمایش تصویر اصلی"
+    
+    def hero_video_poster_preview(self, obj):
+        if obj.hero_video_poster and obj.hero_video_poster.name:
+            try:
+                return format_html('<img src="{}" width="200" height="112" style="border-radius: 8px; border: 1px solid #ddd;" />', obj.hero_video_poster.url)
+            except (ValueError, AttributeError):
+                return "خطا در بارگذاری تصویر"
+        return "بدون تصویر پیش‌نمایش"
+    hero_video_poster_preview.short_description = "پیش‌نمایش تصویر ویدیو"
 
     def has_add_permission(self, request):
         # Only allow one instance
