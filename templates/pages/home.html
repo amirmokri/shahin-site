@@ -17,8 +17,8 @@
             <!-- Hero Image with Text Overlay -->
             <div class="relative mb-16">
                 <!-- Rounded Hero Image -->
-                <div class="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white w-full" data-aos="fade-up">
-                    <img src="{% if site_settings.hero_image %}{{ site_settings.hero_image.url }}{% else %}{% static 'images/hero.webp' %}{% endif %}" alt="{{ site_settings.site_name }}" class="w-full h-[350px] sm:h-[400px] md:h-[500px] object-cover">
+                <div class="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white w-full max-w-7xl mx-auto" data-aos="fade-up">
+                    <img src="{% if site_settings.hero_image %}{{ site_settings.hero_image.url }}{% else %}{% static 'images/hero.webp' %}{% endif %}" alt="{{ site_settings.site_name }}" class="w-full h-[350px] sm:h-[400px] md:h-[500px] lg:h-[600px] xl:h-[700px] object-cover object-center">
                     <div class="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-transparent"></div>
                     
                     <!-- Text Overlays -->
