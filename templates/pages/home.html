@@ -194,19 +194,8 @@
                                     <i class="fas fa-play text-shahin-blue text-3xl mr-1"></i>
                                 </div>
                             </div>
-                        {% elif site_settings.hero_video_url %}
-                            <!-- External Video (YouTube/Vimeo) -->
-                            <iframe 
-                                src="{{ site_settings.hero_video_url }}?rel=0&modestbranding=1" 
-                                class="w-full h-full"
-                                frameborder="0" 
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                allowfullscreen
-                                loading="lazy"
-                                title="ویدیو تبلیغاتی {{ site_settings.site_name }}">
-                            </iframe>
                         {% else %}
-                            <!-- Fallback: Static folder tabliq.mp4 -->
+                            <!-- Static video file from static folder: tabliq.mp4 -->
                             <video 
                                 id="advertising-video-player"
                                 class="w-full h-full object-cover"
@@ -233,8 +222,6 @@
 </section>
 
 <!-- Schema.org VideoObject Structured Data for SEO -->
-<!-- Only add structured data for local video files (not external URLs) -->
-{% if site_settings.hero_video_file or not site_settings.hero_video_url %}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -256,7 +243,6 @@
   }
 }
 </script>
-{% endif %}
 
 <!-- Services Section -->
 <section id="services" class="py-20 bg-white relative overflow-hidden">
