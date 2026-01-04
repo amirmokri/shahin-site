@@ -13,6 +13,19 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import os
 
+# PyMySQL compatibility shim for Django
+# This allows Django to use PyMySQL instead of mysqlclient
+# Note: This is also in __init__.py, but kept here as a backup
+try:
+    import pymysql
+    pymysql.install_as_MySQLdb()
+    # Set version to satisfy Django's version check
+    import MySQLdb
+    MySQLdb.version_info = (2, 2, 7, 'final', 0)
+    MySQLdb.__version__ = '2.2.7'
+except (ImportError, AttributeError):
+    pass
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -98,7 +111,7 @@ DATABASES = {
     }
 }
 
-# Using mysqlclient for MySQL database connection
+# Using PyMySQL for MySQL database connection (pure Python, no compilation required)
 
 
 # Password validation

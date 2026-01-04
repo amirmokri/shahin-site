@@ -10,13 +10,10 @@ ENV DJANGO_SETTINGS_MODULE=shahin_auto.settings_production
 # Set work directory
 WORKDIR /app
 
-# Install system dependencies for mysqlclient
+# Install system dependencies (PyMySQL is pure Python, no MySQL client libraries needed)
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         curl \
-        default-libmysqlclient-dev \
-        build-essential \
-        pkg-config \
         wget \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
@@ -50,11 +47,11 @@ HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
 RUN echo '#!/bin/bash\n\
 set -e\n\
 \n\
-# Wait for database using Python MySQL connection\n\
+# Wait for database using PyMySQL\n\
 echo "Waiting for database..."\n\
 python - <<"PYCODE"\n\
 import os, time, sys\n\
-import MySQLdb as mysql\n\
+import pymysql\n\
 host = os.environ.get("DB_HOST", "db")\n\
 port = int(os.environ.get("DB_PORT", "3306"))\n\
 user = os.environ.get("DB_USER", "root")\n\
@@ -62,7 +59,7 @@ password = os.environ.get("DB_PASSWORD", "")\n\
 name = os.environ.get("DB_NAME", "")\n\
 for i in range(60):\n\
     try:\n\
-        conn = mysql.connect(host=host, port=port, user=user, passwd=password, db=name)\n\
+        conn = pymysql.connect(host=host, port=port, user=user, password=password, database=name)\n\
         conn.close()\n\
         print("Database is up")\n\
         break\n\

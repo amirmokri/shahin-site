@@ -4,7 +4,7 @@ djangorestframework==3.14.0
 django-cors-headers==4.3.1
 
 # Database
-mysqlclient==2.2.0
+PyMySQL==1.1.0
 
 # Image processing
 Pillow==10.1.0

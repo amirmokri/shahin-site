@@ -45,7 +45,7 @@ DATABASES = {
     }
 }
 
-# Using mysqlclient for MySQL database connection
+# Using PyMySQL for MySQL database connection (pure Python, no compilation required)
 
 # Sites framework
 SITE_ID = 1
