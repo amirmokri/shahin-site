@@ -65,7 +65,7 @@
                          data-service-duration="{{ service.duration|default:'نامشخص' }}">
                         <div class="relative overflow-hidden">
                             <img src="{% if service.image %}{{ service.image.url }}{% else %}{% static 'images/logo.png' %}{% endif %}" 
-                                 alt="{{ service.name }}" 
+                                 alt="تصویر سرویس {{ service.name }} برای رزرو وقت - اتوسرویس شاهین" 
                                  class="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                             <div class="absolute top-4 right-4">
@@ -189,7 +189,7 @@
                             </h3>
                             <div id="selected-service-summary" class="flex items-center justify-between">
                                 <div class="flex items-center space-x-4 space-x-reverse">
-                                    <img id="selected-service-image" src="" alt="" class="w-16 h-16 rounded-xl object-cover">
+                                    <img id="selected-service-image" src="" alt="تصویر سرویس انتخاب شده" class="w-16 h-16 rounded-xl object-cover">
                                     <div>
                                         <h4 id="selected-service-name" class="font-bold text-gray-800"></h4>
                                         <p id="selected-service-duration" class="text-sm text-gray-600"></p>
@@ -328,7 +328,7 @@
             </div>
             <div>
                 <div class="rounded-2xl overflow-hidden shadow-shahin-xl">
-                    <iframe title="map" src="https://maps.google.com/maps?q={{ site_settings.address|urlencode }}&t=&z=13&ie=UTF8&iwloc=&output=embed" class="w-full h-64" loading="lazy"></iframe>
+                    <iframe title="نقشه موقعیت اتوسرویس شاهین برای رزرو وقت" src="https://maps.google.com/maps?q={{ site_settings.address|urlencode }}&t=&z=13&ie=UTF8&iwloc=&output=embed" class="w-full h-64" loading="lazy"></iframe>
                 </div>
             </div>
         </div>
