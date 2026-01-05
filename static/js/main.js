@@ -17,6 +17,7 @@ function initializeApp() {
     initializeParallax();
     initializeVideoLazyLoading();
     initializeSearchFunctionality();
+    initializeHeaderScroll();
 }
 
 // Mobile Menu Functions
@@ -520,6 +521,24 @@ window.addEventListener('error', function(e) {
 window.addEventListener('unhandledrejection', function(e) {
     console.error('Unhandled promise rejection:', e.reason);
 });
+
+// Header Scroll Effect
+function initializeHeaderScroll() {
+    const header = document.querySelector('header');
+    if (!header) return;
+
+    const scrollThreshold = 50;
+
+    window.addEventListener('scroll', throttle(() => {
+        const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+
+        if (currentScroll > scrollThreshold) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    }, 10));
+}
 
 // Performance Monitoring
 if ('performance' in window) {

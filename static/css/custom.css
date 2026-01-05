@@ -898,6 +898,133 @@ body {
     }
 }
 
+/* Header Navigation Enhancements */
+header nav a {
+    position: relative;
+    overflow: hidden;
+}
+
+header nav a::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+    z-index: 0;
+}
+
+header nav a:hover::before {
+    left: 100%;
+}
+
+/* Appointment Button Special Effects */
+header nav a[href*="appointment"] {
+    position: relative;
+    overflow: visible;
+}
+
+header nav a[href*="appointment"]::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(135deg, var(--shahin-yellow), var(--shahin-gold), var(--shahin-yellow));
+    border-radius: inherit;
+    z-index: -1;
+    opacity: 0;
+    filter: blur(8px);
+    transition: opacity 0.3s ease;
+}
+
+header nav a[href*="appointment"]:hover::after {
+    opacity: 0.6;
+}
+
+/* Dark Mode Toggle Animation */
+#dark-mode-toggle svg {
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#dark-mode-toggle:hover svg {
+    transform: rotate(180deg);
+}
+
+/* Mobile Menu Button Pulse Effect */
+#mobile-menu-button::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: inherit;
+    background: linear-gradient(135deg, var(--shahin-yellow), var(--shahin-blue));
+    opacity: 0;
+    z-index: -1;
+    transition: opacity 0.3s ease;
+}
+
+#mobile-menu-button:hover::before {
+    opacity: 0.1;
+    animation: pulse 2s infinite;
+}
+
+/* Mobile Menu Item Enhancements */
+.mobile-menu nav a,
+.mobile-menu nav button {
+    position: relative;
+    overflow: hidden;
+}
+
+.mobile-menu nav a::after,
+.mobile-menu nav button::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--shahin-yellow), var(--shahin-blue));
+    transform: translateY(-50%);
+    transition: width 0.3s ease;
+}
+
+.mobile-menu nav a:hover::after,
+.mobile-menu nav button:hover::after {
+    width: 20px;
+}
+
+/* Icon Container Animation */
+.mobile-menu nav a .w-10,
+.mobile-menu nav button .w-10 {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mobile-menu nav a:hover .w-10,
+.mobile-menu nav button:hover .w-10 {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 4px 12px rgba(30, 64, 175, 0.2);
+}
+
+/* Header Sticky Enhancement */
+header {
+    transition: all 0.3s ease;
+}
+
+header.scrolled {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(12px);
+}
+
+/* Navigation Link Active State */
+header nav a.active {
+    color: var(--shahin-blue);
+    background: linear-gradient(135deg, var(--shahin-blue)/10, var(--shahin-yellow)/10);
+}
+
+header nav a.active::before {
+    left: 0;
+}
+
 /* Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
     *,
@@ -910,6 +1037,11 @@ body {
     
     .service-card::before,
     .time-slot::before {
+        display: none;
+    }
+    
+    header nav a::before,
+    #mobile-menu-button::before {
         display: none;
     }
 }
